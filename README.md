@@ -16,7 +16,7 @@ Download Musharing apk [here](./relase) for test.
 
 ## Developing
 
-The development of Android platform has realized a primitive Demo that can display some functions of Musharing.
+The development of Android platform has realized [a primitive Demo](./relase/musharing-v0.0.0-demo.apk) that can display some functions of Musharing.
 
 [Click here](./TODO.md) to peek what we are going to do as well as what we have already done.
 
@@ -73,7 +73,7 @@ dependencies {
 
 MIT License
 
-Copyright (c) 2019 musharing-team
+Copyright (c) 2019 Musharing Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
