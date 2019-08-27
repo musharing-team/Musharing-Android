@@ -39,7 +39,6 @@ import java.util.UUID;
  * <h1>登录活动</h1>
  * 输入用户名、密码尝试登录，成功后转到RoomPlaylistActivity; 或 忘记密码/快速注册
  */
-
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
