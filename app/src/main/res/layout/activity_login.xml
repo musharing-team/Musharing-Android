@@ -100,6 +100,20 @@
 
             android:orientation="horizontal">
             <CheckBox
+                android:id="@+id/remember_password"
+                android:layout_gravity="center"
+                android:enabled="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="记住密码"
+                android:textSize="18sp" />
+            <CheckBox
                 android:id="@+id/login_remember"
                 android:layout_gravity="center"
                 android:enabled="false"
@@ -113,6 +127,7 @@
                 android:gravity="center"
                 android:text="记住登录"
                 android:textSize="18sp" />
+
         </LinearLayout>
         <Button
             android:id="@+id/login_button"
@@ -121,6 +136,7 @@
             android:onClick="loginOnClick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
 
     </LinearLayout>
 
