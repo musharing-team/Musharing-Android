@@ -40,8 +40,6 @@ import java.util.UUID;
  * 输入用户名、密码尝试登录，成功后转到RoomPlaylistActivity; 或 忘记密码/快速注册
  */
 
-
-
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -61,10 +59,10 @@ public class LoginActivity extends AppCompatActivity {
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        final CheckBox rememberPass = findViewById(R.id.remember_password);
+        final CheckBox rememberPass = findViewById(R.id.remember_account);
         final Button loginButton = findViewById(R.id.login_button);
-        EditText userNameText = findViewById(R.id.login_user_name);
-        EditText passwordText = findViewById(R.id.login_password);
+        final EditText userNameText = findViewById(R.id.login_user_name);
+        final EditText passwordText = findViewById(R.id.login_password);
 
         //引入imei加密后产生密匙
         final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
@@ -89,12 +87,10 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.login_progress_bar);
         progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.GONE);
-        getRemembed();
-        // TODO(b02) 实现忘记密码、记住密码
+        getRememberedAccount();
     }
 
     public void loginOnClick(View view) {
-
 
         String userName = userNameText.getText().toString();
         String password = passwordText.getText().toString();
@@ -103,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入用户名和密码", Toast.LENGTH_SHORT).show();
             return;
         }
-        Remember();
+        rememberAccount();
         String nameEncoded = UserUtil.encodeName(userName);
         String passwordEncrypted = UserUtil.encryptPassword(nameEncoded, password);
 
@@ -145,7 +141,6 @@ public class LoginActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }).execute(nameEncoded, passwordEncrypted);
-
     }
 
     public void toRegisterOnClick(View view) {
@@ -153,9 +148,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    public void getRemembed(){
+    public void getRememberedAccount(){
         // 读取记住的账户
-        boolean isRemember = pref.getBoolean("remember_password", false);
+        boolean isRemember = pref.getBoolean("remember_account", false);
         if (isRemember) {
             String account = pref.getString("account", "");
             String password = pref.getString("password", "");
@@ -167,11 +162,11 @@ public class LoginActivity extends AppCompatActivity {
             loginButton.setEnabled(true);
         }
     }
-    public void Remember() {
+    public void rememberAccount() {
         final SharedPreferences.Editor editor = pref.edit();
 
         if (rememberPass.isChecked()) {
-            editor.putBoolean("remember_password", true);
+            editor.putBoolean("remember_account", true);
             editor.putString("account", AESUtil.encrypt(szImei,userNameText.getText().toString()));
             editor.putString("password",AESUtil.encrypt(szImei,passwordText.getText().toString()));
 

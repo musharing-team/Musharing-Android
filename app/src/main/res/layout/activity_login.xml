@@ -100,7 +100,7 @@
 
             android:orientation="horizontal">
             <CheckBox
-                android:id="@+id/remember_password"
+                android:id="@+id/remember_account"
                 android:layout_gravity="center"
                 android:enabled="false"
                 android:layout_width="wrap_content"
