@@ -12,7 +12,7 @@ Wondering more about **musharing** ? [Tap Here(Simplified Chinese)](./musharing.
 
 ## Getting started
 
-Download Musharing apk [here](./relase) for test.
+Download Musharing apk [here](./release) for test.
 
 ## Developing
 
