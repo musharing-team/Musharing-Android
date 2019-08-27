@@ -9,13 +9,17 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
+/**
+ * <h1>加密库</h1>
+ *
+ * <p>在 LoginActivity 的 <em>记住密码</em> 功能中，对储存的用户名和密码进行 AES 加/解密</p>
+ */
 public class AESUtil {
 
+    // private static final String CipherMode = "AES/ECB/PKCS5Padding";     //使用ECB加密，不需要设置IV，但是不安全
+    private static final String CipherMode = "AES/CFB/NoPadding";   //使用CFB加密，需要设置IV
 
-    //    private static final String CipherMode = "AES/ECB/PKCS5Padding";使用ECB加密，不需要设置IV，但是不安全
-    private static final String CipherMode = "AES/CFB/NoPadding";//使用CFB加密，需要设置IV
-
-    // /** 创建密钥 **/
+    /** 创建密钥 **/
     private static SecretKeySpec createKey(String password) {
         byte[] data = null;
         if (password == null) {
@@ -38,11 +42,10 @@ public class AESUtil {
         return new SecretKeySpec(data, "AES");
     }
 
-    // /** 加密字节数据 **/
+    /** 加密字节数据 **/
     private static byte[] encrypt(byte[] content, String password) {
         try {
             SecretKeySpec key = createKey(password);
-            System.out.println(key);
             Cipher cipher = Cipher.getInstance(CipherMode);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(
                     new byte[cipher.getBlockSize()]));
@@ -53,9 +56,9 @@ public class AESUtil {
         return null;
     }
 
-    // /** 加密(结果为16进制字符串) **/
+    /** 加密(结果为16进制字符串) **/
     public static String encrypt(String password, String content) {
-        Log.d("加密前", "seed=" + password + "\ncontent=" + content);
+        // Log.d("加密前", "seed=" + password + "\ncontent=" + content);
         byte[] data = null;
         try {
             data = content.getBytes("UTF-8");
@@ -64,11 +67,11 @@ public class AESUtil {
         }
         data = encrypt(data, password);
         String result = byte2hex(data);
-        Log.d("加密后", "result=" + result);
+        // Log.d("加密后", "result=" + result);
         return result;
     }
 
-    // /** 解密字节数组 **/
+    /** 解密字节数组 **/
     private static byte[] decrypt(byte[] content, String password) {
 
         try {
@@ -84,9 +87,9 @@ public class AESUtil {
         return null;
     }
 
-    // /** 解密16进制的字符串为字符串 **/
+    /** 解密16进制的字符串为字符串 **/
     public static String decrypt(String password, String content) {
-        Log.d("解密前", "seed=" + password + "\ncontent=" + content);
+        // Log.d("解密前", "seed=" + password + "\ncontent=" + content);
         byte[] data = null;
         try {
             data = hex2byte(content);
@@ -99,14 +102,14 @@ public class AESUtil {
         String result = null;
         try {
             result = new String(data, "UTF-8");
-            Log.d("解密后", "result=" + result);
+            // Log.d("解密后", "result=" + result);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    // /** 字节数组转成16进制字符串 **/
+    /** 字节数组转成16进制字符串 **/
     private static String byte2hex(byte[] b) { // 一个字节的数，
         StringBuilder sb = new StringBuilder(b.length * 2);
         String tmp = "";
@@ -121,7 +124,7 @@ public class AESUtil {
         return sb.toString().toUpperCase(); // 转成大写
     }
 
-    // /** 将hex字符串转换成字节数组 **/
+    /** 将hex字符串转换成字节数组 **/
     private static byte[] hex2byte(String inputString) {
         if (inputString == null || inputString.length() < 2) {
             return new byte[0];

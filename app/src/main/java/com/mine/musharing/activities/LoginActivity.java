@@ -45,11 +45,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private SharedPreferences pref;
-    private String szImei;
+
     private EditText userNameText;
     private EditText passwordText;
-    private CheckBox rememberPass;
-    private Button loginButton;
+    private CheckBox rememberAccountCheckBox;
+
+    private String szImei;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,34 +59,28 @@ public class LoginActivity extends AppCompatActivity {
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        final CheckBox rememberPass = findViewById(R.id.remember_account);
-        final Button loginButton = findViewById(R.id.login_button);
-        final EditText userNameText = findViewById(R.id.login_user_name);
-        final EditText passwordText = findViewById(R.id.login_password);
+        rememberAccountCheckBox = findViewById(R.id.remember_account);
+        userNameText = findViewById(R.id.login_user_name);
+        passwordText = findViewById(R.id.login_password);
 
-        //引入imei加密后产生密匙
-        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        final String tmDevice, tmSerial, tmPhone, androidId;
+        // 引入imei加密后产生密匙
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            //return;
             ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
         }
+
+        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+        final String tmDevice, tmSerial, androidId;
+
         tmDevice = "" + tm.getDeviceId();
         tmSerial = "" + tm.getSimSerialNumber();
         androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String szImei = deviceUuid.toString();
+        szImei = deviceUuid.toString();
 
         progressBar = findViewById(R.id.login_progress_bar);
         progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.GONE);
+
         getRememberedAccount();
     }
 
@@ -98,7 +93,9 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入用户名和密码", Toast.LENGTH_SHORT).show();
             return;
         }
+
         rememberAccount();
+
         String nameEncoded = UserUtil.encodeName(userName);
         String passwordEncrypted = UserUtil.encryptPassword(nameEncoded, password);
 
@@ -147,28 +144,35 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    /**
+     * 尝试读取记住的账户，如果有已记住的则填充至输入框中
+     */
     public void getRememberedAccount(){
-        // 读取记住的账户
-        boolean isRemember = pref.getBoolean("remember_account", false);
-        if (isRemember) {
+        boolean isRemembered = pref.getBoolean("remember_account", false);
+
+        if (isRemembered) {
             String account = pref.getString("account", "");
             String password = pref.getString("password", "");
 
             userNameText.setText(AESUtil.decrypt(szImei,account));
             passwordText.setText(AESUtil.decrypt(szImei,password));
 
-            rememberPass.setChecked(true);
-            loginButton.setEnabled(true);
+            // "续订"
+            rememberAccountCheckBox.setChecked(true);
         }
     }
+
+    /**
+     * 尝试记住账户，只有勾选了选择框才会记住
+     */
     public void rememberAccount() {
         final SharedPreferences.Editor editor = pref.edit();
 
-        if (rememberPass.isChecked()) {
+        if (rememberAccountCheckBox.isChecked()) {
             editor.putBoolean("remember_account", true);
             editor.putString("account", AESUtil.encrypt(szImei,userNameText.getText().toString()));
             editor.putString("password",AESUtil.encrypt(szImei,passwordText.getText().toString()));
-
         } else {
             editor.clear();
         }
