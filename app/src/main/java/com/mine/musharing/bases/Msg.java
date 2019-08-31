@@ -24,6 +24,16 @@ public class Msg {
     public static final String TYPE_PLAYER_ASYNC = "player_async";
 
     /**
+     * 消息类型： 语言消息
+     */
+    public static final String TYPE_RECORD = "record";
+
+    /**
+     * 消息类型: void，可能意外发出的空消息
+     */
+    public static final String TYPE_VOID = "void";
+
+    /**
      * 消息类型
      */
     protected String type;
@@ -49,6 +59,7 @@ public class Msg {
     protected String content;
 
     public Msg() {
+        this.type = TYPE_VOID;
     }
 
     public Msg(String type, User fromUser, String content) {

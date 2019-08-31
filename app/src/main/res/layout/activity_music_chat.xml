@@ -39,7 +39,7 @@
             <FrameLayout
                 android:id="@+id/music_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="320dp" />
+                android:layout_height="280dp" />
 
             <FrameLayout
                 android:id="@+id/chat_fragment"

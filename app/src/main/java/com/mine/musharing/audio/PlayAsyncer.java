@@ -1,20 +1,14 @@
-package com.mine.musharing.asyncPlayer;
+package com.mine.musharing.audio;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.Playlist;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.requestTasks.SendTask;
 
-import java.nio.channels.AsynchronousChannelGroup;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Dictionary;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
@@ -107,7 +101,7 @@ public class PlayAsyncer {
         }
     }
 
-    public PlayAsyncer() {}
+    private PlayAsyncer() {}
 
     /**
      * 单例Holder

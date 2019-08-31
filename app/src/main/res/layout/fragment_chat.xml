@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,6 +15,7 @@
 
         <!--Show Messages-->
         <LinearLayout
+            android:id="@+id/msg_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -97,4 +98,15 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+    <ImageButton
+        android:src="@drawable/ic_keyboard_voice_white_24dp"
+        android:id="@+id/hot_line_button"
+        android:layout_margin="8dp"
+        app:layout_anchor="@id/msg_list"
+        app:layout_anchorGravity="bottom|center"
+        app:elevation="4dp"
+        app:backgroundTint="#AF00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,26 +1,30 @@
 package com.mine.musharing.fragments;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
-import com.mine.musharing.asyncPlayer.PlayAsyncer;
+import com.mine.musharing.audio.HotLineRecorder;
+import com.mine.musharing.audio.PlayAsyncer;
 import com.mine.musharing.bases.Msg;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
@@ -32,8 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -51,6 +53,10 @@ public class ChatFragment extends Fragment {
 
     private FloatingActionButton moreInputButton;
 
+    private ImageButton hotLineButton;
+
+    private HotLineRecorder hotLineRecorder;
+
     private User user;
 
     private List<Msg> mMsgList = new ArrayList<>();
@@ -63,6 +69,7 @@ public class ChatFragment extends Fragment {
 
     private static final long REFRESH_PERIOD = 2000;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,8 +83,20 @@ public class ChatFragment extends Fragment {
             startActivity(intent);
         }
 
+        // permissions
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        }
+
         // Inflate the layout for this fragment
         chatFragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
+
+        // Set the hotLineRecorder
+        hotLineRecorder = HotLineRecorder.getInstance();
+        hotLineRecorder.setUser(user);
 
         // Buttons and their onClick
         sendButton = chatFragmentView.findViewById(R.id.send_button);
@@ -85,6 +104,9 @@ public class ChatFragment extends Fragment {
 
         moreInputButton = chatFragmentView.findViewById(R.id.more_input_button);
         moreInputButton.setOnClickListener(this::moreInputOnClick);
+
+        hotLineButton = chatFragmentView.findViewById(R.id.hot_line_button);
+        hotLineButton.setOnTouchListener(this::hotLineOnTouch);
 
         // message recycler view
         msgRecyclerView = chatFragmentView.findViewById(R.id.msg_recycler_view);
@@ -106,6 +128,11 @@ public class ChatFragment extends Fragment {
         return chatFragmentView;
     }
 
+    /**
+     * 总的消息获取地；
+     *
+     * 所有地消息都在这里接收，并被分发
+     */
     private void refreshMsgs() {
 
         new ReceiveTask(new RequestTaskListener<List<Msg>>() {
@@ -129,6 +156,12 @@ public class ChatFragment extends Fragment {
                             case Msg.TYPE_PLAYER_ASYNC:
                                 PlayAsyncer.getInstance().handleAsyncMsg(msg);
                                 break;
+                            case Msg.TYPE_RECORD:
+                                HotLineRecorder.getInstance().handleRecordMsg(msg);
+                                Msg recordSignMsg = new Msg(msg.TYPE_TEXT, new User(msg.getFromUid(), msg.getFromName(), msg.getFromImg()), "[语音]");
+                                mMsgList.add(recordSignMsg);
+                                adapter.notifyItemInserted(mMsgList.size() - 1); // 有新消息,刷新显示
+                                msgRecyclerView.scrollToPosition(mMsgList.size() - 1);   // 移动到最后一条消息
                         }
                     }
                 });
@@ -147,10 +180,9 @@ public class ChatFragment extends Fragment {
         }).execute(user.getUid());
     }
 
-    public void moreInputOnClick(View view) {
-        Toast.makeText(getContext(), "未完成的功能", Toast.LENGTH_SHORT).show();
-    }
-
+    /**
+     * 点击发送按钮的事件
+     */
     public void sendOnClick(View view) {
         EditText editText = chatFragmentView.findViewById(R.id.input_text);
         String content = editText.getText().toString();
@@ -182,6 +214,43 @@ public class ChatFragment extends Fragment {
 
             }).execute(user.getUid(), msg.toString());
         }
+    }
+
+    /**
+     * 点击更多输入的事件
+     */
+    public void moreInputOnClick(View view) {
+        Toast.makeText(getContext(), "未完成的功能", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 点击 HotLine 的事件
+     */
+    public boolean hotLineOnTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "HotLine button -> down");
+                try {
+                    hotLineRecorder.startRecord();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                    hotLineRecorder.reset();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "HotLine button -> up");
+                try {
+                    hotLineRecorder.stopRecord();
+                    hotLineRecorder.publishRecord();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                    hotLineRecorder.reset();
+                }
+
+                break;
+
+        }
+        return false;
     }
 
     @Override

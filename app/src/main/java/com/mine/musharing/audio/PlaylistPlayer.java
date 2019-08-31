@@ -1,4 +1,4 @@
-package com.mine.musharing.asyncPlayer;
+package com.mine.musharing.audio;
 
 import android.media.MediaPlayer;
 import android.util.Log;
