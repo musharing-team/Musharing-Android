@@ -16,7 +16,7 @@ Download Musharing apk [here](./release) for test.
 
 ## Developing
 
-The development of Android platform has realized [a primitive Demo](./release/musharing-demo.apk) that can display some functions of Musharing.
+The development of Android platform has realized [a primitive Demo](./release) that can display some functions of Musharing.
 
 [Click here](./TODO.md) to peek what we are going to do as well as what we have already done.
 
