@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -230,4 +231,31 @@ public class MusicFragment extends Fragment {
         }
     }
 
+    /**
+     * 按键处理<br/>
+     *
+     * 用来处理音量键事件
+     * 由于在 fragment 中不能直接 onKeyDown，所以要在 activity 里 onKeyDown，然后把事件通过这个传进来
+     */
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                currentVolume += 1;
+                if (currentVolume > maxVolume) {
+                    currentVolume = maxVolume;
+                }
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                currentVolume -= 1;
+                if (currentVolume < 0) {
+                    currentVolume = 0;
+                }
+                break;
+        }
+
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
+        volumeBar.setProgress(currentVolume);
+
+        return true;
+    }
 }
