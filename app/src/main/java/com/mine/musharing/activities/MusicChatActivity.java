@@ -187,4 +187,6 @@ public class MusicChatActivity extends AppCompatActivity {
 
         }).execute(user.getUid());
     }
+
 }
+
