@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,10 +56,13 @@ public class MusicChatActivity extends AppCompatActivity {
 
     private PlaylistFragment playlistFragment;
 
+    private TextView tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_chat);
+        tv = (TextView) findViewById(R.id.tv);
 
         // 获取数据
         Intent intent = getIntent();
@@ -187,6 +191,51 @@ public class MusicChatActivity extends AppCompatActivity {
 
         }).execute(user.getUid());
     }
+    int count = -1;
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+
+        int action = event.getAction();
+
+        if (action ==KeyEvent.ACTION_DOWN) {
+            tv.setText("+++++++++ACTION_DOWN++++++"+ count++);
+            return true;
+        }
+
+        if (action== KeyEvent.ACTION_UP) {
+            tv.setText("+++++ACTION_UP++++++++++");
+            return true;
+        }
+
+        return super.dispatchKeyEvent(event);
+    }
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+
+                tv.setText("-----------------"+count);
+                count--;
+
+                return true;
+
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                tv.setText("++++++++++++++++"+ count);
+                count++;
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_MUTE:
+                tv.setText("MUTE");
+
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 }
 
