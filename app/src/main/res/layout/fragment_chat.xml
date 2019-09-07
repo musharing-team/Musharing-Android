@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/draw_layout"
+    android:background="@color/pureWhite"
     tools:context=".fragments.ChatFragment" >
 
     <RelativeLayout
@@ -19,15 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginBottom="70dp"
+            android:layout_marginTop="70dp"
             app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/msg_recycler_view"
                 android:layout_width="match_parent"
-                app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
@@ -35,7 +34,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal|bottom">
 
             <LinearLayout
@@ -53,6 +52,16 @@
                     app:elevation="4dp"
                     app:backgroundTint="#fff"
                     android:onClick="moreInputOnClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:src="@drawable/ic_keyboard_voice_white_24dp"
+                    android:id="@+id/hot_line_button"
+                    android:layout_margin="8dp"
+                    app:elevation="4dp"
+                    app:backgroundTint="#AF00"
+                    android:background="@drawable/button_hotline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -81,7 +90,9 @@
                         <android.support.design.widget.FloatingActionButton
                             android:id="@+id/send_button"
                             android:src="@drawable/ic_send_white_24dp"
+                            android:backgroundTint="@color/sparkBlue"
                             android:layout_margin="4dp"
+                            app:elevation="16dp"
                             android:layout_gravity="end|bottom"
                             app:fabSize="mini"
                             android:onClick="sendOnClick"
@@ -97,16 +108,5 @@
         </android.support.v7.widget.CardView>
 
     </RelativeLayout>
-
-    <ImageButton
-        android:src="@drawable/ic_keyboard_voice_white_24dp"
-        android:id="@+id/hot_line_button"
-        android:layout_margin="8dp"
-        app:layout_anchor="@id/msg_list"
-        app:layout_anchorGravity="bottom|center"
-        app:elevation="4dp"
-        app:backgroundTint="#AF00"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </android.support.design.widget.CoordinatorLayout>

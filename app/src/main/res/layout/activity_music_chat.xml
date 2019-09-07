@@ -8,6 +8,53 @@
     android:id="@+id/draw_layout"
     tools:context=".activities.MusicChatActivity" >
 
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/music_chat_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/music_chat_collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentScrim="?attr/colorPrimary"
+                android:background="#FFF"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:fitsSystemWindows="true">
+
+                <!-- Music Fragment -->
+                <FrameLayout
+                    android:id="@+id/music_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+            <!-- Chat Fragment -->
+            <FrameLayout
+                android:id="@+id/chat_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+<!--
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -49,7 +96,7 @@
         </LinearLayout>
 
     </RelativeLayout>
-
+-->
     <android.support.design.widget.NavigationView
         android:layout_gravity="start"
         android:id="@+id/nav_view"
@@ -64,7 +111,9 @@
         android:layout_gravity="end"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
+
         <FrameLayout
             android:id="@+id/room_in_music_chat_activity"
             android:background="#fff"
@@ -78,5 +127,6 @@
             android:layout_height="match_parent"/>
 
     </LinearLayout>
+
 
 </android.support.v4.widget.DrawerLayout>
