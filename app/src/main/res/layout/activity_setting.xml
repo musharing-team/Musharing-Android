@@ -6,6 +6,7 @@
     android:id="@+id/setting_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pureWhite"
     tools:context=".activities.SettingActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -37,6 +38,7 @@
 
             <android.support.v7.widget.CardView
                 android:onClick="accountSettingOnClick"
+                app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
@@ -62,7 +64,7 @@
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_gravity="center_horizontal|bottom"
-                    android:background="#ccc"
+                    android:background="@color/boneDark"
                     android:layout_marginHorizontal="56dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"/>
@@ -70,6 +72,7 @@
 
             <android.support.v7.widget.CardView
                 android:onClick="aboutSettingOnClick"
+                app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
@@ -95,7 +98,7 @@
                 </LinearLayout>
                 <!--<RelativeLayout-->
                 <!--android:layout_gravity="center_horizontal|bottom"-->
-                <!--android:background="#ccc"-->
+                <!--android:background="@color/boneDark"-->
                 <!--android:layout_marginHorizontal="56dp"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="1dp"/>-->

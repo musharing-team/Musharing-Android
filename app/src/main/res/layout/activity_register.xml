@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.RegisterActivity">
+    android:background="@color/pureWhite"
+    tools:context=".activities.RegisterActivity">
 
     <LinearLayout
         android:id="@+id/register_layout"
@@ -32,7 +33,7 @@
                 android:id="@+id/register_img"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/sparkBlueDark"
                 android:layout_gravity="center" />
             <TextView
                 android:layout_width="wrap_content"

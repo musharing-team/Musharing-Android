@@ -1,8 +1,12 @@
 package com.mine.musharing.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -10,26 +14,41 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.MainActivity;
 import com.mine.musharing.R;
+import com.mine.musharing.audio.HotLineRecorder;
+import com.mine.musharing.audio.PlayAsyncer;
+import com.mine.musharing.bases.Msg;
 import com.mine.musharing.bases.Playlist;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.fragments.ChatFragment;
 import com.mine.musharing.fragments.MusicFragment;
 import com.mine.musharing.fragments.PlaylistFragment;
 import com.mine.musharing.fragments.RoomFragment;
+import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
 import com.mine.musharing.requestTasks.LeaveTask;
+import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.support.constraint.Constraints.TAG;
 
 /**
  * <h1>音乐聊天活动</h1>
@@ -56,26 +75,37 @@ public class MusicChatActivity extends AppCompatActivity {
 
     private PlaylistFragment playlistFragment;
 
+    // Msg
+    private Timer mTimerForMsg;
+
+    private TimerTask refreshMsgTimerTask;
+
+    private static final long MSG_REFRESH_PERIOD = 2000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_chat);
+
+        // permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        }
 
         // 获取数据
         Intent intent = getIntent();
         user = (User) intent.getBundleExtra("data").get("user");
         playlist = (Playlist) intent.getBundleExtra("data").get("playlist");
 
-        // Show Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         // Show ic_menu
         mDrawerLayout = findViewById(R.id.draw_layout);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            // actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         }
 
         // 处理 fragments
@@ -140,6 +170,70 @@ public class MusicChatActivity extends AppCompatActivity {
 
         navUserNameView = navigationView.getHeaderView(0).findViewById(R.id.nav_user_name_view);
         navUserNameView.setText(user.getName());
+
+        // Refresh the message list periodically
+        mTimerForMsg = new Timer();
+        refreshMsgTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                refreshMsgs();
+            }
+        };
+        mTimerForMsg.schedule(refreshMsgTimerTask, 0, MSG_REFRESH_PERIOD);
+    }
+
+    /**
+     * 总的消息获取地
+     *
+     * <p>所有地消息都在这里接收，并被分发</p>
+     *
+     * <em>⚠整个App中必须实现且只实现一次这个方法！⚠</em>
+     */
+    private void refreshMsgs() {
+
+        new ReceiveTask(new RequestTaskListener<List<Msg>>() {
+            @Override
+            public void onStart() {}
+
+            @Override
+            public void onSuccess(List<Msg> newMsgs) {
+                if (!newMsgs.isEmpty()) {
+                    Log.d(TAG, "refreshMsgs: new Msgs: " + newMsgs);
+                }
+                runOnUiThread(() -> {
+                    for (Msg msg : newMsgs) {
+                        switch (msg.getType()) {
+                            case Msg.TYPE_TEXT:
+                                musicFragment.showTextMsg(msg);
+                                chatFragment.showTextMsg(msg);
+                                break;
+                            case Msg.TYPE_PLAYER_ASYNC:
+                                PlayAsyncer.getInstance().handleAsyncMsg(msg);
+                                break;
+                            case Msg.TYPE_RECORD:
+                                HotLineRecorder.getInstance().handleRecordMsg(msg);
+                                Msg recordSignMsg = new Msg(msg.TYPE_TEXT, new User(msg.getFromUid(), msg.getFromName(), msg.getFromImg()), "[语音]");
+                                musicFragment.showTextMsg(recordSignMsg);
+                                chatFragment.showTextMsg(recordSignMsg);
+                        }
+                    }
+                    // 清除过多的历史消息
+                    musicFragment.clearSurplusMsgs(1);
+                    chatFragment.clearSurplusMsgs(20);
+                });
+            }
+
+            @Override
+            public void onFailed(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(MusicChatActivity.this, error, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onFinish(String s) {}
+
+        }).execute(user.getUid());
     }
 
     @Override
@@ -166,6 +260,12 @@ public class MusicChatActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (refreshMsgTimerTask != null) {
+            refreshMsgTimerTask.cancel();
+        }
+        if (mTimerForMsg != null) {
+            mTimerForMsg.cancel();
+        }
         leaveRoom();
         super.onDestroy();
     }
@@ -200,4 +300,6 @@ public class MusicChatActivity extends AppCompatActivity {
 
         }).execute(user.getUid());
     }
+
+
 }

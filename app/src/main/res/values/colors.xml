@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#03a9f4</color>
-    <color name="colorPrimaryDark">#0277bd</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="pureWhite">#F5F3FD</color>
+
+    <color name="boneLight">#EEE9E9</color>
+    <color name="boneDark">#CBC8C3</color>
+
+    <color name="ceramicsYellow">#E2DE8F</color>
+    <color name="ceramicsYellowDark">#D0CD80</color>
+
+    <color name="woodLight">#F7DCAE</color>
+    <color name="woodDark">#7E5134</color>
+
+    <color name="sparkBlue">#03a9f4</color>
+    <color name="sparkBlueDark">#0277bd</color>
+
+    <color name="tpsl2Blue">#4295dc</color>
+    <color name="tpsl2Grey">#b9bcc4</color>
+
+    <color name="woodInk">#68575F</color>
+    <color name="woodInkDark">#292023</color>
+
+    <color name="pureBlack">#2B2326</color>
+    <color name="pureBlackDarker">#0A090E</color>
+
+    <color name="alrightGreen">#78DE5F</color>
+    <color name="forgetYellow">#C0CD70</color>
+
+    <color name="heartRed">#FE584F</color>
+    <color name="hotRed">#EB4532</color>
 </resources>

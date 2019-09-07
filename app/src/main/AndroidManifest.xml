@@ -17,15 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.AboutActivity"></activity>
+        <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.SettingActivity" />
 
-        <service
-            android:name=".services.MusicPlayService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity android:name=".activities.MusicChatActivity" />
+        <activity android:name=".activities.MusicChatActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.RoomPlaylistActivity" />
         <activity android:name=".activities.BootActivity">
             <intent-filter>

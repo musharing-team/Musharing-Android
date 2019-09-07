@@ -1,16 +1,25 @@
 package com.mine.musharing.fragments;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -20,13 +29,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
+import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.PlayAsyncer;
 import com.mine.musharing.audio.PlaylistPlayer;
+import com.mine.musharing.bases.Msg;
 import com.mine.musharing.bases.Music;
 import com.mine.musharing.bases.Playlist;
 import com.mine.musharing.bases.User;
+import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
+import com.mine.musharing.requestTasks.ReceiveTask;
+import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.Utility;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,16 +67,19 @@ public class MusicFragment extends Fragment {
     // views
     private TextView titleTextView;
     private TextView artistTextView;
-    private ImageView imageView;
+    // private ImageView imageView;
+    private Button playButton;
+    private TextView playStatusTextView;
     private ProgressBar progressBar;
     private SeekBar volumeBar;
     private TextView playedTime;
     private TextView residueTime;
+    private ImageButton hotLineButton;
 
     // 定时任务
-    private Timer mTimer;
-    private TimerTask mTimerTask;
-    private static final int REFRESH_PERIOD = 1000;
+    private Timer mTimerForMusic;
+    private TimerTask mTimerTaskForMusic;
+    private static final int MUSIC_REFRESH_PERIOD = 1000;
 
     // 音量控制
     private AudioManager audioManager;
@@ -68,6 +87,15 @@ public class MusicFragment extends Fragment {
     private int maxVolume;
 
     private int currentIndex = -1;
+
+    // Hot line
+    private HotLineRecorder hotLineRecorder;
+
+    // Msg
+    private RecyclerView msgRecyclerView;
+    private List<Msg> mMsgList = new ArrayList<>();
+    private MsgAdapter adapter;
+
 
     public MusicFragment() {
         // Required empty public constructor
@@ -121,19 +149,71 @@ public class MusicFragment extends Fragment {
     }
 
     /**
+     * 点击 HotLine 的事件
+     */
+    public boolean hotLineOnTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "HotLine button -> down");
+                try {
+                    hotLineRecorder.startRecord();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                    hotLineRecorder.reset();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "HotLine button -> up");
+                try {
+                    hotLineRecorder.stopRecord();
+                    hotLineRecorder.publishRecord();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                    hotLineRecorder.reset();
+                }
+
+                break;
+
+        }
+        return false;
+    }
+
+    /**
      * 初始化UI组件
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
+        // Title
         titleTextView = musicFragmentView.findViewById(R.id.play_title_text);
         artistTextView = musicFragmentView.findViewById(R.id.play_artist_text);
-        imageView = musicFragmentView.findViewById(R.id.play_image_view);
+
+        // Play/Pause button
+        playButton = musicFragmentView.findViewById(R.id.play_button);
+        playStatusTextView = musicFragmentView.findViewById(R.id.play_status_text);
+        playButton.setOnClickListener(this::playOrPauseOnClick);
+
+        // Progress
         progressBar = musicFragmentView.findViewById(R.id.play_progress_bar);
-        volumeBar = musicFragmentView.findViewById(R.id.play_volume);
         playedTime = musicFragmentView.findViewById(R.id.play_time);
         residueTime = musicFragmentView.findViewById(R.id.play_residue);
 
-        // 把图片作为处理播放/暂停一体的按钮
-        imageView.setOnClickListener(this::playOrPauseOnClick);
+        // Volume
+        volumeBar = musicFragmentView.findViewById(R.id.play_volume);
+
+        // Hot line button
+        hotLineButton = musicFragmentView.findViewById(R.id.hotline_in_music_fragment);
+        hotLineRecorder = HotLineRecorder.getInstance();
+        hotLineRecorder.setUser(user);
+        hotLineButton.setOnTouchListener(this::hotLineOnTouch);
+
+        // message recycler view
+        msgRecyclerView = musicFragmentView.findViewById(R.id.msg_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        msgRecyclerView.setLayoutManager(layoutManager);
+        adapter = new MsgAdapter(user, mMsgList);
+        msgRecyclerView.setAdapter(adapter);
+
+
     }
 
     /**
@@ -165,14 +245,14 @@ public class MusicFragment extends Fragment {
      * 初始化定时刷新任务
      */
     private void initTimerTask() {
-        mTimer = new Timer();
-        mTimerTask = new TimerTask() {
+        mTimerForMusic = new Timer();
+        mTimerTaskForMusic = new TimerTask() {
             @Override
             public void run() {
                 updateUi();
             }
         };
-        mTimer.schedule(mTimerTask, 0, REFRESH_PERIOD);
+        mTimerForMusic.schedule(mTimerTaskForMusic, 0, MUSIC_REFRESH_PERIOD);
     }
 
     /**
@@ -188,29 +268,32 @@ public class MusicFragment extends Fragment {
 
                 titleTextView.setText(currentMusic.getName());
                 artistTextView.setText(currentMusic.getArtist());
-                progressBar.setMax(playlistPlayer.getMaxProgress());
             }
 
-            // 作为播放/暂停按钮的图片
+            // 播放/暂停按钮
             if (playlistPlayer.isPlaying()) {
-                Glide.with(musicFragmentView).load(R.drawable.ic_pause_blue).into(imageView);
+                playStatusTextView.setText("暂停");
+                playButton.setBackgroundResource(R.drawable.button_start);
             } else {
-                Glide.with(musicFragmentView).load(R.drawable.ic_play_blue).into(imageView);
+                playStatusTextView.setText("播放");
+                playButton.setBackgroundResource(R.drawable.button_stop);
             }
 
             // 刷新进度条
-            setProgress(playlistPlayer.getCurrentProgress());
+            setProgress(playlistPlayer.getCurrentProgress(), playlistPlayer.getMaxProgress());
         });
     }
 
     /**
      * 刷新播放进度条显示，并对应刷新两端显示的时间
-     * @param progress playing progress in milliseconds
+     * @param currentProgress current playing progress in milliseconds
+     * @param maxProgress max progress
      */
-    private void setProgress(int progress) {
-        progressBar.setProgress(progress);
-        playedTime.setText(Utility.formatMusicProgress(progress));
-        residueTime.setText(Utility.formatMusicProgress(progress - progressBar.getMax()));
+    private void setProgress(int currentProgress, int maxProgress) {
+        progressBar.setMax(maxProgress);
+        progressBar.setProgress(currentProgress);
+        playedTime.setText(Utility.formatMusicProgress(currentProgress));
+        residueTime.setText(Utility.formatMusicProgress(currentProgress - maxProgress));
     }
 
     /**
@@ -232,7 +315,7 @@ public class MusicFragment extends Fragment {
     }
 
     /**
-     * 按键处理<br/>
+     * 实体按键处理<br/>
      *
      * 用来处理音量键事件
      * 由于在 fragment 中不能直接 onKeyDown，所以要在 activity 里 onKeyDown，然后把事件通过这个传进来
@@ -257,5 +340,27 @@ public class MusicFragment extends Fragment {
         volumeBar.setProgress(currentVolume);
 
         return true;
+    }
+
+    /**
+     * 显示一条消息
+     * @param msg
+     */
+    public void showTextMsg(Msg msg) {
+        mMsgList.add(msg);
+        adapter.notifyItemInserted(mMsgList.size() - 1); // 有新消息,刷新显示
+        msgRecyclerView.scrollToPosition(mMsgList.size() - 1);   // 移动到最后一条消息
+    }
+
+    /**
+     * 移除过多的消息
+     */
+    public void clearSurplusMsgs(int retainCount) {
+        int removed = 0;
+        while (mMsgList.size() > retainCount) {
+            mMsgList.remove(0);
+            removed++;
+        }
+        adapter.notifyItemRangeRemoved(0, removed);
     }
 }

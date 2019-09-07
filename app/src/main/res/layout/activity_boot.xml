@@ -7,6 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/pureWhite"
     tools:context=".activities.BootActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -19,6 +20,7 @@
         android:layout_margin="8dp"
         android:text="Musharing"
         android:textSize="40dp"
+        android:textColor="@color/tpsl2Blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

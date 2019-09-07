@@ -63,12 +63,6 @@ public class ChatFragment extends Fragment {
 
     private MsgAdapter adapter;
 
-    private Timer mTimer;
-
-    private TimerTask refreshMsgTimerTask;
-
-    private static final long REFRESH_PERIOD = 2000;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,14 +75,6 @@ public class ChatFragment extends Fragment {
             Toast.makeText(getContext(), "系统异常，请重新登录", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
-        }
-
-        // permissions
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        }
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
 
         // Inflate the layout for this fragment
@@ -115,69 +101,7 @@ public class ChatFragment extends Fragment {
         adapter = new MsgAdapter(user, mMsgList);
         msgRecyclerView.setAdapter(adapter);
 
-        // Refresh the message list periodically
-        mTimer = new Timer();
-        refreshMsgTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                refreshMsgs();
-            }
-        };
-        mTimer.schedule(refreshMsgTimerTask, 0, REFRESH_PERIOD);
-
         return chatFragmentView;
-    }
-
-    /**
-     * 总的消息获取地；
-     *
-     * 所有地消息都在这里接收，并被分发
-     */
-    private void refreshMsgs() {
-
-        new ReceiveTask(new RequestTaskListener<List<Msg>>() {
-            @Override
-            public void onStart() {}
-
-            @Override
-            public void onSuccess(List<Msg> newMsgs) {
-                if (!newMsgs.isEmpty()) {
-                    Log.d(TAG, "ChatFragment refreshMsgs: new Msgs: " + newMsgs);
-                }
-                getActivity().runOnUiThread(() -> {
-                    for (Msg msg : newMsgs) {
-                        switch (msg.getType()) {
-                            case Msg.TYPE_TEXT:
-                                mMsgList.add(msg);
-                                // TODO:(b04) 控制消息列表大小
-                                adapter.notifyItemInserted(mMsgList.size() - 1); // 有新消息,刷新显示
-                                msgRecyclerView.scrollToPosition(mMsgList.size() - 1);   // 移动到最后一条消息
-                                break;
-                            case Msg.TYPE_PLAYER_ASYNC:
-                                PlayAsyncer.getInstance().handleAsyncMsg(msg);
-                                break;
-                            case Msg.TYPE_RECORD:
-                                HotLineRecorder.getInstance().handleRecordMsg(msg);
-                                Msg recordSignMsg = new Msg(msg.TYPE_TEXT, new User(msg.getFromUid(), msg.getFromName(), msg.getFromImg()), "[语音]");
-                                mMsgList.add(recordSignMsg);
-                                adapter.notifyItemInserted(mMsgList.size() - 1); // 有新消息,刷新显示
-                                msgRecyclerView.scrollToPosition(mMsgList.size() - 1);   // 移动到最后一条消息
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onFailed(String error) {
-                getActivity().runOnUiThread(() -> {
-                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                });
-            }
-
-            @Override
-            public void onFinish(String s) {}
-
-        }).execute(user.getUid());
     }
 
     /**
@@ -198,7 +122,6 @@ public class ChatFragment extends Fragment {
                 public void onSuccess(String s) {
                     getActivity().runOnUiThread(() -> {
                         editText.setText("");
-                        refreshMsgs();
                     });
                 }
 
@@ -224,7 +147,7 @@ public class ChatFragment extends Fragment {
     }
 
     /**
-     * 点击 HotLine 的事件
+     * 按住 HotLine 的事件
      */
     public boolean hotLineOnTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
@@ -253,14 +176,25 @@ public class ChatFragment extends Fragment {
         return false;
     }
 
-    @Override
-    public void onDestroy() {
-        if (refreshMsgTimerTask != null) {
-            refreshMsgTimerTask.cancel();
+    /**
+     * 显示一条消息
+     * @param msg
+     */
+    public void showTextMsg(Msg msg) {
+        mMsgList.add(0, msg);
+        adapter.notifyItemInserted(0); // 有新消息,刷新显示
+        msgRecyclerView.scrollToPosition(0);   // 移动到最新一条消息
+    }
+
+    /**
+     * 移除过多的消息
+     */
+    public void clearSurplusMsgs(int retainCount) {
+        int removed = 0;
+        while (mMsgList.size() > retainCount) {
+            mMsgList.remove(mMsgList.size() - 1);
+            removed++;
         }
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-        super.onDestroy();
+        adapter.notifyItemRangeRemoved(retainCount + 1, removed);
     }
 }

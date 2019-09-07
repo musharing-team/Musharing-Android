@@ -1,7 +1,6 @@
 package com.mine.musharing.fragments;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,12 +14,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -32,10 +29,6 @@ import com.mine.musharing.requestTasks.AttendTask;
 import com.mine.musharing.requestTasks.MemberTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.UserUtil;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +77,7 @@ public class RoomFragment extends Fragment {
 
         // Swipe Refresh
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
+        swipeRefreshLayout.setColorSchemeResources(R.color.sparkBlueDark);
         swipeRefreshLayout.setOnRefreshListener(() -> refreshMemberList());
 
         // Set ProgressBar

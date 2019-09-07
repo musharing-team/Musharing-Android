@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pureWhite"
     tools:context=".activities.LoginActivity">
 
     <LinearLayout
@@ -13,6 +14,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_margin="32dp"
+        android:background="@color/pureWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
