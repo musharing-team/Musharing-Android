@@ -218,7 +218,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Demo中的歌曲由BaSO4授权给Musharing团队测试使用\n禁止用于包括但不限于私自拷贝等其他任何用途，版权所有，侵权必究！"
+                        android:text="Demo中的歌曲由BaSO4授权Musharing团队测试使用\n禁止用于包括但不限于私自拷贝等其他任何用途，版权所有，侵权必究！"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textSize="10sp"
