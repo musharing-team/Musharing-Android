@@ -6,8 +6,8 @@ android {
         applicationId "com.mine.musharing"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 3
-        versionName "0.2.0"
+        versionCode 6
+        versionName "0.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -38,4 +38,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.18'
 }

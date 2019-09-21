@@ -103,11 +103,20 @@ public class PlaylistPlayer {
      * 获取当前播放进度
      */
     public int getCurrentProgress() {
-        return mediaPlayer.getCurrentPosition();
+        if (mediaPlayer.isPlaying()) {
+            return mediaPlayer.getCurrentPosition();
+        } else {
+            return 0;
+        }
     }
 
     public int getMaxProgress() {
-        return mediaPlayer.getDuration();
+        if (mediaPlayer.isPlaying()) {
+            return mediaPlayer.getDuration();
+        } else {
+            return 0;
+        }
+
     }
     /**
      * 开始从同步处播放
@@ -151,31 +160,6 @@ public class PlaylistPlayer {
             // playAsyncer.postPaused(current.index, getCurrentProgress());
         }
     }
-
-//    /**
-//     * 同步，处理来自其他人的start/pause/next
-//     */
-//    public void async() throws PlayAsyncer.FailedToAsync {
-//        int state = playAsyncer.getState(current.index);
-//        Log.d(TAG, "async: state: " + state);
-//        switch (state) {
-//            case PlayAsyncer.SHOULD_CONTINUE:
-//                // 不用处理，继续播放
-//                break;
-//            case PlayAsyncer.SHOULD_START:
-//                start();
-//                break;
-//            case PlayAsyncer.SHOULD_PAUSE:
-//                pause();
-//                break;
-//            case PlayAsyncer.SHOULD_NEXT:
-//                next();
-//                break;
-//            default:
-//                throw new PlayAsyncer.FailedToAsync();
-//        }
-//        playAsyncer.notifyAsynced();
-//    }
 
     /**
      * 一首歌结束，准备并开始播放下一首

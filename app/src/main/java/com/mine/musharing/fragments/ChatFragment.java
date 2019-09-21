@@ -3,9 +3,11 @@ package com.mine.musharing.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import com.mine.musharing.activities.LoginActivity;
 import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.PlayAsyncer;
 import com.mine.musharing.bases.Msg;
+import com.mine.musharing.bases.RecordingDialogManager;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
 import com.mine.musharing.requestTasks.ReceiveTask;
@@ -57,6 +60,8 @@ public class ChatFragment extends Fragment {
 
     private HotLineRecorder hotLineRecorder;
 
+    private RecordingDialogManager recordingDialogManager;
+
     private User user;
 
     private List<Msg> mMsgList = new ArrayList<>();
@@ -83,6 +88,8 @@ public class ChatFragment extends Fragment {
         // Set the hotLineRecorder
         hotLineRecorder = HotLineRecorder.getInstance();
         hotLineRecorder.setUser(user);
+        hotLineRecorder.reset();
+        recordingDialogManager = new RecordingDialogManager(getContext());
 
         // Buttons and their onClick
         sendButton = chatFragmentView.findViewById(R.id.send_button);
@@ -153,7 +160,20 @@ public class ChatFragment extends Fragment {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d(TAG, "HotLine button -> down");
+                // UI 更新
                 try {
+                    // 一个震动效果
+                    Vibrator vibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
+                    vibrator.vibrate(100);
+                } finally {
+                    // 对话框效果
+                    recordingDialogManager.showRecordingDialog();
+                    recordingDialogManager.recording();
+
+                }
+
+                try {
+                    hotLineRecorder.reset();
                     hotLineRecorder.startRecord();
                 } catch (RuntimeException e) {
                     e.printStackTrace();
@@ -162,6 +182,15 @@ public class ChatFragment extends Fragment {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d(TAG, "HotLine button -> up");
+                // UI 更新
+                try {
+                    // 一个震动效果
+                    Vibrator vibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
+                    vibrator.vibrate(50);
+                } finally {
+                    // 对话框效果
+                    recordingDialogManager.dismissDialog();
+                }
                 try {
                     hotLineRecorder.stopRecord();
                     hotLineRecorder.publishRecord();

@@ -1,14 +1,13 @@
 package com.mine.musharing.fragments;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,13 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
 import com.mine.musharing.audio.HotLineRecorder;
@@ -35,10 +32,9 @@ import com.mine.musharing.audio.PlaylistPlayer;
 import com.mine.musharing.bases.Msg;
 import com.mine.musharing.bases.Music;
 import com.mine.musharing.bases.Playlist;
+import com.mine.musharing.bases.RecordingDialogManager;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
-import com.mine.musharing.requestTasks.ReceiveTask;
-import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.Utility;
 
 import java.util.ArrayList;
@@ -78,7 +74,7 @@ public class MusicFragment extends Fragment {
 
     // 定时任务
     private Timer mTimerForMusic;
-    private TimerTask mTimerTaskForMusic;
+    private TimerTask refreshMusicTimerTask;
     private static final int MUSIC_REFRESH_PERIOD = 1000;
 
     // 音量控制
@@ -90,6 +86,7 @@ public class MusicFragment extends Fragment {
 
     // Hot line
     private HotLineRecorder hotLineRecorder;
+    private RecordingDialogManager recordingDialogManager;
 
     // Msg
     private RecyclerView msgRecyclerView;
@@ -105,12 +102,7 @@ public class MusicFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /*
-        ⚠️[注意]: 👇 保持下面这种顺序！👇
-        First of all, inflate the layout
-        Then, get User & Playlist
-        After that, call init*() according to priority
-         */
+
         // Inflate the layout for this fragment
         musicFragmentView = inflater.inflate(R.layout.fragment_music, container, false);
 
@@ -124,7 +116,7 @@ public class MusicFragment extends Fragment {
             startActivity(intent);
         }
 
-        // inits
+        initHotlineRecorder();
         initViews();
         initVolumeControl();
         initPlayer();
@@ -155,7 +147,20 @@ public class MusicFragment extends Fragment {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d(TAG, "HotLine button -> down");
+                // UI 更新
                 try {
+                    // 一个震动效果
+                    Vibrator vibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
+                    vibrator.vibrate(100);
+                } finally {
+                    // 对话框效果
+                    recordingDialogManager.showRecordingDialog();
+                    recordingDialogManager.recording();
+
+                }
+
+                try {
+                    hotLineRecorder.reset();
                     hotLineRecorder.startRecord();
                 } catch (RuntimeException e) {
                     e.printStackTrace();
@@ -164,6 +169,15 @@ public class MusicFragment extends Fragment {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d(TAG, "HotLine button -> up");
+                // UI 更新
+                try {
+                    // 一个震动效果
+                    Vibrator vibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
+                    vibrator.vibrate(50);
+                } finally {
+                    // 对话框效果
+                    recordingDialogManager.dismissDialog();
+                }
                 try {
                     hotLineRecorder.stopRecord();
                     hotLineRecorder.publishRecord();
@@ -176,6 +190,16 @@ public class MusicFragment extends Fragment {
 
         }
         return false;
+    }
+
+    /**
+     * 初始化HotlineRecorder 以及 录音时管理UI效果的RecordingDialogManager
+     */
+    private void initHotlineRecorder() {
+        hotLineRecorder = HotLineRecorder.getInstance();
+        hotLineRecorder.setUser(user);
+        hotLineRecorder.reset();
+        recordingDialogManager = new RecordingDialogManager(getContext());
     }
 
     /**
@@ -202,8 +226,6 @@ public class MusicFragment extends Fragment {
 
         // Hot line button
         hotLineButton = musicFragmentView.findViewById(R.id.hotline_in_music_fragment);
-        hotLineRecorder = HotLineRecorder.getInstance();
-        hotLineRecorder.setUser(user);
         hotLineButton.setOnTouchListener(this::hotLineOnTouch);
 
         // message recycler view
@@ -246,13 +268,13 @@ public class MusicFragment extends Fragment {
      */
     private void initTimerTask() {
         mTimerForMusic = new Timer();
-        mTimerTaskForMusic = new TimerTask() {
+        refreshMusicTimerTask = new TimerTask() {
             @Override
             public void run() {
                 updateUi();
             }
         };
-        mTimerForMusic.schedule(mTimerTaskForMusic, 0, MUSIC_REFRESH_PERIOD);
+        mTimerForMusic.schedule(refreshMusicTimerTask, 0, MUSIC_REFRESH_PERIOD);
     }
 
     /**
@@ -362,5 +384,18 @@ public class MusicFragment extends Fragment {
             removed++;
         }
         adapter.notifyItemRangeRemoved(0, removed);
+    }
+
+    @Override
+    public void onDestroy() {
+        // 结束定时刷新音乐进度的任务
+        if (refreshMusicTimerTask != null) {
+            refreshMusicTimerTask.cancel();
+        }
+        if (mTimerForMusic != null) {
+            mTimerForMusic.cancel();
+        }
+
+        super.onDestroy();
     }
 }

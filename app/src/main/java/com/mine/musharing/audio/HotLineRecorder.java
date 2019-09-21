@@ -3,6 +3,7 @@ package com.mine.musharing.audio;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.util.Log;
 
 import com.mine.musharing.bases.Msg;
 import com.mine.musharing.bases.User;
@@ -20,23 +21,24 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class HotLineRecorder {
-    
+
+    // STATUS
     private final int NOTHING = 0;
-    
-    private final int RECORDING = 1;
-    
-    private final int RECORDED = 2;
+    private final int INITED = 1;
+    private final int RECORDING = 2;
+    private final int RECORDED = 3;
+    private final int SENDING = 4;
 
-    private final int SENDING = 3;
+    private int status = NOTHING;
 
-    private MediaRecorder mediaRecorder = new MediaRecorder();
+    private final MediaRecorder mediaRecorder = new MediaRecorder();    // Promise there is ONLY ONE MediaRecorder to avoid hanging
 
     private File dir;
 
     private String path;
-    
-    private int status = NOTHING;
 
     /**
      * 当前登录的用户
@@ -78,7 +80,7 @@ public class HotLineRecorder {
      * @return path
      */
     private String initFilePath(String fileName) {
-        dir = new File(Environment.getExternalStorageDirectory(),"sounds");
+        dir = new File(Environment.getExternalStorageDirectory(),"musharing_hotline_recorder");
         if(!dir.exists()){
             dir.mkdirs();
         }
@@ -97,30 +99,38 @@ public class HotLineRecorder {
     }
 
     /**
-     * init MediaRecorder
+     * set MediaRecorder
      * @param path 要储存录音文件的地址
+     *
+     * status: NOTHING -> INITED
      */
-    private void initMediaRecorder(String path) {
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);   //设置输出格式
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);   //设置编码格式
-        mediaRecorder.setOutputFile(path);
+    private void resetMediaRecorder(String path) {
+        if (status == NOTHING) {
+            mediaRecorder.reset();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);   //设置输出格式
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);   //设置编码格式
+            mediaRecorder.setOutputFile(path);
+
+            status = INITED;
+        } else {
+            throw new RuntimeException("HotLineRecorder cannot resetMediaRecorder on status " + status);
+        }
+
     }
 
     /**
      * 开始录制<br/>
      *
-     * status: NOTHING -> RECORDING
+     * status: INITED -> RECORDING
      */
     public void startRecord() throws RuntimeException {
-        if (status == NOTHING) {
+        if (status == INITED) {
             try {
-                status = RECORDING;
-
-                initMediaRecorder(path);
                 mediaRecorder.prepare();
                 mediaRecorder.start();  //开始录制
+
+                status = RECORDING;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -137,13 +147,10 @@ public class HotLineRecorder {
      */
     public void stopRecord() throws RuntimeException {
         if (status == RECORDING) {
-            status = RECORDED;
+            mediaRecorder.stop();
+            // mediaRecorder.release();
 
-            if(mediaRecorder != null){
-                mediaRecorder.stop();
-                mediaRecorder.release();
-                mediaRecorder = null;
-            }
+            status = RECORDED;
         } else {
             throw new RuntimeException("HotLineRecorder cannot stopRecord on status " + status);
         }
@@ -189,9 +196,9 @@ public class HotLineRecorder {
     }
 
     /**
-     * 把已录音转化为 Msg 发送<br/>
+     * 把已录音转化为 Msg 发送<br/>，然后自动调用reset
      *
-     * status: RECORDED -> SENDING -> NOTHING
+     * status: RECORDED -> SENDING -> NOTHING -> (Then call reset(), which will take it to INITED)
      */
     public void publishRecord() throws RuntimeException {
         if (status == RECORDED) {
@@ -209,7 +216,10 @@ public class HotLineRecorder {
                     public void onFailed(String error) {}
 
                     @Override
-                    public void onFinish(String s) { status = NOTHING; }
+                    public void onFinish(String s) {
+                        status = NOTHING;
+                        reset();
+                    }
                 }).execute(user.getUid(), msg.toString());
 
             } catch (Throwable e) {
@@ -289,13 +299,39 @@ public class HotLineRecorder {
     }
 
     /**
-     * 重置，在出错后调用，防止HotLineRecorder陷入某个尴尬的状态无法自拔使之再不可用
+     * 重置，准备下一次录制-发送流程
+     *
+     * 也期待在出错后被调用，防止整个HotLineRecorder陷入某个尴尬的状态（status链条断裂）无法自拔使之再不可用
+     *
+     * status: NOTHING -> INITED
      */
     public void reset() {
-        if (mediaRecorder != null) {
-            mediaRecorder.release();
-            mediaRecorder = null;
+        // 删除所有录音缓存
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    f.delete();
+                }
+            }
         }
+
         status = NOTHING;
+        resetMediaRecorder(path);
+    }
+
+    public void onDestroy() {
+        status = NOTHING;
+        mediaRecorder.release();
+
+        // 删除所有录音缓存
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    f.delete();
+                }
+            }
+        }
     }
 }

@@ -260,13 +260,21 @@ public class MusicChatActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        // 结束定时刷新消息的任务
         if (refreshMsgTimerTask != null) {
             refreshMsgTimerTask.cancel();
         }
         if (mTimerForMsg != null) {
             mTimerForMsg.cancel();
         }
+        // destroy fragments
+        chatFragment.onDestroy();
+        musicFragment.onDestroy();
+        // 退出房间
         leaveRoom();
+        // 结束HotLineRecorder
+        HotLineRecorder.getInstance().onDestroy();
+
         super.onDestroy();
     }
 
