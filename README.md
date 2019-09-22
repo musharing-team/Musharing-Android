@@ -1,14 +1,16 @@
 ![Logo of the project](./images/logo.png)
 
-# Musharing-Android &middot; [![Build Status](https://img.shields.io/travis/npm/npm/latest.svg?style=flat-square)](https://travis-ci.org/npm/npm) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
+# Musharing-Android
 
-> A New Way of Music Sharing in the Internet Era
+[![Build Status](https://img.shields.io/travis/npm/npm/latest.svg?style=flat-square)](https://travis-ci.org/npm/npm) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
+
+> A New Way of Music Sharing in the Internet Era.
 
 **Musharing** is a *Android* app for immediate sharing music via Internet with your friends. It offers your the possibility of simulcasting a song in different phones no metter how far apart they are.  More attractive, with musharing, you can chat with your friends in the background of real synchronized music playing.
 
 Wondering more about **musharing** ? [Tap Here(Simplified Chinese)](./musharing.md).
 
-> **This repositories is the *Android app of Musharing*, if you are seek the Back-End of Musharing please [click here]()**
+> **This repository is the *Android app of Musharing*, if you are seek the Back-End of Musharing please [click here](https://github.com/musharing-team/Musharing-Server)**.
 
 ## Getting started
 
