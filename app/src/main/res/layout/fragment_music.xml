@@ -163,7 +163,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:elevation="2dp"
-                        android:background="@drawable/button_em"/>
+                        android:background="@drawable/button_em"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <TextView
                         android:id="@+id/play_status_text"
@@ -195,7 +196,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:elevation="2dp"
-                        android:background="@drawable/button_common"/>
+                        android:background="@drawable/button_common"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <TextView
                         android:text="导航"
@@ -230,7 +232,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:textColor="#F5F3FD"/>
+                        android:textColor="#F5F3FD"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                 </LinearLayout>
 
@@ -261,7 +264,8 @@
             android:layout_height="wrap_content"
             android:elevation="4dp"
             android:src="@drawable/ic_keyboard_voice_white_24dp"
-            android:background="@drawable/button_hotline"/>
+            android:background="@drawable/button_hotline"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
         <!-- Logo -->
         <ImageView

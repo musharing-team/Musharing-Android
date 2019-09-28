@@ -19,6 +19,7 @@ public class RequestUtil {
 	 * 服务器地址
 	 */
 	public static final String SERVER_URL = "http://39.107.75.19:5000";
+	// public static final String SERVER_URL = "http://10.0.2.2:5000";		// local debug for back-end via emulator
 
 	/**
 	 * 注册的网络请求
