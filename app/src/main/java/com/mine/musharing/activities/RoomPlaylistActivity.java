@@ -6,17 +6,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.mine.musharing.MainActivity;
 import com.mine.musharing.R;
+import com.mine.musharing.audio.MusicListHolder;
+import com.mine.musharing.bases.Playlist;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.fragments.PlaylistFragment;
 import com.mine.musharing.fragments.RoomFragment;
+import com.mine.musharing.requestTasks.PlaylistTask;
+import com.mine.musharing.requestTasks.RequestTaskListener;
 
 /**
  * <h1>房间/播放列表活动</h1>
@@ -35,6 +41,8 @@ public class RoomPlaylistActivity extends AppCompatActivity {
     private ImageButton intoRoomButton;
 
     private ProgressBar intoRoomProgressBar;
+
+    private CardView playlistCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +64,53 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         user = (User) intent.getBundleExtra("data").get("user");
         Log.d(TAG, "onCreate: user: " + user);
 
+        // playlistCardView
+        playlistCardView = findViewById(R.id.playlist_card);
+        playlistCardView.setOnClickListener(this::playlistCardOnClick);
+
+        initFragments();
+    }
+
+//    private void initMusicList(String idOfCategory) {
+//
+//        new PlaylistTask(new RequestTaskListener<Playlist>() {
+//            @Override
+//            public void onStart() {
+//                intoRoomButton.setVisibility(View.GONE);
+//                intoRoomProgressBar.setVisibility(View.VISIBLE);
+//            }
+//
+//            @Override
+//            public void onSuccess(Playlist s) {
+//                runOnUiThread(() -> {
+//                    initFragments(s);
+//                });
+//            }
+//
+//            @Override
+//            public void onFailed(String error) {
+//                runOnUiThread(() -> {
+//                    Toast.makeText(RoomPlaylistActivity.this, error, Toast.LENGTH_SHORT).show();
+//                });
+//            }
+//
+//            @Override
+//            public void onFinish(String s) {
+//                intoRoomButton.setVisibility(View.VISIBLE);
+//                intoRoomProgressBar.setVisibility(View.GONE);
+//            }
+//        }).execute(user.getUid(), idOfCategory);
+//
+//        // musicListHolder.musicList = Demo.testMusicList;
+//
+//    }
+
+    private void initFragments() {
         // 打包要传递给 fragments 的 user 数据
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", user);
+        bundle.putSerializable("playlist", MusicListHolder.getInstance().getPlaylist());
+        bundle.putSerializable("musiclist", MusicListHolder.getInstance().getMusicList());
 
         // roomFragment
         roomFragment = new RoomFragment();
@@ -76,6 +128,14 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    private void playlistCardOnClick(View view) {
+        Intent intent = new Intent(this, CategoryActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user);
+        intent.putExtra("data", bundle);
+        startActivity(intent);
+    }
+
     public void intoChatRoomOnClick(View view) {
         intoRoomButton.setVisibility(View.GONE);
         intoRoomProgressBar.setVisibility(View.VISIBLE);
@@ -84,7 +144,7 @@ public class RoomPlaylistActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MusicChatActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("user", user);
-            bundle.putSerializable("playlist", playlistFragment.getPlaylist());
+            // bundle.putSerializable("playlist", playlistFragment.getPlaylist());
             intent.putExtra("data", bundle);
             startActivity(intent);
             finish();

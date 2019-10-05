@@ -1,7 +1,6 @@
 package com.mine.musharing.recyclerViewAdapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
+import com.mine.musharing.bases.Category;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.utils.Utility;
 
@@ -24,13 +24,13 @@ import java.util.Random;
 import static android.support.constraint.Constraints.TAG;
 
 /**
- * RoomFragment 中 Room内成员RecycleView 的 Adapter
+ * CategoryFragment 中 Categories RecycleView 的 Adapter
  */
-public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
 
     private Context mContext;
 
-    private List<User> mMemberList;
+    private List<Category> mCategoryList;
 
     private OnItemClickListener onItemClickListener;
 
@@ -42,13 +42,13 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         public ViewHolder(View view) {
             super(view);
             cardView = (CardView) view;
-            imageView = view.findViewById(R.id.member_image);
-            textView = view.findViewById(R.id.member_name);
+            imageView = view.findViewById(R.id.category_image);
+            textView = view.findViewById(R.id.category_title);
         }
     }
 
-    public MemberAdapter(List<User> memberList) {
-        mMemberList = memberList;
+    public CategoryAdapter(List<Category> categories) {
+        mCategoryList = categories;
     }
 
     @NonNull
@@ -57,14 +57,14 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         if (mContext == null) {
             mContext = viewGroup.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.member_item, viewGroup, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.category_item, viewGroup, false);
         final ViewHolder holder = new ViewHolder(view);
         holder.cardView.setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
-            User member = mMemberList.get(position);
+            Category category = mCategoryList.get(position);
 
             if(onItemClickListener != null){
-                onItemClickListener.OnItemClick(v, member);
+                onItemClickListener.OnItemClick(v, category);
             }
         });
         return holder;
@@ -72,16 +72,16 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        // Log.d(TAG, "onBindViewHolder: mMemberList: " + mMemberList);
-        User member = mMemberList.get(i);
+        Log.d(TAG, "onBindViewHolder: mCategoryList: " + mCategoryList);
+        Category category = mCategoryList.get(i);
         viewHolder.cardView.setCardBackgroundColor(Utility.randomCardColor());
-        Glide.with(mContext).load(member.getImgUrl()).into(viewHolder.imageView);
-        viewHolder.textView.setText(member.getName());
+        Glide.with(mContext).load(category.getImage()).into(viewHolder.imageView);
+        viewHolder.textView.setText(category.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return mMemberList.size();
+        return mCategoryList.size();
     }
 
 
@@ -95,7 +95,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
          * @param view 点击的item的视图
          * @param member 点击的item的数据
          */
-        public void OnItemClick(View view, User member);
+        public void OnItemClick(View view, Category member);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

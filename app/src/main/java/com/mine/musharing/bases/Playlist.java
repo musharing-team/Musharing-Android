@@ -1,10 +1,13 @@
 package com.mine.musharing.bases;
 
+import com.mine.musharing.utils.UserUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,14 +20,17 @@ public class Playlist extends Msg implements Serializable {
 
     private String id;
 
-    private List<Music> musicList;
+    private List<Music> musicList = new ArrayList<>();  // 初始化以防止列表在没有完成从服务器下载时被调用导致 a null object reference
 
     private int size;
 
     private long totalDuration;
 
-    public Playlist(User fromUser) {
-        super(Msg.TYPE_PLAYLIST, fromUser, "");
+    public Playlist() {
+        super(Msg.TYPE_PLAYLIST, UserUtil.playlistFakeUser, "");
+        this.setType(Msg.TYPE_PLAYLIST);
+        this.setFromUser(UserUtil.playlistFakeUser);
+        this.setContent("");
     }
 
     public String getId() {
@@ -47,6 +53,10 @@ public class Playlist extends Msg implements Serializable {
         return size;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public long getTotalDuration() {
         return totalDuration;
     }
@@ -55,27 +65,32 @@ public class Playlist extends Msg implements Serializable {
         this.totalDuration = totalDuration;
     }
 
-    public void commit() {
+    public String commit() {
         id = UUID.randomUUID().toString();
         size = musicList.size();
         totalDuration = 0;
 
-        JSONArray musicArrayJson = new JSONArray();
-        for (Music music : musicList) {
-            totalDuration += music.getDuration();
-            musicArrayJson.put(music);
-        }
-
-        JSONObject contentJson = new JSONObject();
         try {
+            JSONArray musicArrayJson = new JSONArray();
+            for (Music music : musicList) {
+                totalDuration += music.getDuration();
+                JSONObject musicJson = new JSONObject(music.toString());
+                musicArrayJson.put(musicJson);
+            }
+
+            JSONObject contentJson = new JSONObject();
             contentJson.put("id", id);
             contentJson.put("size", size);
             contentJson.put("total_duration", totalDuration);
             contentJson.put("music_list", musicArrayJson);
+
+            this.setContent(contentJson.toString());
+
+            return id;
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        content = contentJson.toString();
+        return "";
     }
 }

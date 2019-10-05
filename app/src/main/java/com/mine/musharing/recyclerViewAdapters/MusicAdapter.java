@@ -1,5 +1,6 @@
 package com.mine.musharing.recyclerViewAdapters;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,15 +14,17 @@ import com.mine.musharing.R;
 import com.mine.musharing.bases.Music;
 import com.mine.musharing.bases.Playlist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * PlaylistFragment 中 播放列表RecycleView 的 Adapter
  */
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> {
-    private List<Music> musicList;
+public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    private List<Music> musicList = new ArrayList<>();
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         View musicView;
         ImageView musicImage;
         TextView musicTitle;
@@ -33,6 +36,18 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
             musicImage = view.findViewById(R.id.music_image);
             musicTitle = view.findViewById(R.id.music_title);
             musicFrom = view.findViewById(R.id.music_from);
+        }
+
+        //选中item，改变背景颜色
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        //放开item，改变背景颜色
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
         }
     }
 
@@ -77,5 +92,20 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return musicList.size();
+    }
+
+    //交换item
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Music prev = musicList.remove(fromPosition);
+        musicList.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    //删除item
+    @Override
+    public void onItemDismiss(int position) {
+        musicList.remove(position);
+        notifyItemRemoved(position);
     }
 }

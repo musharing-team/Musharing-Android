@@ -19,7 +19,7 @@ public class RequestUtil {
 	 * 服务器地址
 	 */
 	public static final String SERVER_URL = "http://39.107.75.19:5000";
-	// public static final String SERVER_URL = "http://10.0.2.2:5000";		// local debug for back-end via emulator
+	// public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
 
 	/**
 	 * 注册的网络请求
@@ -47,7 +47,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -84,7 +84,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -117,7 +117,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -156,7 +156,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -191,7 +191,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -224,7 +224,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -257,7 +257,7 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {
@@ -290,7 +290,76 @@ public class RequestUtil {
 				.build();
 		try {
 			Response response = client.newCall(request).execute();
-			if (response.body() != null) {
+			if (response.isSuccessful() && response.body() != null) {
+				return response.body().string();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "{\"error\": \"Unexpected\"}";
+	}
+
+	/**
+	 * ## 获取 categories (可选的 playlist) 的网络请求
+	 * @param uid 用户的uid
+	 * @return <pre>response json:
+	 * 	- `{id, name, musicList: [{music.json}, ...]}`: 请求成功，返回播放列表的json
+	 *
+	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
+	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
+	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
+	 *
+	 * 	- `{"error": "Unexpected"}`: 未知错误
+	 * 	</pre>
+	 */
+	public static String category(String uid) {
+		OkHttpClient client = new OkHttpClient();
+		RequestBody requestBody = new FormBody.Builder()
+				.add("from_uid", uid)
+				.build();
+		Request request = new Request.Builder()
+				.url(SERVER_URL + "/category")
+				.post(requestBody)
+				.build();
+		try {
+			Response response = client.newCall(request).execute();
+			if (response.isSuccessful() && response.body() != null) {
+				return response.body().string();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "{\"error\": \"Unexpected\"}";
+	}
+
+	/**
+	 * ## 获取指定 Playlist 的网络请求
+	 * @param uid 用户的uid
+	 * @param playlistId 欲获取的 playlist 的 id
+	 * @return <pre>response json:
+	 * 	- `{id, name, musicList: [{music.json}, ...]}`: 请求成功，返回播放列表的json
+	 *
+	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
+	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
+	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
+	 * 	- `{"error": "NoSuchPlaylist"}`: 没有请求的播放列表
+	 *
+	 * 	- `{"error": "Unexpected"}`: 未知错误
+	 * 	</pre>
+	 */
+	public static String playlist(String uid, String playlistId) {
+		OkHttpClient client = new OkHttpClient();
+		RequestBody requestBody = new FormBody.Builder()
+				.add("from_uid", uid)
+				.add("playlist", playlistId)
+				.build();
+		Request request = new Request.Builder()
+				.url(SERVER_URL + "/playlist")
+				.post(requestBody)
+				.build();
+		try {
+			Response response = client.newCall(request).execute();
+			if (response.isSuccessful() && response.body() != null) {
 				return response.body().string();
 			}
 		} catch (IOException e) {

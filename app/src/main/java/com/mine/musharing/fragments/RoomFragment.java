@@ -32,6 +32,8 @@ import com.mine.musharing.utils.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.support.constraint.Constraints.TAG;
 import static com.mine.musharing.utils.UserUtil.addMemberSign;
@@ -48,13 +50,21 @@ public class RoomFragment extends Fragment {
 
     private RecyclerView membersRecycleView;
 
-    private ProgressBar progressBar;
+    // private ProgressBar progressBar;
 
     private MemberAdapter memberAdapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private User user;
+
+    private Timer timer;
+
+    private TimerTask refreshTask;
+
+    private final static int REFRESH_PERIOD = 3500;
+
+    private boolean autoRefreshFlag = true;     // 自动刷新时不显示 swipeRefreshLayout 的 progressbar
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -81,12 +91,23 @@ public class RoomFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(() -> refreshMemberList());
 
         // Set ProgressBar
-        progressBar = view.findViewById(R.id.attend_room_progressbar);
-        progressBar.setIndeterminate(true);
-        progressBar.setVisibility(View.GONE);
+//        progressBar = view.findViewById(R.id.attend_room_progressbar);
+//        progressBar.setIndeterminate(true);
+//        progressBar.setVisibility(View.GONE);
 
         initMemberRecycleView();
-        refreshMemberList();
+        // refreshMemberList();
+
+        timer = new Timer();
+        refreshTask = new TimerTask() {
+            @Override
+            public void run() {
+                autoRefreshFlag = true;
+                refreshMemberList();
+                autoRefreshFlag = false;
+            }
+        };
+        timer.schedule(refreshTask, 0, REFRESH_PERIOD);
 
         return view;
     }
@@ -109,19 +130,24 @@ public class RoomFragment extends Fragment {
 
     private void refreshMemberList() {
         // mMemberList.clear();
+        if (getActivity() == null) {
+            return;
+        }
 
         new MemberTask(new RequestTaskListener<List<User>>() {
             @Override
             public void onStart() {
                 getActivity().runOnUiThread(()-> {
                     // progressBar.setVisibility(View.VISIBLE);
-                    swipeRefreshLayout.setRefreshing(true);
+                    if (autoRefreshFlag) {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
                 });
             }
 
             @Override
             public void onSuccess(List<User> users) {
-                Log.d(TAG, "onSuccess: users: " + users);
+                // Log.d(TAG, "onSuccess: users: " + users);
                 getActivity().runOnUiThread(() -> {
                     /* 注意：不能 `mMemberList = users;`
                     [参考1](https://www.cnblogs.com/xesam/archive/2012/05/31/2529056.html)
@@ -130,16 +156,16 @@ public class RoomFragment extends Fragment {
                     mMemberList.clear();
                     mMemberList.addAll(users);
 
-                    Log.d(TAG, "onSuccess: mMemberList" + mMemberList);
+                    Log.d(TAG, "refreshMemberList onSuccess: mMemberList" + mMemberList);
                     memberAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "onSuccess: notified");
+                    // Log.d(TAG, "onSuccess: notified");
                 });
-                Log.d(TAG, "onSuccess: afterRunOnUiThread: " + mMemberList);
+                // Log.d(TAG, "onSuccess: afterRunOnUiThread: " + mMemberList);
             }
 
             @Override
             public void onFailed(String error) {
-                Log.d(TAG, "onFailed: error");
+                // Log.d(TAG, "onFailed: error");
                 getActivity().runOnUiThread(() -> {
                     Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
                 });
@@ -187,7 +213,7 @@ public class RoomFragment extends Fragment {
         new AttendTask(new RequestTaskListener<String>() {
             @Override
             public void onStart() {
-                progressBar.setVisibility(View.VISIBLE);
+                // progressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -204,7 +230,7 @@ public class RoomFragment extends Fragment {
 
             @Override
             public void onFinish(String s) {
-                progressBar.setVisibility(View.GONE);
+                // progressBar.setVisibility(View.GONE);
             }
         }).execute(uid, targetNameEncoded);
     }

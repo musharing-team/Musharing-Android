@@ -24,6 +24,10 @@ public class UserUtil {
 	public final static User addMemberSign = new User("add_member", "添加朋友", "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_1280.png");
 
 	/**
+	 * 代表 Playlist 的特殊用户对象
+	 */
+	public final static User playlistFakeUser = new User("playlist", "playlist", "");
+	/**
 	 * 计算 password 用 userNameBase64 加盐后 md5 加密值 (hmac)
 	 * @param nameBase64 Base64编码后的用户名
 	 * @param password_text 原始密码字符串

@@ -1,5 +1,9 @@
 package com.mine.musharing.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * <h1>小工具库</h1>
  * 
@@ -75,6 +79,36 @@ public class Utility {
 		}
 		second.append(s);
 		return sign + minute.toString() + ":" + second.toString();
+	}
+
+	/**
+	 * <h2>为卡片获取随机背景颜色</h2>
+	 *
+	 * 例如: cardView.setCardBackgroundColor(Utility.randomCardColor());
+	 *
+	 * @return 颜色的值
+	 */
+	public static int randomCardColor() {
+		int lastCardColorIndex = 0;
+		List<Integer> colors = new ArrayList<>();
+		colors.add(0xffddeaf3);
+		colors.add(0xfff9ede9);
+		colors.add(0xffb6eee1);
+		colors.add(0xfffaead2);
+		colors.add(0xffd1e3e1);
+		colors.add(0xffeaede1);
+		colors.add(0xffdee2ed);
+		colors.add(0xffcef0e1);
+		colors.add(0xffc9e5e8);
+		colors.add(0xffe3dbfa);
+		colors.add(0xffffdffb);
+		Random random = new Random();
+		int i;
+		for (i = 0; i == lastCardColorIndex; i = random.nextInt(colors.size())) {
+			continue;
+		}
+		lastCardColorIndex = i;
+		return colors.get(i);
 	}
 
 }

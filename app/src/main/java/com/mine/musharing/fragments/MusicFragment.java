@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
 import com.mine.musharing.audio.HotLineRecorder;
+import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
 import com.mine.musharing.audio.PlaylistPlayer;
 import com.mine.musharing.bases.Msg;
@@ -49,12 +50,14 @@ import static android.support.constraint.Constraints.TAG;
  */
 public class MusicFragment extends Fragment {
 
+    private static final String TAG = "MusicFragment";
+
     // 该 Fragment 的 view
     private View musicFragmentView;
 
     // 数据
     private User user;
-    private Playlist playlist;
+    // private Playlist playlist;
 
     // 同步播放
     private PlayAsyncer playAsyncer;
@@ -109,7 +112,7 @@ public class MusicFragment extends Fragment {
         // get User & Playlist
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable("user");
-            playlist = (Playlist) getArguments().getSerializable("playlist");
+            // playlist = (Playlist) getArguments().getSerializable("playlist");
         } else {
             Toast.makeText(getContext(), "系统异常，请重新登录", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -257,7 +260,8 @@ public class MusicFragment extends Fragment {
      * 初始化PlayAsyncer & PlaylistPlayer
      */
     private void initPlayer() {
-        playlistPlayer = new PlaylistPlayer(playlist);
+        Log.d(TAG, "initPlayer: MusicList: " + MusicListHolder.getInstance().getMusicList());
+        playlistPlayer = new PlaylistPlayer(MusicListHolder.getInstance().getMusicList());
         playAsyncer = PlayAsyncer.getInstance();
         playAsyncer.setUser(user);
         playAsyncer.setPlayer(playlistPlayer);

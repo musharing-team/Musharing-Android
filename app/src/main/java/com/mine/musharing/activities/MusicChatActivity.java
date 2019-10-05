@@ -3,8 +3,6 @@ package com.mine.musharing.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -14,20 +12,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.mine.musharing.MainActivity;
 import com.mine.musharing.R;
 import com.mine.musharing.audio.HotLineRecorder;
+import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
 import com.mine.musharing.bases.Msg;
 import com.mine.musharing.bases.Playlist;
@@ -36,12 +31,10 @@ import com.mine.musharing.fragments.ChatFragment;
 import com.mine.musharing.fragments.MusicFragment;
 import com.mine.musharing.fragments.PlaylistFragment;
 import com.mine.musharing.fragments.RoomFragment;
-import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
 import com.mine.musharing.requestTasks.LeaveTask;
 import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -98,7 +91,7 @@ public class MusicChatActivity extends AppCompatActivity {
         // 获取数据
         Intent intent = getIntent();
         user = (User) intent.getBundleExtra("data").get("user");
-        playlist = (Playlist) intent.getBundleExtra("data").get("playlist");
+        // playlist = (Playlist) intent.getBundleExtra("data").get("playlist");
 
         // Show ic_menu
         mDrawerLayout = findViewById(R.id.draw_layout);
@@ -112,7 +105,8 @@ public class MusicChatActivity extends AppCompatActivity {
         // 打包要传递给 fragments 的 user 数据
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", user);
-        bundle.putSerializable("playlist", playlist);
+        bundle.putSerializable("playlist", MusicListHolder.getInstance().getPlaylist());
+        bundle.putSerializable("musiclist", MusicListHolder.getInstance().getMusicList());
 
         // init MusicFragment
         musicFragment = new MusicFragment();
@@ -191,6 +185,11 @@ public class MusicChatActivity extends AppCompatActivity {
      */
     private void refreshMsgs() {
 
+        // 禁用 MusicListHolder 中的消息接收器
+        if (MusicListHolder.getInstance().receiveFlag) {
+            MusicListHolder.getInstance().receiveFlag = false;
+        }
+
         new ReceiveTask(new RequestTaskListener<List<Msg>>() {
             @Override
             public void onStart() {}
@@ -215,6 +214,11 @@ public class MusicChatActivity extends AppCompatActivity {
                                 Msg recordSignMsg = new Msg(msg.TYPE_TEXT, new User(msg.getFromUid(), msg.getFromName(), msg.getFromImg()), "[语音]");
                                 musicFragment.showTextMsg(recordSignMsg);
                                 chatFragment.showTextMsg(recordSignMsg);
+                            case Msg.TYPE_PLAYLIST:
+                                boolean changed = MusicListHolder.getInstance().handlePlaylistMsg(msg);
+                                if (changed) {
+                                    // Refresh the player!
+                                }
                         }
                     }
                     // 清除过多的历史消息
@@ -286,7 +290,7 @@ public class MusicChatActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String s) {
                 runOnUiThread(() -> {
-                    // 返回到 RoomPlaylistActivity
+                    // 返回到 RoomActivity
                     Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);

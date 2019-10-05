@@ -1,7 +1,6 @@
 package com.mine.musharing.activities;
 
 import android.Manifest;
-import android.app.assist.AssistStructure;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,27 +9,24 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.mine.musharing.MainActivity;
 import com.mine.musharing.R;
+import com.mine.musharing.audio.HotLineRecorder;
+import com.mine.musharing.audio.MusicListHolder;
+import com.mine.musharing.audio.PlayAsyncer;
+import com.mine.musharing.audio.PlaylistPlayer;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.requestTasks.LoginTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.UserUtil;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.mine.musharing.utils.AESUtil;
 import java.util.UUID;
@@ -114,9 +110,14 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(User user) {
+
+                PlayAsyncer.getInstance().setUser(user);
+                MusicListHolder.getInstance().setUser(user);
+                HotLineRecorder.getInstance().setUser(user);
+
                 runOnUiThread(() -> {
                     Toast.makeText(LoginActivity.this, "Hello, " + user.getName(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, RoomPlaylistActivity.class);     // TODO(a01) 打开正确的Activity
+                    Intent intent = new Intent(LoginActivity.this, RoomPlaylistActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);
                     intent.putExtra("data", bundle);

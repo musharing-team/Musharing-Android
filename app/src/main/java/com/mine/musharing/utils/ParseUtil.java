@@ -1,7 +1,14 @@
 package com.mine.musharing.utils;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mine.musharing.activities.MusicChatActivity;
+import com.mine.musharing.bases.Category;
 import com.mine.musharing.bases.Msg;
+import com.mine.musharing.bases.Music;
+import com.mine.musharing.bases.Playlist;
 import com.mine.musharing.bases.User;
 
 import org.json.JSONArray;
@@ -10,6 +17,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.support.constraint.Constraints.TAG;
 
 /**
  * <h1>解析库</h1>
@@ -148,6 +157,74 @@ public class ParseUtil {
                 String errorInfo = jsonObject.getString("error");
                 throw new ResponseError(errorInfo);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * <h2>解析 获取 category 的结果</h2>
+     *
+     * @param responseText 请求的响应文本
+     * @return <p>category 列表({@code List<Category>})</p>
+     * @throws ResponseError 当响应json中包含error字段时，抛出携带错误信息的ResponseError
+     */
+    public static List<Category> categoryResponseParse(String responseText) throws ResponseError {
+        try {
+            Log.d(TAG, "categoryResponseParse: responseText: " + responseText);
+            JSONObject jsonObject = new JSONObject(responseText);
+            if (jsonObject.has("categories")) {
+                Gson gson = new Gson();
+                JSONArray categories = jsonObject.getJSONArray("categories");
+                List<Category> categoryList = new ArrayList<>();
+
+                for (int i = 0; i < categories.length(); i++) {
+                    Category category = gson.fromJson(categories.getJSONObject(i).toString(), Category.class);
+                    categoryList.add(category);
+                }
+
+                return categoryList;
+
+            } else if (jsonObject.has("error")) {
+                String errorInfo = jsonObject.getString("error");
+                throw new ResponseError(errorInfo);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * <h2>解析 Playlist Msg 的 Content</h2>
+     * @param content 收到的 Playlist 的 content
+     * @return 解析出的 Playlist 对象
+     * @throws JSONException 解析 Json 出错
+     */
+    public static Playlist playlistContentParse(String content){
+        Log.d(TAG, "playlistContentParse: " + content);
+        try {
+            JSONObject jsonObject = new JSONObject(content);
+            Gson gson = new Gson();
+            Playlist playlist = new Playlist();
+
+            playlist.setId(jsonObject.getString("id"));
+            playlist.setSize(jsonObject.getInt("size"));
+            playlist.setTotalDuration(jsonObject.getLong("total_duration"));
+
+            JSONArray musicArrayJson = jsonObject.getJSONArray("music_list");
+            List<Music> musicList = new ArrayList<>();
+            for (int i = 0; i < musicArrayJson.length(); i++) {
+                String musicString = musicArrayJson.getString(i);
+                Music music = gson.fromJson(musicString, Music.class);
+                musicList.add(music);
+            }
+            playlist.setMusicList(musicList);
+
+            playlist.setContent(content);
+
+            return playlist;
         } catch (JSONException e) {
             e.printStackTrace();
         }

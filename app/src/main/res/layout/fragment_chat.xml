@@ -90,7 +90,7 @@
                         <android.support.design.widget.FloatingActionButton
                             android:id="@+id/send_button"
                             android:src="@drawable/ic_send_white_24dp"
-                            android:backgroundTint="@color/sparkBlue"
+                            app:backgroundTint="@color/sparkBlue"
                             android:layout_margin="4dp"
                             app:elevation="16dp"
                             android:layout_gravity="end|bottom"

@@ -19,6 +19,11 @@ public class Msg {
     public static final String TYPE_PLAYLIST = "playlist";
 
     /**
+     * 消息类型：请求播放列表
+     */
+    public static final String TYPE_QUERY_PLAYLIST = "query_playlist";
+
+    /**
      * 消息类型: 同步信息
      */
     public static final String TYPE_PLAYER_ASYNC = "player_async";
@@ -108,6 +113,16 @@ public class Msg {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public User getFromUser() {
+        return new User(getFromUid(), getFromName(), getFromImg());
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUid = fromUser.getUid();
+        this.fromName = fromUser.getName();
+        this.fromImg = fromUser.getImgUrl();
     }
 
     /**

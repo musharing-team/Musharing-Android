@@ -6,10 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.RoomFragment">
 
-    <ProgressBar
-        android:id="@+id/attend_room_progressbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+<!--    <ProgressBar-->
+<!--        android:id="@+id/attend_room_progressbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"

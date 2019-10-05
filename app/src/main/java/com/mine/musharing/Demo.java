@@ -30,6 +30,6 @@ public class Demo {
 
     };
 
-    public static List<Music> testMusicList = Arrays.asList(life_BaSO4);
+    public static List<Music> testMusicList = new ArrayList<>(Arrays.asList(life_BaSO4));   // Read this [reference](https://stackoverflow.com/questions/7399482/java-lang-unsupportedoperationexception-at-java-util-abstractlist-removeunknown).
 
 }

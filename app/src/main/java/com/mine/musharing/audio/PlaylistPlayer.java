@@ -7,6 +7,7 @@ import com.mine.musharing.bases.Music;
 import com.mine.musharing.bases.Playlist;
 
 import java.io.IOException;
+import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -27,7 +28,7 @@ public class PlaylistPlayer {
 
         public Current(int index) {
             this.index = index;
-            this.music = playlist.getMusicList().get(index);
+            this.music = musicList.get(index);
             this.prepared = false;
         }
 
@@ -59,7 +60,8 @@ public class PlaylistPlayer {
     /**
      * 要播放的播放列表
      */
-    private Playlist playlist;
+    // private Playlist playlist;
+    private List<Music> musicList;
 
     /**
      * 完成音频播放任务的MediaPlayer
@@ -76,8 +78,8 @@ public class PlaylistPlayer {
      */
     private boolean musicOverHandling = false;
 
-    public PlaylistPlayer(Playlist playlist) {
-        this.playlist = playlist;
+    public PlaylistPlayer(List<Music> ml) {
+        this.musicList = ml;
         this.mediaPlayer = new MediaPlayer();
         this.current = new Current(0);
 
@@ -180,7 +182,7 @@ public class PlaylistPlayer {
      */
     public void playNext() {
         int index = current.index + 1;
-        if (index >= playlist.getSize()) {   // 没有了，从头来过
+        if (index >= musicList.size()) {   // 没有了，从头来过
             index = 0;
         }
         nextTo(index);
@@ -191,7 +193,7 @@ public class PlaylistPlayer {
      * 将current定位到播放列表中的某一首
      */
     public void nextTo(int index) {
-        if (current.index != index && index < playlist.getSize()) {
+        if (current.index != index && index < musicList.size()) {
             mediaPlayer.reset();
             current.index = index;
             current = new Current(current.index);
