@@ -62,7 +62,7 @@ public class RoomFragment extends Fragment {
 
     private TimerTask refreshTask;
 
-    private final static int REFRESH_PERIOD = 3500;
+    private final static int REFRESH_PERIOD = 10000;     // 这个请求常常在后端日志里刷屏出现，应该尽量降低其频率。
 
     private boolean autoRefreshFlag = true;     // 自动刷新时不显示 swipeRefreshLayout 的 progressbar
 

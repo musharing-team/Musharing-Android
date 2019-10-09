@@ -79,8 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 runOnUiThread(() -> {
-                    String name = UserUtil.decodeName(user.getName());
-                    Toast.makeText(RegisterActivity.this, "注册成功，请登录\nWelcome, " + name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "注册成功，请登录\nWelcome, " + user.getName(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
