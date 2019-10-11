@@ -128,7 +128,7 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private void playlistCardOnClick(View view) {
+    public void playlistCardOnClick(View view) {
         Intent intent = new Intent(this, CategoryActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", user);
@@ -140,17 +140,19 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         intoRoomButton.setVisibility(View.GONE);
         intoRoomProgressBar.setVisibility(View.VISIBLE);
 
-        if (roomFragment.getmMemberList().size() > 1) {     // 已经加入房间
+        if (roomFragment.getmMemberList().size() <= 1) {    // 没加好友
+            Snackbar.make(findViewById(R.id.attend_room_layout),
+                    "至少添加一位朋友才能开始哦^_^", Snackbar.LENGTH_LONG).show();
+        } else if (MusicListHolder.getInstance().getMusicList().size() < 1) {   // 没加歌单
+            Snackbar.make(findViewById(R.id.attend_room_layout),
+                    "选择一张歌单再开始吧^_^", Snackbar.LENGTH_LONG).show();
+        } else {
             Intent intent = new Intent(this, MusicChatActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("user", user);
-            // bundle.putSerializable("playlist", playlistFragment.getPlaylist());
             intent.putExtra("data", bundle);
             startActivity(intent);
             finish();
-        } else {    // 没加入房间
-            Snackbar.make(findViewById(R.id.attend_room_layout),
-                    "至少添加一位朋友才能开始哦^_^", Snackbar.LENGTH_LONG).show();
         }
 
         intoRoomButton.setVisibility(View.VISIBLE);

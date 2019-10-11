@@ -23,8 +23,10 @@ import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userNameText;
     private EditText passwordText;
     private CheckBox rememberAccountCheckBox;
+    private ImageButton loginButton;
 
     private String szImei;
 
@@ -58,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         rememberAccountCheckBox = findViewById(R.id.remember_account);
         userNameText = findViewById(R.id.login_user_name);
         passwordText = findViewById(R.id.login_password);
+        loginButton = findViewById(R.id.login_button);
 
         // 引入imei加密后产生密匙
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -105,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
              */
             @Override
             public void onStart() {
+                loginButton.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             }
 
@@ -136,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFinish(String s) {
                 progressBar.setVisibility(View.GONE);
+                loginButton.setVisibility(View.VISIBLE);
             }
         }).execute(nameEncoded, passwordEncrypted);
     }
@@ -143,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
     public void toRegisterOnClick(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
-        finish();
+        // finish();
     }
 
     /**

@@ -154,6 +154,8 @@ public class MusicChatActivity extends AppCompatActivity {
                     mDrawerLayout.closeDrawers();
                     leaveRoom();
                     break;
+                default:
+                    Toast.makeText(MusicChatActivity.this, "未完成的功能", Toast.LENGTH_SHORT).show();
             }
             return true;
         });

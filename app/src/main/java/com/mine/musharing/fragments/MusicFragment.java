@@ -5,10 +5,12 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -64,6 +67,9 @@ public class MusicFragment extends Fragment {
     private PlaylistPlayer playlistPlayer;
 
     // views
+//    private LinearLayout screenLayout;
+//    private GradientDrawable screenBackground;
+
     private TextView titleTextView;
     private TextView artistTextView;
     // private ImageView imageView;
@@ -210,6 +216,11 @@ public class MusicFragment extends Fragment {
      */
     @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
+//        screenLayout = musicFragmentView.findViewById(R.id.screen_layout);
+//        // screenLayout.setBackgroundColor(Utility.randomCardColor());
+//        screenBackground = (GradientDrawable) screenLayout.getBackground();
+//        screenBackground.setColor(Utility.randomCardColor());
+
         // Title
         titleTextView = musicFragmentView.findViewById(R.id.play_title_text);
         artistTextView = musicFragmentView.findViewById(R.id.play_artist_text);
@@ -294,6 +305,9 @@ public class MusicFragment extends Fragment {
 
                 titleTextView.setText(currentMusic.getName());
                 artistTextView.setText(currentMusic.getArtist());
+
+                // screenLayout.setBackgroundColor(Utility.randomCardColor());
+                // screenBackground.setColor(Utility.randomCardColor());        这个更改会造成 Activity 意外结束
             }
 
             // 播放/暂停按钮

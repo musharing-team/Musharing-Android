@@ -4,130 +4,319 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pureWhite"
+    android:background="@drawable/login_bkg_f"
     tools:context=".activities.LoginActivity">
+<!--android:background="@color/woodLight"-->
 
-    <LinearLayout
-        android:id="@+id/login_layout"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_margin="32dp"
-        android:background="@color/pureWhite"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:id="@+id/login_progress_bar"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#1000">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/login_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="用户名: "
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/login_user_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="3"
-                android:layout_marginEnd="16dp"
-                android:hint="User Name" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal">
-            <TextView
-                android:text="密    码: "
-                android:textSize="18sp"
-                android:layout_gravity="center"
-                android:gravity="right"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/login_password"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="3"
-                android:hint="Password"
-                android:layout_marginEnd="16dp"
-                android:inputType="textPassword" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal">
-            <TextView
-                android:text="忘记密码"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:layout_height="wrap_content" />
+                android:layout_margin="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" >
 
-            <TextView
-                android:id="@+id/login_register"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="快速注册"
-                android:onClick="toRegisterOnClick"
-                android:textColor="#5D8EF6" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginVertical="28dp"
+                    android:gravity="left">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="欢迎回来！"
+                        android:textSize="30sp"/>
 
-            <CheckBox
-                android:id="@+id/remember_account"
-                android:layout_gravity="center"
-                android:enabled="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                    <!--                <TextView-->
+                    <!--                    android:layout_width="wrap_content"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:text="有何吩咐？请登录。"-->
+                    <!--                    android:textSize="20sp"/>-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="记住登录"
-                android:textSize="18sp" />
+                </LinearLayout>
 
-        </LinearLayout>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="16dp"
+                    app:cardBackgroundColor="#fff">
 
-        <Button
-            android:id="@+id/login_button"
-            android:text="登录"
-            android:padding="16dp"
-            android:onClick="loginOnClick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <!--Account-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <!--                    <TextView-->
+                            <!--                        android:layout_width="0dp"-->
+                            <!--                        android:layout_height="wrap_content"-->
+                            <!--                        android:layout_gravity="center"-->
+                            <!--                        android:layout_weight="1"-->
+                            <!--                        android:gravity="right"-->
+                            <!--                        android:text="用户名: "-->
+                            <!--                        android:textSize="18sp" />-->
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_person_pink_400_24dp"/>
+
+                            <EditText
+                                android:id="@+id/login_user_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="3"
+                                android:layout_marginEnd="16dp"
+                                android:textAlignment="center"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:background="#0000"
+                                android:hint="昵称" />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/tpsl2Grey"/>
+
+                        <!--Password-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <!--                    <TextView-->
+                            <!--                        android:text="密    码: "-->
+                            <!--                        android:textSize="18sp"-->
+                            <!--                        android:layout_gravity="center"-->
+                            <!--                        android:gravity="right"-->
+                            <!--                        android:layout_width="0dp"-->
+                            <!--                        android:layout_weight="1"-->
+                            <!--                        android:layout_height="wrap_content" />-->
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_lock_pink_400_24dp"/>
+
+                            <EditText
+                                android:id="@+id/login_password"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="3"
+                                android:hint="密码"
+                                android:textAlignment="center"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:background="#0000"
+                                android:layout_marginEnd="16dp"
+                                android:inputType="textPassword" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <!--Forget/Register-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:text="忘记密码?"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:elevation="4dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:textColor="#5DA6DC" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <!--Remember-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginHorizontal="32dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/remember_account"
+                            android:layout_gravity="center"
+                            android:enabled="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="记住我"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/tpsl2Grey"/>
+
+                    <!--Login-->
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginHorizontal="32dp"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="#EC407A">
+
+                        <ImageButton
+                            android:id="@+id/login_button"
+                            android:src="@drawable/ic_play_arrow_white_24dp"
+                            android:minHeight="32dp"
+                            android:textSize="14sp"
+                            android:visibility="visible"
+                            android:textColor="@color/pureWhite"
+                            android:background="#0000"
+                            android:elevation="0dp"
+                            android:onClick="loginOnClick"
+                            android:layout_width="75dp"
+                            android:layout_height="wrap_content"
+                            android:foreground="?android:attr/selectableItemBackground" />
+
+                    </android.support.v7.widget.CardView>
+
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:id="@+id/login_progress_bar"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginHorizontal="32dp"
+                        android:layout_width="75dp"
+                        android:layout_height="24dp" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="8dp"
+                    android:scaleType="fitCenter"
+                    android:alpha="0.5"
+                    android:src="@drawable/login_cassette"/>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0dp"
+                    app:cardBackgroundColor="#2fff"
+                    app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Musharing 新人，初来乍到?"/>
+
+                        <TextView
+                            android:id="@+id/login_register"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="快速注册"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:elevation="4dp"
+                            android:onClick="toRegisterOnClick"
+                            android:textColor="#5DA6DC" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
 
 
-    </LinearLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+    </ScrollView>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Copyright © 2019 Musharing Team." />-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="All rights reserved." />-->
+<!--        -->
+<!--    </LinearLayout>-->
 
 </android.support.constraint.ConstraintLayout>

@@ -20,10 +20,12 @@ public class SettingActivity extends AppCompatActivity {
 
         // Show Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_setting);
+        toolbar.setTitle("设置");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("设置");
         }
     }
 
@@ -37,8 +39,8 @@ public class SettingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void accountSettingOnClick(View view) {
-        Snackbar.make(findViewById(R.id.setting_layout), "🚫 暂不可用", Snackbar.LENGTH_LONG).show();
+    public void nonImplementSettingOnClick(View view) {
+        Snackbar.make(findViewById(R.id.setting_layout), "暂不可用", Snackbar.LENGTH_LONG).show();
     }
 
     public void aboutSettingOnClick(View view) {

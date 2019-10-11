@@ -5,17 +5,35 @@
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_people_white_24dp"
-            android:title="房间" />
+            android:title="查看房间" />
 
         <item
-            android:id="@+id/nav_exit"
-            android:icon="@drawable/ic_exit_to_app_white_24dp"
-            android:title="离开" />
+            android:id="@+id/nav_collection"
+            android:icon="@drawable/ic_collections_bookmark_white_24dp"
+            android:title="我的收藏" />
+
+        <item
+            android:id="@+id/nav_lookaround"
+            android:icon="@drawable/ic_room_white_24dp"
+            android:title="发现周边" />
+
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback_white_24dp"
+            android:title="意见反馈" />
+    </group>
+
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_white_24dp"
             android:title="设置" />
+
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_exit_to_app_white_24dp"
+            android:title="离开" />
 
     </group>
 </menu>

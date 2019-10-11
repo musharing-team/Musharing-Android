@@ -37,17 +37,15 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/sparkBlue"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                app:cardBackgroundColor="#ed84e5"
+                android:layout_margin="16dp"
                 app:cardCornerRadius="16dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="16dp">
+
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/icon_img"
                         android:src="@mipmap/ic_launcher"
@@ -79,6 +77,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
+                    <TextView
+                        android:layout_below="@id/version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Designed By Musharing Team"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center"
+                        android:textColor="#eee"/>
+
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
@@ -86,11 +94,52 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/boneDark"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                app:cardBackgroundColor="@color/tpsl2Blue"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="16dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:text="开放源代码"
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:src="@drawable/github"
+                        android:layout_gravity="center"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:text="musharing-team/Musharing-Android"
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:text="MIT LICENSE © Musharing Team"
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/tpsl2Grey"
+                android:layout_margin="16dp"
                 app:cardCornerRadius="16dp">
 
                 <LinearLayout
@@ -123,11 +172,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/colorAccent"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                app:cardBackgroundColor="@color/woodLight"
+                android:layout_margin="16dp"
                 app:cardCornerRadius="16dp">
 
                 <LinearLayout
@@ -139,20 +185,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="由CDFMLR提供Demo服务\n对信息完整与安全不做保证"
+                        android:text="由 CDFMLR 提供服务\n对信息完整与安全性不做保证"
                         android:textSize="16sp"
                         android:gravity="center"
                         android:layout_margin="8dp"
                         android:layout_gravity="center"
-                        android:textColor="#fff"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Designed By CDFMLR."
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center"
-                        android:textColor="#fff"/>
+                        android:textColor="@color/woodInkDark"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -160,7 +198,7 @@
                         android:text="cdfmlr@163.com"
                         android:layout_gravity="center"
                         android:textSize="10sp"
-                        android:textColor="#eee"/>
+                        android:textColor="@color/tpsl2Grey"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -168,7 +206,7 @@
                         android:text="650114  Kunming, Yunnan"
                         android:layout_gravity="center"
                         android:textSize="10sp"
-                        android:textColor="#eee"/>
+                        android:textColor="@color/tpsl2Grey"/>
 
                 </LinearLayout>
 
@@ -177,11 +215,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/woodInkDark"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                app:cardBackgroundColor="@color/tpsl2Blue"
+                android:layout_margin="16dp"
                 app:cardCornerRadius="16dp">
 
                 <LinearLayout
@@ -219,7 +254,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Demo中的歌曲由BaSO4授权给Musharing团队测试使用\n禁止用于包括但不限于私自拷贝等其他任何用途，版权所有，侵权必究！"
+                        android:text="Demo 中的歌曲由 BaSO4 授权给 Musharing 团队测试使用\n禁止用于包括但不限于私自拷贝等其他任何用途。\n版权所有，侵权必究！"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textSize="10sp"
@@ -233,7 +268,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="16dp"
-                android:text="Copyright © 2019 CDFMLR. All rights reserved.\n"
+                android:text="Copyright © 2019 Musharing Team. All rights reserved.\n"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

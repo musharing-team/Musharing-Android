@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="216dp"
     android:padding="16dp"
-    android:background="@drawable/nav_head_background">
+    android:background="@drawable/nav_bkg">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_user_img_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:elevation="4dp"
+        android:layout_margin="16dp"
         android:layout_width="70dp"
         android:layout_height="70dp" />
 
-    <TextView
-        android:id="@+id/nav_user_name_view"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:elevation="4dp"
-        android:textStyle="bold"
-        android:text="未登录"
-        android:textSize="24sp"
-        android:textColor="#ffff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" >
+
+        <TextView
+            android:id="@+id/nav_user_name_view"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="16dp"
+            android:textStyle="bold"
+            android:text="未登录"
+            android:textSize="24sp"
+            android:textColor="#8a8a8a"
+            android:textAlignment="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_drop_down_grey_400_24dp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

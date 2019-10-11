@@ -12,24 +12,45 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.PlaylistActivity"></activity>
-        <activity android:name=".activities.CategoryActivity" />
-        <activity android:name=".activities.AboutActivity" />
-        <activity android:name=".activities.SettingActivity" />
-        <activity
-            android:name=".activities.MusicChatActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.RoomPlaylistActivity" />
-        <activity android:name=".activities.BootActivity">
+        <activity android:name=".activities.PlaylistActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.CategoryActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.AboutActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.SettingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.MusicChatActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.RoomPlaylistActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.BootActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.RegisterActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.LoginActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
     </application>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />

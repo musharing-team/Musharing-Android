@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,6 +22,8 @@ import com.mine.musharing.utils.UserUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * <h1>注册活动</h1>
  * 提供头像、用户名、密码尝试注册，成功后转到LoginActivity
@@ -29,7 +32,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
-    private ImageView imageView;
+    private Button registerButton;
+
+    private CircleImageView imageView;
 
     // TODO(b03) 实现让用户可选则头像
     private String imgUrl = "https://cdn.pixabay.com/photo/2014/12/21/23/59/block-576506_1280.png";
@@ -42,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.register_progress_bar);
         progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.GONE);
+
+        registerButton = findViewById(R.id.register_button);
 
         imageView = findViewById(R.id.register_img);
         Glide.with(this).load(imgUrl).into(imageView);
@@ -57,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         String passwordAgain = passwordAgainText.getText().toString();
 
         if (TextUtils.isEmpty(imgUrl) || TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "请选择头像并正确输入用户名和密码", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请正确输入用户名和密码", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -73,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
             // TODO [b01](todo://LoginActivity/b01)
             @Override
             public void onStart() {
+                registerButton.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             }
 
@@ -96,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFinish(String s) {
                 progressBar.setVisibility(View.GONE);
+                registerButton.setVisibility(View.VISIBLE);
             }
         }).execute(nameEncoded, passwordEncrypted, imgUrl);
     }

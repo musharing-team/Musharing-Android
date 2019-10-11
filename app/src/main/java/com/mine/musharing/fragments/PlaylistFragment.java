@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.mine.musharing.Demo;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
+import com.mine.musharing.activities.PlaylistActivity;
 import com.mine.musharing.activities.RoomPlaylistActivity;
 import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.bases.Msg;
@@ -97,7 +98,13 @@ public class PlaylistFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::refreshPlaylist);
 
         commitPlaylistButton = view.findViewById(R.id.commit_playlist_button);
-        commitPlaylistButton.setOnClickListener(this::commitPlayListOnClick);
+        commitPlaylistButton.hide();
+
+        // 只有在 PlaylistActivity 才可以 commitPlaylist
+        if (getActivity().getClass().equals(PlaylistActivity.class)) {
+            commitPlaylistButton.setOnClickListener(this::commitPlayListOnClick);
+            commitPlaylistButton.show();
+        }
 
         view = inflaterPlaylist(view);
 
@@ -154,16 +161,21 @@ public class PlaylistFragment extends Fragment {
     }
 
     private void commitPlaylist() {
-        MusicListHolder musicListHolder = MusicListHolder.getInstance();
-        musicListHolder.setPlaylist(playlist);
-        musicListHolder.setUser(user);
-        musicListHolder.postPlaylist();
 
-        Intent intent = new Intent(getContext(), RoomPlaylistActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
-        intent.putExtra("data", bundle);
-        startActivity(intent);
-        getActivity().finish();
+        if (getActivity().getClass().equals(PlaylistActivity.class)) {
+
+            MusicListHolder musicListHolder = MusicListHolder.getInstance();
+            musicListHolder.setPlaylist(playlist);
+            musicListHolder.setUser(user);
+            musicListHolder.postPlaylist();
+
+            Intent intent = new Intent(getContext(), RoomPlaylistActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            intent.putExtra("data", bundle);
+            startActivity(intent);
+            getActivity().finish();
+        }
+
     }
 }

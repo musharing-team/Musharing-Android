@@ -5,27 +5,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:gravity="center"
+    android:gravity="top"
     android:orientation="vertical"
-    android:background="@color/pureWhite"
+    android:background="@drawable/boot_bkg"
     tools:context=".activities.BootActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_margin="8dp"
-        android:text="Musharing"
-        android:textSize="40dp"
-        android:textColor="@color/tpsl2Blue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_margin="64dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:text="DEMO"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="left|bottom">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="晓音"
+                android:textSize="40dp"
+                android:textColor="@color/ceramicsYellow" />
+
+            <TextView
+                android:text="Musharing"
+                android:textSize="25dp"
+                android:textColor="@color/ceramicsYellow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="DEMO"
+                android:textSize="16dp"
+                android:textColor="@color/tpsl2Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

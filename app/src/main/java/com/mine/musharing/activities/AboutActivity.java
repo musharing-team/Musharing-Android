@@ -17,10 +17,12 @@ public class AboutActivity extends AppCompatActivity {
 
         // Show Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_about);
+        toolbar.setTitle("关于");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("关于");
         }
     }
 
