@@ -101,7 +101,12 @@ public class PlayAsyncer {
         }
     }
 
-    private PlayAsyncer() {}
+    /**
+     * Required empty public constructor
+     */
+    private PlayAsyncer() {
+        // Required empty constructor
+    }
 
     /**
      * 单例Holder
@@ -267,24 +272,6 @@ public class PlayAsyncer {
         return progress;
     }
 
-    /*
-    public int getState(int index) {
-        updateAsyncContentList(index);
-        if (asyncContentList.isEmpty()) {
-            return SHOULD_CONTINUE;
-        }
-        switch (asyncContentList.get(asyncContentList.size() - 1).type) {
-            case TYPE_STARTED:
-                return SHOULD_START;
-            case TYPE_PAUSED:
-                return SHOULD_PAUSE;
-            case TYPE_NEXT:
-                return SHOULD_NEXT;
-        }
-        return SHOULD_CONTINUE;
-    }
-    */
-
     /**
      * 构造一个基于当前时间以及给定type, index, progress的AsyncContent，并返回其toString的结果
      *
@@ -339,6 +326,8 @@ public class PlayAsyncer {
 
     /**
      * 更新同步消息列表，暂时弃用
+     *
+     * TODO: 重新实现之，或确定不需要后删除
      */
     private void updateAsyncContentList(int index) {
         // 移除过时的

@@ -24,6 +24,12 @@ import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
+/**
+ * 播放列表的"管理员"
+ *
+ * 储存这当前使用的播放列表；
+ * 并完成和别人的播放列表的同步。
+ */
 public class MusicListHolder {
 
     private static final String TAG = "MusicListHolder";
@@ -48,7 +54,7 @@ public class MusicListHolder {
 
     public boolean receiveFlag = true;
 
-    public MusicListHolder() {
+    private MusicListHolder() {
         setPlaylist(new Playlist());
     }
 
@@ -67,10 +73,18 @@ public class MusicListHolder {
         return SingletonHolder.instance;
     }
 
+    /**
+     * 设置当前用户
+     * @param user 当前用户
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * 获取当前播放列表对应的 Playlist 对象
+     * @return
+     */
     public Playlist getPlaylist() {
         playlist.setType(Msg.TYPE_PLAYLIST);
         playlist.setFromUser(user);
@@ -78,21 +92,36 @@ public class MusicListHolder {
         return playlist;
     }
 
+    /**
+     * 从 Playlist 对象重置当前播放列表
+     * @param playlist
+     */
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
         setList(playlist.getMusicList());
         Log.d(TAG, "setPlaylist:\n playlist: " + playlist + "\n musicList: " + musicList);
     }
 
+    /**
+     * 向房间中的其他人发送当前自己的播放列表
+     */
     public void postPlaylist() {
         sendPlaylist(getPlaylist());
     }
 
+    /**
+     * 设置播放列表
+     * @param ms @code{List<Music>} 的播放列表
+     */
     private void setList(List<Music> ms) {
         musicList.clear();
         musicList.addAll(ms);
     }
 
+    /**
+     * 获取播放列表
+     * @return @code{List<Music>} 的播放列表
+     */
     public SerializableList<Music> getMusicList() {
         return musicList;
     }
@@ -114,6 +143,10 @@ public class MusicListHolder {
         return false;
     }
 
+    /**
+     * 处理接收到的 Playlist 消息
+     * @param msg 接收到的 Playlist 消息
+     */
     public void handleQueryPlaylistMsg(Msg msg) {
         if (!msg.getFromUid().equals(user.getUid())) {
             Log.d(TAG, "handleQueryPlaylistMsg");
@@ -121,6 +154,10 @@ public class MusicListHolder {
         }
     }
 
+    /**
+     * 发送播放列表
+     * @param pl Playlist对象表示的播放列表
+     */
     private void sendPlaylist(Playlist pl) {
 
         Log.d(TAG, "sendPlaylist: " + pl);
@@ -149,9 +186,13 @@ public class MusicListHolder {
         }).execute(user.getUid(), pl.toString());
     }
 
+    /**
+     * 向房间中的其他人询问播放列表
+     */
     public void queryPlaylist() {
 
         Log.d(TAG, "queryPlaylist");
+
         Msg msg = new Msg(Msg.TYPE_QUERY_PLAYLIST, user, "");
         new SendTask(new RequestTaskListener<String>() {
             @Override
@@ -169,9 +210,10 @@ public class MusicListHolder {
     }
 
     /**
-     * 消息获取
+     * 临时的消息获取
      *
-     * <em>⚠注意：这个方法只能在 MusicChatActivity 活跃前被启用，当 MusicChatActivity 开始工作时，这个方法必须被停用。</em>
+     * <em>⚠注意：这个方法只能在 MusicChatActivity 活跃前被启用；
+     * 当 MusicChatActivity 开始工作时，这个方法必须被停用。</em>
      *
      */
     public void refreshMsgs() {

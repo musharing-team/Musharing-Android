@@ -4,6 +4,11 @@ import com.mine.musharing.bases.Playlist;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.RequestUtil;
 
+/**
+ * <h1>获取一张由 Category 目录提供的 播放列表 的请求与响应解析任务</h1>
+ *
+ * 若解析成功调用 {@code listener.onSuccess(Playlist result)}，把请求成员成功得到的播放列表(Playlist)传出给listener
+ */
 public class PlaylistTask extends RequestTask<Playlist> {
 
     public PlaylistTask(RequestTaskListener<Playlist> listener) {

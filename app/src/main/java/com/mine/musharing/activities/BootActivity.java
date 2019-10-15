@@ -32,6 +32,9 @@ public class BootActivity extends AppCompatActivity {
         mTimer.schedule(startLoginTimerTask, 1000);
     }
 
+    /**
+     * 进入登录界面
+     */
     private void toLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

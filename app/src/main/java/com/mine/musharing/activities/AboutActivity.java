@@ -8,6 +8,10 @@ import android.view.MenuItem;
 
 import com.mine.musharing.R;
 
+/**
+ * <h1>关于页面</h1>
+ * 显示一些关于信息
+ */
 public class AboutActivity extends AppCompatActivity {
 
     @Override

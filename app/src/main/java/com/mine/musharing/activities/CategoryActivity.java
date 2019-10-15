@@ -14,6 +14,12 @@ import com.mine.musharing.R;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.fragments.CategoryFragment;
 
+/**
+ * <h1>Category 活动</h1>
+ *
+ * 查看所有可选的播放列表；
+ * 并可以点击某一播放列表来启动其 PlaylistActivity 以查看详情
+ */
 public class CategoryActivity extends AppCompatActivity {
 
     private static final String TAG = "CategotyActivity";

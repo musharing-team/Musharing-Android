@@ -54,6 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
         Glide.with(this).load(imgUrl).into(imageView);
     }
 
+    /**
+     * 尝试注册
+     */
     public void  registerOnClick(View view) {
         EditText userNameText = findViewById(R.id.register_user_name);
         EditText passwordText = findViewById(R.id.register_password);

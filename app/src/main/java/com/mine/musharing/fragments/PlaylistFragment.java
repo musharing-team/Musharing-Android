@@ -136,6 +136,9 @@ public class PlaylistFragment extends Fragment {
         return view;
     }
 
+    /**
+     * 刷新（重新请求）播放列表
+     */
     private void refreshPlaylist() {
         if (refreshCount++ > QUERY_PERIOD) {
             MusicListHolder.getInstance().queryPlaylist();
@@ -156,10 +159,16 @@ public class PlaylistFragment extends Fragment {
         });
     }
 
+    /**
+     * 点击了表示"选择当前显示的这张播放列表"的按钮
+     */
     private void commitPlayListOnClick(View view) {
         commitPlaylist();
     }
 
+    /**
+     * 选择当前显示的这个播放列表的具体事件
+     */
     private void commitPlaylist() {
 
         if (getActivity().getClass().equals(PlaylistActivity.class)) {

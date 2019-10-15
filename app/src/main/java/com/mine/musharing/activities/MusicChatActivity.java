@@ -46,6 +46,14 @@ import static android.support.constraint.Constraints.TAG;
 /**
  * <h1>音乐聊天活动</h1>
  * 播放音乐并有聊天功能。
+ *
+ * <p>一进去后显示的是控制、显示音乐播放的 MusicFragment</p>
+ * <p>上划出现查看、发送消息的 ChatFragment</p>
+ * <p>从左边可以划出导航</p>
+ * <p>从右边可以划出显示房间成员、播放列表的 RoomFragment + PlaylistFragment</p>
+ *
+ * <p>消息的刷新接收在次活动中完成</p>
+ *
  * <em>Musharing理念的主要实现活动</em>
  */
 public class MusicChatActivity extends AppCompatActivity {
@@ -252,6 +260,10 @@ public class MusicChatActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * 捕获实体按键的按下事件
+     * 捕获音量按键事件传给 musicFragment 处理音量键控制
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 捕获音量按键事件传给 musicFragment 处理音量键控制
@@ -284,6 +296,9 @@ public class MusicChatActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * 退出当前房间
+     */
     private void leaveRoom() {
         new LeaveTask(new RequestTaskListener<String>() {
             @Override

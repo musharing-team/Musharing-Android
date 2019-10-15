@@ -84,6 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         getRememberedAccount();
     }
 
+    /**
+     * 尝试登录
+     */
     public void loginOnClick(View view) {
 
         String userName = userNameText.getText().toString();
@@ -146,6 +149,9 @@ public class LoginActivity extends AppCompatActivity {
         }).execute(nameEncoded, passwordEncrypted);
     }
 
+    /**
+     * 转到注册界面
+     */
     public void toRegisterOnClick(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);

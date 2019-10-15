@@ -22,6 +22,9 @@ import com.mine.musharing.fragments.PlaylistFragment;
 
 import java.util.List;
 
+/**
+ * 显示播放列表详情并选择的活动
+ */
 public class PlaylistActivity extends AppCompatActivity {
 
     private User user;
@@ -73,6 +76,9 @@ public class PlaylistActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    /**
+     * 返回上一页
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

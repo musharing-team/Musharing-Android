@@ -7,6 +7,11 @@ import com.mine.musharing.utils.RequestUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>获取 播放列表的目录(被叫做 categoryList 😂) 的请求与响应解析任务</h1>
+ *
+ * 若解析成功调用 {@code listener.onSuccess(List<Category> result)}，把获取到的播放列表目录(the list (i.e. index) of playlists)出给listener
+ */
 public class CategoriesTask extends RequestTask<List<Category>> {
 
     public CategoriesTask(RequestTaskListener<List<Category>> listener) {

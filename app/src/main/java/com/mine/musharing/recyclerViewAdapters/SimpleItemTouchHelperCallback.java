@@ -3,6 +3,9 @@ package com.mine.musharing.recyclerViewAdapters;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+/**
+ * 实现可拖动、滑动删除的 RecycleView 用的
+ */
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     private final ItemTouchHelperAdapter mAdapter;
 

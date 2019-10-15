@@ -128,6 +128,9 @@ public class RoomFragment extends Fragment {
         membersRecycleView.setAdapter(memberAdapter);
     }
 
+    /**
+     * 刷新（重新请求）当前房间中的成员列表
+     */
     private void refreshMemberList() {
         // mMemberList.clear();
         if (getActivity() == null) {
@@ -182,6 +185,9 @@ public class RoomFragment extends Fragment {
 
     }
 
+    /**
+     * 添加一个人到房间中
+     */
     private void addMember() {
         String uid = user.getUid();
 
@@ -208,6 +214,11 @@ public class RoomFragment extends Fragment {
 
     }
 
+    /**
+     * 发送添加人的请求
+     * @param uid
+     * @param targetNameEncoded
+     */
     private void attendRequest(String uid, String targetNameEncoded) {
 
         new AttendTask(new RequestTaskListener<String>() {
@@ -235,6 +246,10 @@ public class RoomFragment extends Fragment {
         }).execute(uid, targetNameEncoded);
     }
 
+    /**
+     * 获取当前的成员列表
+     * @return 当前的成员列表
+     */
     public List<User> getmMemberList() {
         return mMemberList;
     }

@@ -16,6 +16,9 @@ import java.util.TimerTask;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
+/**
+ * 提供按住 HotLine 按钮后录音时显示的类似于微信那种的浮窗的反馈（代表真正录音）
+ */
 public class RecordingDialogManager {
 
     private Context mContext;

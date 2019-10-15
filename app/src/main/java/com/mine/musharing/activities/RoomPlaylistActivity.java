@@ -71,40 +71,6 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         initFragments();
     }
 
-//    private void initMusicList(String idOfCategory) {
-//
-//        new PlaylistTask(new RequestTaskListener<Playlist>() {
-//            @Override
-//            public void onStart() {
-//                intoRoomButton.setVisibility(View.GONE);
-//                intoRoomProgressBar.setVisibility(View.VISIBLE);
-//            }
-//
-//            @Override
-//            public void onSuccess(Playlist s) {
-//                runOnUiThread(() -> {
-//                    initFragments(s);
-//                });
-//            }
-//
-//            @Override
-//            public void onFailed(String error) {
-//                runOnUiThread(() -> {
-//                    Toast.makeText(RoomPlaylistActivity.this, error, Toast.LENGTH_SHORT).show();
-//                });
-//            }
-//
-//            @Override
-//            public void onFinish(String s) {
-//                intoRoomButton.setVisibility(View.VISIBLE);
-//                intoRoomProgressBar.setVisibility(View.GONE);
-//            }
-//        }).execute(user.getUid(), idOfCategory);
-//
-//        // musicListHolder.musicList = Demo.testMusicList;
-//
-//    }
-
     private void initFragments() {
         // 打包要传递给 fragments 的 user 数据
         Bundle bundle = new Bundle();
@@ -128,6 +94,11 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    /**
+     * 点击选择播放列表的按钮的事件
+     *
+     * TODO:这个命名有点问题，需要 refactor 一下
+     */
     public void playlistCardOnClick(View view) {
         Intent intent = new Intent(this, CategoryActivity.class);
         Bundle bundle = new Bundle();
@@ -136,6 +107,11 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * 点击 "Let's play" 进入 MusicChatActivity
+     * 当没有添加好友、没有选择播放列表的时候不可进入！
+     * @param view
+     */
     public void intoChatRoomOnClick(View view) {
         intoRoomButton.setVisibility(View.GONE);
         intoRoomProgressBar.setVisibility(View.VISIBLE);

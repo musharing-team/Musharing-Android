@@ -32,6 +32,9 @@ import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
+/**
+ * 显示可选的播放列表目录的 Fragment
+ */
 public class CategoryFragment extends Fragment {
 
     private List<Category> mCategoryList = new ArrayList<>();
@@ -86,7 +89,7 @@ public class CategoryFragment extends Fragment {
             new PlaylistTask(new RequestTaskListener<Playlist>() {
                 @Override
                 public void onStart() {
-                    // UI 反馈，小电视之类的玩意儿
+                    // TODO：加载等待时的 UI 反馈，B站小电视之类的玩意儿
                 }
 
                 @Override
@@ -119,7 +122,7 @@ public class CategoryFragment extends Fragment {
 
                 @Override
                 public void onFinish(String s) {
-                    // UI 反馈
+                    // TODO: UI 反馈
                 }
             }).execute(user.getUid(), category.getId());
 
@@ -127,6 +130,9 @@ public class CategoryFragment extends Fragment {
         categoriesRecycleView.setAdapter(categoryAdapter);
     }
 
+    /**
+     * 刷新（重新请求）目录
+     */
     private void refreshCategoryList() {
         new CategoriesTask(new RequestTaskListener<List<Category>>() {
             @Override

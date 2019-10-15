@@ -112,6 +112,9 @@ public class PlaylistPlayer {
         }
     }
 
+    /**
+     * 获取这首歌的总长度
+     */
     public int getMaxProgress() {
         if (mediaPlayer.isPlaying()) {
             return mediaPlayer.getDuration();
@@ -120,6 +123,7 @@ public class PlaylistPlayer {
         }
 
     }
+
     /**
      * 开始从同步处播放
      */
@@ -175,6 +179,7 @@ public class PlaylistPlayer {
             musicOverHandling = false;
         }
     }
+
     /**
      * 开始播放下一曲
      *

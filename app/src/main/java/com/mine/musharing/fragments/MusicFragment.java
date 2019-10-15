@@ -66,13 +66,9 @@ public class MusicFragment extends Fragment {
     private PlayAsyncer playAsyncer;
     private PlaylistPlayer playlistPlayer;
 
-    // views
-//    private LinearLayout screenLayout;
-//    private GradientDrawable screenBackground;
-
     private TextView titleTextView;
     private TextView artistTextView;
-    // private ImageView imageView;
+
     private Button playButton;
     private TextView playStatusTextView;
     private ProgressBar progressBar;

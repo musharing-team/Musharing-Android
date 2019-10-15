@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.mine.musharing.R;
 
+/**
+ * 设置界面
+ */
 public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

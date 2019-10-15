@@ -23,6 +23,10 @@ import java.io.UnsupportedEncodingException;
 
 import static android.support.constraint.Constraints.TAG;
 
+/**
+ * 实现 HotLine 功能的"录音机"
+ * 实现录制、发送新的语音消息并播放接收到的音频。
+ */
 public class HotLineRecorder {
 
     // STATUS

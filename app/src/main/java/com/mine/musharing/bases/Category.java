@@ -2,6 +2,9 @@ package com.mine.musharing.bases;
 
 import java.io.Serializable;
 
+/**
+ * 代表由后端可以提供的一张固定的播放列表(被叫做 categoryList 😂)
+ */
 public class Category implements Serializable {
 
     private String id;
