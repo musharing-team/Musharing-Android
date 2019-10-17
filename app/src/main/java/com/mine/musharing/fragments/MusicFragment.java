@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
+import com.mine.musharing.activities.MusicChatActivity;
 import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
@@ -50,6 +51,9 @@ import static android.support.constraint.Constraints.TAG;
 
 /**
  * <h1>音乐播放的碎片</h1>
+ *
+ * 注意，只能为 MusicChatFragment 所实现，因为涉及到用向下转型对 MusicChatFragment 进行调用（to implement the button of Nav and Room）！
+ *
  */
 public class MusicFragment extends Fragment {
 
@@ -88,6 +92,10 @@ public class MusicFragment extends Fragment {
     private int maxVolume;
 
     private int currentIndex = -1;
+
+    // 导航、房间按钮
+    private Button navButton;
+    private Button roomButton;
 
     // Hot line
     private HotLineRecorder hotLineRecorder;
@@ -198,6 +206,23 @@ public class MusicFragment extends Fragment {
     }
 
     /**
+     * 点击 导航、房间 的事件
+     * @param view
+     */
+    public void navRoomButtonOnClick(View view) {
+        MusicChatActivity parent = (MusicChatActivity) getActivity();
+        switch (view.getId()) {
+            case R.id.nav_button:
+                parent.openDrawer(MusicChatActivity.DRAWER_NAV);
+                break;
+            case R.id.room_button:
+                parent.openDrawer(MusicChatActivity.RRAWER_ROOM);
+                break;
+        }
+
+    }
+
+    /**
      * 初始化HotlineRecorder 以及 录音时管理UI效果的RecordingDialogManager
      */
     private void initHotlineRecorder() {
@@ -233,6 +258,12 @@ public class MusicFragment extends Fragment {
 
         // Volume
         volumeBar = musicFragmentView.findViewById(R.id.play_volume);
+
+        // nav and room button
+        navButton = musicFragmentView.findViewById(R.id.nav_button);
+        navButton.setOnClickListener(this::navRoomButtonOnClick);
+        roomButton = musicFragmentView.findViewById(R.id.room_button);
+        roomButton.setOnClickListener(this::navRoomButtonOnClick);
 
         // Hot line button
         hotLineButton = musicFragmentView.findViewById(R.id.hotline_in_music_fragment);
@@ -409,6 +440,8 @@ public class MusicFragment extends Fragment {
         if (mTimerForMusic != null) {
             mTimerForMusic.cancel();
         }
+
+        playlistPlayer.onDestroy();
 
         super.onDestroy();
     }

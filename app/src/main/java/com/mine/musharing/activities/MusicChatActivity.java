@@ -1,9 +1,11 @@
 package com.mine.musharing.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +18,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,13 +80,29 @@ public class MusicChatActivity extends AppCompatActivity {
 
     private PlaylistFragment playlistFragment;
 
+    public RelativeLayout touchShield;
+
+    // Timer Tasks
+    private Timer mTimer = new Timer();
+
     // Msg
-    private Timer mTimerForMsg;
-
     private TimerTask refreshMsgTimerTask;
-
     private static final long MSG_REFRESH_PERIOD = 2000;
 
+    // Member & Musiclist
+    private TimerTask checkMemberMusiclistTimerTask;
+    private static final long MEMBER_MUSICLIST_CHECK_PERIOD = 2000;
+
+    private Snackbar memberMusicCheckSnackbar;
+
+    // Drawers
+    public static final int DRAWER_NAV = 0;
+    public static final int RRAWER_ROOM = 1;
+
+    // reloadFlag
+    private boolean reloadFlag = false;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +176,7 @@ public class MusicChatActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     mDrawerLayout.closeDrawers();
                     Intent intent1 = new Intent(MusicChatActivity.this, SettingActivity.class);
+                    reloadFlag = false;
                     startActivity(intent1);
                     break;
                 case R.id.nav_exit:
@@ -175,15 +196,26 @@ public class MusicChatActivity extends AppCompatActivity {
         navUserNameView = navigationView.getHeaderView(0).findViewById(R.id.nav_user_name_view);
         navUserNameView.setText(user.getName());
 
-        // Refresh the message list periodically
-        mTimerForMsg = new Timer();
-        refreshMsgTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                refreshMsgs();
-            }
-        };
-        mTimerForMsg.schedule(refreshMsgTimerTask, 0, MSG_REFRESH_PERIOD);
+        touchShield = findViewById(R.id.touch_shield);
+        touchShield.setOnClickListener(null);
+        touchShield.setOnTouchListener(null);
+        touchShield.setVisibility(View.VISIBLE);
+
+        // 当需要到 RoomPlaylistActivity 选择好友与播放列表时提示用户操作的 Snackbar
+        memberMusicCheckSnackbar = Snackbar.make(mDrawerLayout, "需要添加好友和播放列表才能开始分享", Snackbar.LENGTH_INDEFINITE)
+                .setAction("去添加", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("user", user);
+                        intent.putExtra("data", bundle);
+                        reloadFlag = true;
+                        startActivity(intent);
+                    }
+                });
+
+        restartTimerTasks();
     }
 
     /**
@@ -250,6 +282,91 @@ public class MusicChatActivity extends AppCompatActivity {
         }).execute(user.getUid());
     }
 
+    private void checkMemberMusiclist() {
+
+        if (roomFragment != null && playlistFragment != null) {
+            if (
+                    roomFragment.getmMemberList().size() <= 1 ||    // 没加好友
+                    MusicListHolder.getInstance().getMusicList().size() < 1   // 没加歌单
+            ) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!memberMusicCheckSnackbar.isShown()) {
+                            memberMusicCheckSnackbar.show();
+                        }
+                        if (touchShield.getVisibility() != View.VISIBLE) {
+                            touchShield.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (memberMusicCheckSnackbar.isShown()) {
+                            memberMusicCheckSnackbar.dismiss();
+                        }
+                        if (touchShield.getVisibility() != View.GONE) {
+                            touchShield.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+
+    /**
+     * 重置定时任务
+     */
+    private void restartTimerTasks() {
+        cancelTimerTasks();
+        startTimerTasks();
+    }
+
+    /**
+     * 取消定时任务
+     */
+    private void cancelTimerTasks() {
+        // 结束定时任务
+        if (refreshMsgTimerTask != null) {
+            refreshMsgTimerTask.cancel();
+        }
+        if (checkMemberMusiclistTimerTask != null) {
+            checkMemberMusiclistTimerTask.cancel();
+        }
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+    }
+
+    /**
+     * 开始定时任务
+     */
+    private void startTimerTasks() {
+        mTimer = new Timer();
+        // Refresh the message list periodically
+        refreshMsgTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                refreshMsgs();
+            }
+        };
+        mTimer.schedule(refreshMsgTimerTask, 0, MSG_REFRESH_PERIOD);
+
+        // 检测是否需要到 RoomPlaylistActivity 选择好友与播放列表
+        checkMemberMusiclistTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                checkMemberMusiclist();
+            }
+        };
+        mTimer.schedule(checkMemberMusiclistTimerTask, 200, MEMBER_MUSICLIST_CHECK_PERIOD);
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -261,8 +378,26 @@ public class MusicChatActivity extends AppCompatActivity {
     }
 
     /**
-     * 捕获实体按键的按下事件
-     * 捕获音量按键事件传给 musicFragment 处理音量键控制
+     * 打开指定的抽屉层
+     * @param drawer
+     */
+    public void openDrawer(int drawer) {
+        switch (drawer) {
+            case DRAWER_NAV:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case RRAWER_ROOM:
+                mDrawerLayout.openDrawer(GravityCompat.END);
+                break;
+        }
+    }
+
+    /**
+     * <h1>捕获实体按键的按下事件</h1>
+     *
+     * <p>捕获音量按键事件传给 musicFragment 处理音量键控制</p>
+     * <p>捕获返回键，禁止返回（MusicChatActivity 是主界面，不应该退出）</p>
+     *
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -271,27 +406,65 @@ public class MusicChatActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 return musicFragment.onKeyDown(keyCode, event);
+            case KeyEvent.KEYCODE_BACK:
+                return true;
             default:
                 return super.onKeyDown(keyCode, event);
         }
     }
 
     @Override
+    protected void onRestart() {
+        if (reloadFlag) {
+            // 为防止错误，重启 Music、Chat Fragment
+            musicFragment.onDestroy();
+
+            // 打包要传递给 fragments 的 user 数据
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            bundle.putSerializable("playlist", MusicListHolder.getInstance().getPlaylist());
+            bundle.putSerializable("musiclist", MusicListHolder.getInstance().getMusicList());
+
+            // init MusicFragment
+            musicFragment = new MusicFragment();
+            musicFragment.setArguments(bundle);
+
+            // init ChatFragment
+            chatFragment = new ChatFragment();
+            chatFragment.setArguments(bundle);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            transaction.remove(chatFragment);
+            transaction.remove(musicFragment);
+
+            transaction.add(R.id.chat_fragment, chatFragment);
+            transaction.add(R.id.music_fragment, musicFragment);
+
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            restartTimerTasks();
+        }
+        reloadFlag = false;
+        super.onRestart();
+    }
+
+    @Override
     protected void onDestroy() {
-        // 结束定时刷新消息的任务
-        if (refreshMsgTimerTask != null) {
-            refreshMsgTimerTask.cancel();
-        }
-        if (mTimerForMsg != null) {
-            mTimerForMsg.cancel();
-        }
+        // 结束定时任务
+        cancelTimerTasks();
+
         // destroy fragments
         chatFragment.onDestroy();
         musicFragment.onDestroy();
-        // 退出房间
-        leaveRoom();
+
         // 结束HotLineRecorder
         HotLineRecorder.getInstance().onDestroy();
+
+        // 退出房间
+        leaveRoom();
 
         super.onDestroy();
     }
@@ -307,13 +480,17 @@ public class MusicChatActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String s) {
                 runOnUiThread(() -> {
-                    // 返回到 RoomActivity
-                    Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user", user);
-                    intent.putExtra("data", bundle);
-                    startActivity(intent);
-                    finish();
+//                    Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("user", user);
+//                    intent.putExtra("data", bundle);
+//                    startActivity(intent);
+//                    finish();
+
+                    cancelTimerTasks();
+                    MusicListHolder.getInstance().setPlaylist(new Playlist());
+                    reloadFlag = true;
+                    onRestart();
                 });
             }
 
@@ -329,6 +506,4 @@ public class MusicChatActivity extends AppCompatActivity {
 
         }).execute(user.getUid());
     }
-
-
 }

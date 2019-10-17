@@ -268,7 +268,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="16dp"
-                android:text="Copyright © 2019 Musharing Team. All rights reserved.\n"
+                android:text="Copyright © 2019 Musharing Team.\n All rights reserved."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

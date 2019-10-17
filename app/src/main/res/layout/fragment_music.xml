@@ -145,6 +145,7 @@
                         android:layout_gravity="center">
 
                         <Button
+                            android:id="@+id/nav_button"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/button_common"
@@ -215,6 +216,7 @@
                         android:layout_gravity="center">
 
                         <Button
+                            android:id="@+id/room_button"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/button_common"

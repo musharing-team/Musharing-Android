@@ -124,8 +124,14 @@ public class LoginActivity extends AppCompatActivity {
                 HotLineRecorder.getInstance().setUser(user);
 
                 runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, "Hello, " + user.getName(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, RoomPlaylistActivity.class);
+//                    Toast.makeText(LoginActivity.this, "Hello, " + user.getName(), Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(LoginActivity.this, RoomPlaylistActivity.class);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("user", user);
+//                    intent.putExtra("data", bundle);
+//                    startActivity(intent);
+//                    finish();
+                    Intent intent = new Intent(LoginActivity.this, MusicChatActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);
                     intent.putExtra("data", bundle);

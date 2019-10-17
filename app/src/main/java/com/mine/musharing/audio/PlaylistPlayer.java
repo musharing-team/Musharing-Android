@@ -28,7 +28,13 @@ public class PlaylistPlayer {
 
         public Current(int index) {
             this.index = index;
-            this.music = musicList.get(index);
+            try {
+                this.music = musicList.get(index);
+            } catch (IndexOutOfBoundsException e) {
+                Log.d(TAG, "Current: Maybe Trying an Empty MusicList \n" + e);
+                this.music = Music.voidMusic;
+            }
+
             this.prepared = false;
         }
 
@@ -221,4 +227,12 @@ public class PlaylistPlayer {
     public Current getCurrent() {
         return current;
     }
+
+    public void onDestroy() {
+        if (isPlaying()) {
+            pause();
+        }
+        mediaPlayer.release();
+    }
+
 }

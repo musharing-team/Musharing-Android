@@ -25,6 +25,8 @@ public class Music implements Serializable {
 
     private String fileUrl;
 
+    public static Music voidMusic = new Music("void", " ", " ", " ", "...", 0, "...");
+
     public Music() {
     }
 
