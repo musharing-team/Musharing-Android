@@ -37,7 +37,7 @@ public class MemberTask extends RequestTask<List<User>> {
 
         } catch (ParseUtil.ResponseError e) {
             // 处理 UserNotInGroup 的特殊情况
-            if (TextUtils.equals("UserNotInGroup", e.getMessage())) {
+            if (TextUtils.equals(ParseUtil.ResponseError.FROM_NOT_IN_ROOM, e.getMessage())) {
                 List<User> memberList = new ArrayList<>();
                 // 在最后一个放加入新成员的特殊块
                 memberList.add(UserUtil.addMemberSign);
