@@ -56,7 +56,7 @@ public class Playlist extends Msg implements Serializable {
     }
 
     public String commit() {
-        id = UUID.randomUUID().toString();
+        id = String.valueOf(musicList.hashCode());
         size = musicList.size();
 
         try {

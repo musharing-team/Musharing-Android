@@ -191,8 +191,6 @@ public class MusicListHolder {
      */
     public void queryPlaylist() {
 
-        Log.d(TAG, "queryPlaylist");
-
         Msg msg = new Msg(Msg.TYPE_QUERY_PLAYLIST, user, "");
         new SendTask(new RequestTaskListener<String>() {
             @Override

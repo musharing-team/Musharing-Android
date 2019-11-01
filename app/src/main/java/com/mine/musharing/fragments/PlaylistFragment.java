@@ -72,7 +72,7 @@ public class PlaylistFragment extends Fragment {
 
     private final static int REFRESH_PERIOD = 2000;
 
-    private final int QUERY_PERIOD = 5;
+    private final int QUERY_PERIOD = 25;
 
     private int refreshCount = QUERY_PERIOD + 1;
 
@@ -185,6 +185,5 @@ public class PlaylistFragment extends Fragment {
             startActivity(intent);
             getActivity().finish();
         }
-
     }
 }

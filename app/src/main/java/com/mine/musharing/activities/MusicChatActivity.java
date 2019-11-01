@@ -259,7 +259,7 @@ public class MusicChatActivity extends AppCompatActivity {
                             case Msg.TYPE_PLAYLIST:
                                 boolean changed = MusicListHolder.getInstance().handlePlaylistMsg(msg);
                                 if (changed) {
-                                    // Refresh the player!
+                                    // TODO: Refresh the player!
                                 }
                         }
                     }

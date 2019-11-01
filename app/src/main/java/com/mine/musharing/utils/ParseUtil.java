@@ -260,7 +260,6 @@ public class ParseUtil {
      * @throws JSONException 解析 Json 出错
      */
     public static Playlist playlistContentParse(String content){
-        Log.d(TAG, "playlistContentParse: " + content);
         try {
             JSONObject jsonObject = new JSONObject(content);
             Gson gson = new Gson();
@@ -277,7 +276,7 @@ public class ParseUtil {
                 musicList.add(music);
             }
             playlist.setMusicList(musicList);
-
+            playlist.setId(String.valueOf(musicList.hashCode()));
             playlist.setContent(content);
 
             return playlist;

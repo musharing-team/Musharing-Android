@@ -111,11 +111,12 @@ public class PlaylistPlayer {
      * 获取当前播放进度
      */
     public int getCurrentProgress() {
-        if (mediaPlayer.isPlaying()) {
+        try {
             return mediaPlayer.getCurrentPosition();
-        } else {
+        } catch (Exception e) {
             return 0;
         }
+
     }
 
     /**
