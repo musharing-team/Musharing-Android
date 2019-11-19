@@ -7,7 +7,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 28
         versionCode 9
-        versionName "0.4.7.alpha.local(20191102.0140)"
+        versionName "0.4.7(beta 20191119.1909)"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {

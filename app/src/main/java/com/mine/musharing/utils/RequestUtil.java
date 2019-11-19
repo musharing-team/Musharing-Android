@@ -18,8 +18,8 @@ public class RequestUtil {
 	/**
 	 * 服务器地址
 	 */
-//	public static final String SERVER_URL = "http://39.107.75.19:5000";
-	 public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
+	public static final String SERVER_URL = "http://39.107.75.19:5000";
+//	public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
 
 	/**
 	 * Unexpected Json
