@@ -19,7 +19,7 @@ public class PlaylistTask extends RequestTask<Playlist> {
     protected String doInBackground(String... strings) {
         try {
             String responseText = RequestUtil.playlist(strings[0], strings[1]);    // uid, playlistId
-            Playlist newPlaylist = ParseUtil.playlistContentParse(responseText);
+            Playlist newPlaylist = ParseUtil.playlistResponseParse(responseText);
             if (newPlaylist == null) {
                 newPlaylist = new Playlist();
             }

@@ -19,20 +19,21 @@ public class RequestUtil {
 	 * 服务器地址
 	 */
 	public static final String SERVER_URL = "http://39.107.75.19:5000";
-	// public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
+//	public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
+
+	/**
+	 * Unexpected Json
+	 *
+	 * <p>Return this when something wrong about network</p>
+	 */
+	private static final String NETWORK_ERROR_JSON = "{\"error\":\""+ ParseUtil.ResponseError.NETWORK_ERROR +"\",\"debug\":\"Network Error\"}";
 
 	/**
 	 * 注册的网络请求
 	 * @param nameEncoded Base64编码后的用户名
 	 * @param passwordEncrypted 加密后的密码
 	 * @param img 用户头像Url
-	 * @return <pre>response json:
-	 * 	- `{uid, name, img}`: 成功注册，返回用户uid、name、img
-	 *
-	 * 	- `{"error": "UserNameError"}`: 用户已存在，注册失败
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String register(String nameEncoded, String passwordEncrypted, String img) {
 		OkHttpClient client = new OkHttpClient();
@@ -53,21 +54,14 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * 登录的网络请求
 	 * @param nameEncoded Base64编码后的用户名
 	 * @param passwordEncrypted 加密后的密码
-	 * @return <pre>response json:
-	 * 	- `{uid, name, img}`: 成功登录，返回用户uid、name、img
-	 *
-	 * 	- `{"error": "UserNameError"}`: 不存在的用户名
-	 * 	- `{"error": "PasswordError"}`: 密码错误
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String login(String nameEncoded, String passwordEncrypted) {
 		OkHttpClient client = new OkHttpClient.Builder()
@@ -90,21 +84,13 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * ## 查询指定用户所处Room中成员名单的网络请求
 	 * @param uid 要查询的用户的uid
-	 * @return <pre>response json:
-	 * 	- `{"members": [{uid, name, img}, {...}, ...]}`: 请求成功，返回由成员用户uid、name、img组成的Array
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String members(String uid) {
 		OkHttpClient client = new OkHttpClient();
@@ -123,26 +109,14 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
-	 * 拉其他用户加入自己所在Room的网络请求
+	 * 拉其他用户加入自己所在 Room 的网络请求
 	 * @param uid 当前用户uid
 	 * @param targetName 欲拉取的用户名
-	 * @return <pre>response json:
-	 * 	- `{"successful": "attend"}`: 请求成功
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "UserNameError"}`: 目标用户名不存在
-	 * 	- `{"error": "TargetUserNotLogin"}`: 目标用户登录状态为False
-	 * 	- `{"error": "TargetUserInGroup"}`: 目标用户已身处某Room
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String attend(String uid, String targetName) {
 		OkHttpClient client = new OkHttpClient();
@@ -162,22 +136,14 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * 发送消息到Room中的网络请求
 	 * @param uid 当前用户uid
 	 * @param msg 消息json
-	 * @return <pre>response json:
- 	 * 	- `{"successful": "sent"}`: 请求成功
- 	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String send(String uid, String msg) {
 		OkHttpClient client = new OkHttpClient();
@@ -197,21 +163,13 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * 接收消息的网络请求
 	 * @param uid 当前用户uid
-	 * @return <pre>response json:
-	 * 	- `{"messages": ["MsgJson", "...", ...]}`: 请求成功，返回由Msg.toString()得到的json格式字符串组成的Array
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String receive(String uid) {
 		OkHttpClient client = new OkHttpClient();
@@ -230,21 +188,13 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * 离开Room的网络请求
 	 * @param uid 当前用户uid
-	 * @return <pre>response json:
-	 * 	- `{"successful": 'left'}`: 请求成功
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String leave(String uid) {
 		OkHttpClient client = new OkHttpClient();
@@ -263,21 +213,13 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * 退出登录的网络请求
 	 * @param uid 当前用户uid
-	 * @return <pre>response json:
-	 * 	- `{"successful": 'logout'}`: 请求成功
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String logout(String uid) {
 		OkHttpClient client = new OkHttpClient();
@@ -296,21 +238,13 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * ## 获取 categories (可选的 playlist) 的网络请求
 	 * @param uid 用户的uid
-	 * @return <pre>response json:
-	 * 	- `{id, name, musicList: [{music.json}, ...]}`: 请求成功，返回播放列表的json
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String category(String uid) {
 		OkHttpClient client = new OkHttpClient();
@@ -329,29 +263,20 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 	/**
 	 * ## 获取指定 Playlist 的网络请求
 	 * @param uid 用户的uid
 	 * @param playlistId 欲获取的 playlist 的 id
-	 * @return <pre>response json:
-	 * 	- `{id, name, musicList: [{music.json}, ...]}`: 请求成功，返回播放列表的json
-	 *
-	 * 	- `{"error": "UidError"}`: 发起用户uid不存在
-	 * 	- `{"error": "UserNotLogin"}`: 发起用户登录状态为False
-	 * 	- `{"error": "UserNotInGroup"}`: 发起用户未处于Room中
-	 * 	- `{"error": "NoSuchPlaylist"}`: 没有请求的播放列表
-	 *
-	 * 	- `{"error": "Unexpected"}`: 未知错误
-	 * 	</pre>
+	 * @return response json
 	 */
 	public static String playlist(String uid, String playlistId) {
 		OkHttpClient client = new OkHttpClient();
 		RequestBody requestBody = new FormBody.Builder()
 				.add("from_uid", uid)
-				.add("playlist", playlistId)
+				.add("playlist_id", playlistId)
 				.build();
 		Request request = new Request.Builder()
 				.url(SERVER_URL + "/playlist")
@@ -365,7 +290,7 @@ public class RequestUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "{\"error\": \"Unexpected\"}";
+		return NETWORK_ERROR_JSON;
 	}
 
 }

@@ -24,8 +24,6 @@ public class Playlist extends Msg implements Serializable {
 
     private int size;
 
-    private long totalDuration;
-
     public Playlist() {
         super(Msg.TYPE_PLAYLIST, UserUtil.playlistFakeUser, "");
         this.setType(Msg.TYPE_PLAYLIST);
@@ -57,23 +55,13 @@ public class Playlist extends Msg implements Serializable {
         this.size = size;
     }
 
-    public long getTotalDuration() {
-        return totalDuration;
-    }
-
-    public void setTotalDuration(long totalDuration) {
-        this.totalDuration = totalDuration;
-    }
-
     public String commit() {
-        id = UUID.randomUUID().toString();
+        id = String.valueOf(musicList.hashCode());
         size = musicList.size();
-        totalDuration = 0;
 
         try {
             JSONArray musicArrayJson = new JSONArray();
             for (Music music : musicList) {
-                totalDuration += music.getDuration();
                 JSONObject musicJson = new JSONObject(music.toString());
                 musicArrayJson.put(musicJson);
             }
@@ -81,7 +69,6 @@ public class Playlist extends Msg implements Serializable {
             JSONObject contentJson = new JSONObject();
             contentJson.put("id", id);
             contentJson.put("size", size);
-            contentJson.put("total_duration", totalDuration);
             contentJson.put("music_list", musicArrayJson);
 
             this.setContent(contentJson.toString());
