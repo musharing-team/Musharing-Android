@@ -1,6 +1,7 @@
 package com.mine.musharing.activities;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.mine.musharing.R;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.requestTasks.RegisterTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.SensitiveWordsUtils;
 import com.mine.musharing.utils.UserUtil;
 
 import org.json.JSONException;
@@ -29,6 +32,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 提供头像、用户名、密码尝试注册，成功后转到LoginActivity
  */
 public class RegisterActivity extends AppCompatActivity {
+
+    private LinearLayout registerLayout;
 
     private ProgressBar progressBar;
 
@@ -43,6 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        registerLayout = findViewById(R.id.register_layout);
 
         progressBar = findViewById(R.id.register_progress_bar);
         progressBar.setIndeterminate(true);
@@ -71,8 +78,24 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (userName.length() < 4) {
+            Snackbar.make(registerLayout, "昵称不能少于4个字符。", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        if (password.length() < 6) {
+            Snackbar.make(registerLayout, "请设置至少6位密码。", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
         if (!TextUtils.equals(password, passwordAgain)) {
             Toast.makeText(this, "两次输入密码不一致", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 敏感词检测
+        if(SensitiveWordsUtils.contains(userName)) {
+            Snackbar.make(registerLayout, "昵称不能包含敏感词汇。", Snackbar.LENGTH_LONG).show();
             return;
         }
 

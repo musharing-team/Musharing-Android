@@ -6,7 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mine.musharing.R;
+import com.mine.musharing.audio.PlayAsyncer;
+import com.mine.musharing.utils.SensitiveWordsUtils;
+import com.mine.musharing.utils.Utility;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +29,49 @@ public class BootActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
+
+        // 初始化敏感词库
+        Set<String> sensitiveWords = new HashSet<>();
+
+        InputStream in = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedReader bufferedReader = null;
+
+        try {
+            in = getResources().openRawResource(R.raw.sensitive_words);
+            inputStreamReader = new InputStreamReader(in);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            bufferedReader.readLine();  // 第一行是注释，跳过
+            for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+                sensitiveWords.add(Utility.stringTrim(line));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (inputStreamReader != null) {
+                try {
+                    inputStreamReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        SensitiveWordsUtils.init(sensitiveWords);
 
         // 一秒后进入登录界面
         Timer mTimer = new Timer();
