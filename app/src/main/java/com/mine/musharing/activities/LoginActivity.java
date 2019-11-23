@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,15 +23,18 @@ import com.mine.musharing.utils.UserUtil;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mine.musharing.utils.AESUtil;
+
 import java.util.UUID;
 
 /**
@@ -44,17 +48,18 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private SharedPreferences pref;
 
+    private LinearLayout loginLayout;
     private EditText userNameText;
     private EditText passwordText;
     private CheckBox rememberAccountCheckBox;
     private ImageButton loginButton;
 
-    private String szImei;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        loginLayout = findViewById(R.id.login_layout);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -62,20 +67,6 @@ public class LoginActivity extends AppCompatActivity {
         userNameText = findViewById(R.id.login_user_name);
         passwordText = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
-
-        // 引入imei加密后产生密匙
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-        }
-
-        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        final String tmDevice, tmSerial, androidId;
-
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        szImei = deviceUuid.toString();
 
         progressBar = findViewById(R.id.login_progress_bar);
         progressBar.setIndeterminate(true);
@@ -124,13 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                 HotLineRecorder.getInstance().setUser(user);
 
                 runOnUiThread(() -> {
-//                    Toast.makeText(LoginActivity.this, "Hello, " + user.getName(), Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(LoginActivity.this, RoomPlaylistActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("user", user);
-//                    intent.putExtra("data", bundle);
-//                    startActivity(intent);
-//                    finish();
                     Intent intent = new Intent(LoginActivity.this, MusicChatActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);
@@ -167,18 +151,34 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 尝试读取记住的账户，如果有已记住的则填充至输入框中
      */
-    public void getRememberedAccount(){
-        boolean isRemembered = pref.getBoolean("remember_account", false);
+    public void getRememberedAccount() {
+        boolean isRemembered = pref.getBoolean("remember", false);
 
         if (isRemembered) {
-            String account = pref.getString("account", "");
-            String password = pref.getString("password", "");
+            try {
+                String randomKey = pref.getString("key", "");
+                String accountEncrypted = pref.getString("account", "");
+                String passwordEncrypted = pref.getString("password", "");
 
-            userNameText.setText(AESUtil.decrypt(szImei,account));
-            passwordText.setText(AESUtil.decrypt(szImei,password));
+                String accountDecrypted = AESUtil.decrypt(randomKey, accountEncrypted);
+                String passwordDecrypted = AESUtil.decrypt(accountDecrypted, passwordEncrypted);
 
-            // "续订"
-            rememberAccountCheckBox.setChecked(true);
+                userNameText.setText(accountDecrypted);
+                passwordText.setText(passwordDecrypted);
+//
+//                Log.d(TAG, "rememberAccount: key: " + randomKey);
+//                Log.d(TAG, "rememberAccount: accountRaw: " + accountDecrypted);
+//                Log.d(TAG, "rememberAccount: passwordRaw: " + passwordDecrypted);
+//                Log.d(TAG, "rememberAccount: accountEncrypted: " + accountEncrypted);
+//                Log.d(TAG, "rememberAccount: passwordEncrypted: " + passwordEncrypted);
+
+                // "续订"
+                rememberAccountCheckBox.setChecked(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Snackbar.make(loginLayout, "读取失败", Snackbar.LENGTH_LONG).show();
+            }
+
         }
     }
 
@@ -189,9 +189,27 @@ public class LoginActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = pref.edit();
 
         if (rememberAccountCheckBox.isChecked()) {
-            editor.putBoolean("remember_account", true);
-            editor.putString("account", AESUtil.encrypt(szImei,userNameText.getText().toString()));
-            editor.putString("password",AESUtil.encrypt(szImei,passwordText.getText().toString()));
+            String accountRaw = userNameText.getText().toString();
+            String passwordRaw = passwordText.getText().toString();
+
+            /*
+            用 randomUUID 加密 account
+            未加密的 account 加密 password
+             */
+            String randomKey = UUID.randomUUID().toString();
+            String accountEncrypted = AESUtil.encrypt(randomKey, accountRaw);
+            String passwordEncrypted = AESUtil.encrypt(accountRaw, passwordRaw);
+
+            editor.putString("key", randomKey);
+            editor.putBoolean("remember", true);
+            editor.putString("account", accountEncrypted);
+            editor.putString("password", passwordEncrypted);
+//
+//            Log.d(TAG, "rememberAccount: key: " + randomKey);
+//            Log.d(TAG, "rememberAccount: accountRaw: " + accountRaw);
+//            Log.d(TAG, "rememberAccount: passwordRaw: " + passwordRaw);
+//            Log.d(TAG, "rememberAccount: accountEncrypted: " + accountEncrypted);
+//            Log.d(TAG, "rememberAccount: passwordEncrypted: " + passwordEncrypted);
         } else {
             editor.clear();
         }

@@ -19,14 +19,16 @@ public class AESUtil {
     // private static final String CipherMode = "AES/ECB/PKCS5Padding";     //使用ECB加密，不需要设置IV，但是不安全
     private static final String CipherMode = "AES/CFB/NoPadding";   //使用CFB加密，需要设置IV
 
-    /** 创建密钥 **/
-    private static SecretKeySpec createKey(String password) {
+    /**
+     * 创建密钥
+     **/
+    private static SecretKeySpec createKey(String key) {
         byte[] data = null;
-        if (password == null) {
-            password = "";
+        if (key == null) {
+            key = "";
         }
         StringBuilder sb = new StringBuilder(32);
-        sb.append(password);
+        sb.append(key);
         while (sb.length() < 32) {
             sb.append("0");
         }
@@ -42,12 +44,14 @@ public class AESUtil {
         return new SecretKeySpec(data, "AES");
     }
 
-    /** 加密字节数据 **/
-    private static byte[] encrypt(byte[] content, String password) {
+    /**
+     * 加密字节数据
+     **/
+    private static byte[] encrypt(byte[] content, String key) {
         try {
-            SecretKeySpec key = createKey(password);
+            SecretKeySpec sKey = createKey(key);
             Cipher cipher = Cipher.getInstance(CipherMode);
-            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(
+            cipher.init(Cipher.ENCRYPT_MODE, sKey, new IvParameterSpec(
                     new byte[cipher.getBlockSize()]));
             return cipher.doFinal(content);
         } catch (Exception e) {
@@ -56,28 +60,32 @@ public class AESUtil {
         return null;
     }
 
-    /** 加密(结果为16进制字符串) **/
-    public static String encrypt(String password, String content) {
-        // Log.d("加密前", "seed=" + password + "\ncontent=" + content);
+    /**
+     * 加密(结果为16进制字符串)
+     **/
+    public static String encrypt(String key, String content) {
+        // Log.d("加密前", "seed=" + key + "\ncontent=" + content);
         byte[] data = null;
         try {
             data = content.getBytes("UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        data = encrypt(data, password);
+        data = encrypt(data, key);
         String result = byte2hex(data);
         // Log.d("加密后", "result=" + result);
         return result;
     }
 
-    /** 解密字节数组 **/
-    private static byte[] decrypt(byte[] content, String password) {
+    /**
+     * 解密字节数组
+     **/
+    private static byte[] decrypt(byte[] content, String key) {
 
         try {
-            SecretKeySpec key = createKey(password);
+            SecretKeySpec sKey = createKey(key);
             Cipher cipher = Cipher.getInstance(CipherMode);
-            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(
+            cipher.init(Cipher.DECRYPT_MODE, sKey, new IvParameterSpec(
                     new byte[cipher.getBlockSize()]));
 
             return cipher.doFinal(content);
@@ -87,16 +95,18 @@ public class AESUtil {
         return null;
     }
 
-    /** 解密16进制的字符串为字符串 **/
-    public static String decrypt(String password, String content) {
-        // Log.d("解密前", "seed=" + password + "\ncontent=" + content);
+    /**
+     * 解密16进制的字符串为字符串
+     **/
+    public static String decrypt(String key, String content) {
+        // Log.d("解密前", "seed=" + key + "\ncontent=" + content);
         byte[] data = null;
         try {
             data = hex2byte(content);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        data = decrypt(data, password);
+        data = decrypt(data, key);
         if (data == null)
             return null;
         String result = null;
@@ -109,7 +119,9 @@ public class AESUtil {
         return result;
     }
 
-    /** 字节数组转成16进制字符串 **/
+    /**
+     * 字节数组转成16进制字符串
+     **/
     private static String byte2hex(byte[] b) { // 一个字节的数，
         StringBuilder sb = new StringBuilder(b.length * 2);
         String tmp = "";
@@ -124,7 +136,9 @@ public class AESUtil {
         return sb.toString().toUpperCase(); // 转成大写
     }
 
-    /** 将hex字符串转换成字节数组 **/
+    /**
+     * 将hex字符串转换成字节数组
+     **/
     private static byte[] hex2byte(String inputString) {
         if (inputString == null || inputString.length() < 2) {
             return new byte[0];
