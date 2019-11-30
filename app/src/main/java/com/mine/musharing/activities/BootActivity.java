@@ -30,7 +30,40 @@ public class BootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
 
-        // 初始化敏感词库
+        // 稍作等待后开始加载数据
+        Timer mTimer = new Timer();
+        TimerTask loadTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                load();
+            }
+        };
+        mTimer.schedule(loadTimerTask, 200);
+    }
+
+    /**
+     * 加载数据
+     */
+    private void load() {
+        initSensitiveWordsUtils();
+
+        // 跳转到登录界面
+        runOnUiThread(() -> {
+            Timer mTimer = new Timer();
+            TimerTask startLoginTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    toLogin();
+                }
+            };
+            mTimer.schedule(startLoginTimerTask, 20);
+        });
+    }
+
+    /**
+     * 初始化敏感词库
+     */
+    private void initSensitiveWordsUtils() {
         Set<String> sensitiveWords = new HashSet<>();
 
         InputStream in = null;
@@ -72,16 +105,6 @@ public class BootActivity extends AppCompatActivity {
         }
 
         SensitiveWordsUtils.init(sensitiveWords);
-
-        // 一秒后进入登录界面
-        Timer mTimer = new Timer();
-        TimerTask startLoginTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                toLogin();
-            }
-        };
-        mTimer.schedule(startLoginTimerTask, 1000);
     }
 
     /**

@@ -78,8 +78,8 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (userName.length() < 4) {
-            Snackbar.make(registerLayout, "昵称不能少于4个字符。", Snackbar.LENGTH_LONG).show();
+        if (userName.length() < 3) {
+            Snackbar.make(registerLayout, "昵称不能少于3个字符。", Snackbar.LENGTH_LONG).show();
             return;
         }
 
