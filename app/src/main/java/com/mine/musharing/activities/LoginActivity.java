@@ -18,6 +18,7 @@ import com.mine.musharing.audio.PlaylistPlayer;
 import com.mine.musharing.bases.User;
 import com.mine.musharing.requestTasks.LoginTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.services.NotifyService;
 import com.mine.musharing.utils.UserUtil;
 
 import android.content.Intent;
@@ -115,11 +116,17 @@ public class LoginActivity extends AppCompatActivity {
                 HotLineRecorder.getInstance().setUser(user);
 
                 runOnUiThread(() -> {
-                    Intent intent = new Intent(LoginActivity.this, MusicChatActivity.class);
+                    // 开启 NotifyService
+                    Intent notifyServiceIntent = new Intent(LoginActivity.this, NotifyService.class);
+                    startService(notifyServiceIntent);
+
+                    // 转到 MusicChatActivity
+                    Intent musicChatActivityIntent = new Intent(LoginActivity.this, MusicChatActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);
-                    intent.putExtra("data", bundle);
-                    startActivity(intent);
+                    musicChatActivityIntent.putExtra("data", bundle);
+                    startActivity(musicChatActivityIntent);
+
                     finish();
                 });
             }

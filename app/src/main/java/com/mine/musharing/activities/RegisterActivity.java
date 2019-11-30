@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // 敏感词检测
-        if(SensitiveWordsUtils.contains(userName)) {
+        if(SensitiveWordsUtils.contains(userName, SensitiveWordsUtils.MinMatchTYpe)) {
             Snackbar.make(registerLayout, "昵称不能包含敏感词汇。", Snackbar.LENGTH_LONG).show();
             return;
         }
