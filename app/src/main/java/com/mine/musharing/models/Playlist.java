@@ -1,4 +1,4 @@
-package com.mine.musharing.bases;
+package com.mine.musharing.models;
 
 import com.mine.musharing.utils.UserUtil;
 
@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <h1>播放列表类</h1>

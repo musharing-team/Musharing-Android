@@ -1,12 +1,10 @@
 package com.mine.musharing;
 
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Music;
+import com.mine.musharing.models.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**

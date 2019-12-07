@@ -1,16 +1,12 @@
 package com.mine.musharing.utils;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.mine.musharing.R;
-import com.mine.musharing.activities.MusicChatActivity;
-import com.mine.musharing.bases.Category;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Category;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.Music;
+import com.mine.musharing.models.Notice;
+import com.mine.musharing.models.Playlist;
+import com.mine.musharing.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,8 +14,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * <h1>解析库</h1>
@@ -284,5 +278,37 @@ public class ParseUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * <h2>解析 获取新通知 的结果</h2>
+     *
+     * @param responseText 请求的响应文本
+     * @return <p>新消息列表({@code List<Notice>})</p>
+     * @throws ResponseError 当响应json中包含error字段时，抛出携带错误信息的ResponseError
+     */
+    public static List<Notice> noticeResponseParse(String responseText) throws ResponseError {
+        try {
+            JSONObject jsonObject = new JSONObject(responseText);
+            if (jsonObject.has("response")) {
+                Gson gson = new Gson();
+                JSONArray newNotices = jsonObject.getJSONObject("response").getJSONArray("notices");
+                List<Notice> newNoticeList = new ArrayList<>();
+
+                for (int i = 0; i < newNotices.length(); i++) {
+                    Notice notice = gson.fromJson((String) newNotices.get(i), Notice.class);
+                    newNoticeList.add(notice);
+                }
+
+                return newNoticeList;
+
+            } else if (jsonObject.has("error")) {
+                String errorCode = jsonObject.getJSONObject("error").getString("error");
+                throw new ResponseError(errorCode);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        throw new ResponseError(ResponseError.UNEXPECTED);
     }
 }

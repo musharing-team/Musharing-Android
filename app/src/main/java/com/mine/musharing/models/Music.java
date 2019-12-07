@@ -1,4 +1,4 @@
-package com.mine.musharing.bases;
+package com.mine.musharing.models;
 
 import com.google.gson.Gson;
 

@@ -1,6 +1,6 @@
 package com.mine.musharing.requestTasks;
 
-import com.mine.musharing.bases.Category;
+import com.mine.musharing.models.Category;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.RequestUtil;
 

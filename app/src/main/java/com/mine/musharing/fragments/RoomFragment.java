@@ -18,12 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 import com.mine.musharing.recyclerViewAdapters.MemberAdapter;
 import com.mine.musharing.requestTasks.AttendTask;
 import com.mine.musharing.requestTasks.MemberTask;

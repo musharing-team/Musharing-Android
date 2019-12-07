@@ -9,36 +9,26 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.mine.musharing.Demo;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
 import com.mine.musharing.activities.PlaylistActivity;
 import com.mine.musharing.activities.RoomPlaylistActivity;
 import com.mine.musharing.audio.MusicListHolder;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.SerializableList;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Music;
+import com.mine.musharing.models.Playlist;
+import com.mine.musharing.models.User;
 import com.mine.musharing.recyclerViewAdapters.MusicAdapter;
 import com.mine.musharing.recyclerViewAdapters.SimpleItemTouchHelperCallback;
-import com.mine.musharing.requestTasks.PlaylistTask;
-import com.mine.musharing.requestTasks.RequestTaskListener;
-import com.mine.musharing.requestTasks.SendTask;
-import com.mine.musharing.utils.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * <h1>播放列表碎片</h1>
@@ -173,10 +163,12 @@ public class PlaylistFragment extends Fragment {
 
         if (getActivity().getClass().equals(PlaylistActivity.class)) {
 
-            MusicListHolder musicListHolder = MusicListHolder.getInstance();
-            musicListHolder.setPlaylist(playlist);
-            musicListHolder.setUser(user);
-            musicListHolder.postPlaylist();
+            if (playlist != null && !playlist.getMusicList().isEmpty()) {
+                MusicListHolder musicListHolder = MusicListHolder.getInstance();
+                musicListHolder.setPlaylist(playlist);
+                musicListHolder.setUser(user);
+                musicListHolder.postPlaylist();
+            }
 
             Intent intent = new Intent(getContext(), RoomPlaylistActivity.class);
             Bundle bundle = new Bundle();

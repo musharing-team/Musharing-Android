@@ -2,25 +2,21 @@ package com.mine.musharing.recyclerViewAdapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.User;
 import com.mine.musharing.utils.Utility;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * ChatFragment 中 Room内消息RecycleView 的 Adapter

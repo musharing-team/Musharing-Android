@@ -12,17 +12,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.mine.musharing.MainActivity;
 import com.mine.musharing.R;
 import com.mine.musharing.audio.MusicListHolder;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 import com.mine.musharing.fragments.PlaylistFragment;
 import com.mine.musharing.fragments.RoomFragment;
-import com.mine.musharing.requestTasks.PlaylistTask;
-import com.mine.musharing.requestTasks.RequestTaskListener;
 
 /**
  * <h1>房间/播放列表活动</h1>

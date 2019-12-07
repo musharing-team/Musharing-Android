@@ -8,46 +8,116 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.mine.musharing.R;
 import com.mine.musharing.activities.MusicChatActivity;
+import com.mine.musharing.activities.NoticeActivity;
+import com.mine.musharing.models.Notice;
+import com.mine.musharing.models.User;
+import com.mine.musharing.requestTasks.NoticeTask;
+import com.mine.musharing.requestTasks.RequestTaskListener;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class NotifyService extends Service {
+public class NoticeService extends Service {
 
-    public NotifyService() {
+    private User user;
+
+    private Timer timer;
+
+    private Set<String> history = new HashSet<>();
+
+    public NoticeService() {
     }
 
-    TimerTask refreshNotifications = new TimerTask() {
+    private TimerTask refreshNotifications = new TimerTask() {
         @Override
         public void run() {
-            // TODO: get notifications
-            Random random = new Random();
-            showNotification("" + random.nextInt(), "" + random.nextInt(), "" + random.nextInt());
+
+            if (user == null) {
+                Log.d(TAG, "refreshNotifications run: refresh fail: user lost!");
+                onDestroy();
+                return;
+            }
+
+            new NoticeTask(new RequestTaskListener<List<Notice>>() {
+                @Override
+                public void onStart() {}
+
+                @Override
+                public void onSuccess(List<Notice> newNotices) {
+                    if (!newNotices.isEmpty()) {
+                        Log.d(TAG, "new notices: " + newNotices);
+                        for (Notice n : newNotices) {
+                            if (!history.contains(n.getNid())) {
+                                history.add(n.getNid());
+                                showNotification(n.getTitle(), n.getContent(), n.getContent());
+                            }
+
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailed(String error) {}
+
+                @Override
+                public void onFinish(String s) {}
+
+            }).execute(user.getUid());
+
+//            Random random = new Random();
+//            showNotification("" + random.nextInt(), "" + random.nextInt(), "" + random.nextInt());
         }
     };
 
     @Override
     public void onCreate() {
         super.onCreate();
+    }
 
-        showNotification("Test", "test", "test");
+    @Override
+    public void onDestroy() {
+        if (refreshNotifications != null) {
+            refreshNotifications.cancel();
+        }
+        if (timer != null) {
+            timer.cancel();
+        }
+        super.onDestroy();
+    }
 
-        Timer timer = new Timer();
-        timer.schedule(refreshNotifications, 0, 2000);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.getBundleExtra("data") != null && intent.getBundleExtra("data").get("user") != null) {
+            user = (User) intent.getBundleExtra("data").get("user");
+        }
+
+        if (timer == null) {
+            timer = new Timer();
+            timer.schedule(refreshNotifications, 0, 5000);
+        }
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
+        // NONEEDTODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -75,7 +145,9 @@ public class NotifyService extends Service {
         }
 
         // 点击通知时的 PendingIntent
-        Intent intent = new Intent(this, MusicChatActivity.class);
+        Intent intent = new Intent(this, NoticeActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("content", content);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         // 构建通知
@@ -94,6 +166,6 @@ public class NotifyService extends Service {
                 .build();
 
         // 发送通知
-        mNM.notify(1, notification);
+        mNM.notify(history.size(), notification);
     }
 }

@@ -1,6 +1,6 @@
 package com.mine.musharing.requestTasks;
 
-import com.mine.musharing.bases.Msg;
+import com.mine.musharing.models.Msg;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.RequestUtil;
 

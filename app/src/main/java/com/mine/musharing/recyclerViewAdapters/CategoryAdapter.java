@@ -13,13 +13,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.bases.Category;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Category;
 import com.mine.musharing.utils.Utility;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static android.support.constraint.Constraints.TAG;
 

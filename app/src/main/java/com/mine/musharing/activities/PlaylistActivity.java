@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.bases.Category;
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Category;
+import com.mine.musharing.models.Music;
+import com.mine.musharing.models.Playlist;
+import com.mine.musharing.models.User;
 import com.mine.musharing.fragments.PlaylistFragment;
 
 import java.util.List;
