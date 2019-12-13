@@ -1,5 +1,7 @@
 package com.mine.musharing.models;
 
+import android.support.annotation.NonNull;
+
 public class Notice {
 
     String nid;
@@ -36,5 +38,11 @@ public class Notice {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "[Notice " + this.nid + " " + this.title + "]";
     }
 }

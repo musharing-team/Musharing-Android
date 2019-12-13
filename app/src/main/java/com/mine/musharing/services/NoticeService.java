@@ -21,6 +21,7 @@ import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.NoticeTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,11 +61,11 @@ public class NoticeService extends Service {
                 @Override
                 public void onSuccess(List<Notice> newNotices) {
                     if (!newNotices.isEmpty()) {
-                        Log.d(TAG, "new notices: " + newNotices);
+                        // Log.d(TAG, "new notices: " + newNotices.toString());
                         for (Notice n : newNotices) {
                             if (!history.contains(n.getNid())) {
                                 history.add(n.getNid());
-                                showNotification(n.getTitle(), n.getContent(), n.getContent());
+                                showNotification(n.getNid(), n.getTitle(), n.getContent(), n.getContent());
                             }
 
                         }
@@ -109,7 +110,7 @@ public class NoticeService extends Service {
 
         if (timer == null) {
             timer = new Timer();
-            timer.schedule(refreshNotifications, 0, 5000);
+            timer.schedule(refreshNotifications, 0, 10000);
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -121,7 +122,9 @@ public class NoticeService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void showNotification(String title, String content, String detail) {
+    private void showNotification(String nid, String title, String content, String detail) {
+
+        // Log.d(TAG, "showNotification: notice: " + title);
 
         NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
@@ -136,11 +139,7 @@ public class NoticeService extends Service {
         NotificationChannel mChannel = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mChannel = new NotificationChannel(channel_id, channel_name, channel_importance);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mChannel.setDescription(channel_description);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNM.createNotificationChannel(mChannel);
         }
 
@@ -148,7 +147,14 @@ public class NoticeService extends Service {
         Intent intent = new Intent(this, NoticeActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        // 务必确保 requestCode 的唯一性以保证打开的详情页与通知保持一致
+        Random random = new Random();
+        int requestCode = (int)(System.currentTimeMillis() % 1000) +
+                nid.length() % 1000 * random.nextInt(9) +
+                title.length() % 1000 * random.nextInt(9) +
+                content.length() % 1000 * random.nextInt(9) +
+                random.nextInt(1000);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent, 0);
 
         // 构建通知
         Notification notification = new NotificationCompat.Builder(this, channel_id)

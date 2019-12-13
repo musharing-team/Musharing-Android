@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.NoticeActivity"></activity>
+        <activity android:name=".activities.NoticeActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"/>
         <activity
             android:name=".activities.PlaylistActivity"
             android:launchMode="singleTask"
