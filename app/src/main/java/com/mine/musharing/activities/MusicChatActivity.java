@@ -179,6 +179,12 @@ public class MusicChatActivity extends AppCompatActivity {
                     reloadFlag = false;
                     startActivity(intent1);
                     break;
+                case R.id.nav_lookaround:
+                    mDrawerLayout.closeDrawers();
+                    Intent intent2 = new Intent(MusicChatActivity.this, LookaroundActivity.class);
+                    reloadFlag = false;
+                    startActivity(intent2);
+                    break;
                 case R.id.nav_exit:
                     mDrawerLayout.closeDrawers();
                     leaveRoom();

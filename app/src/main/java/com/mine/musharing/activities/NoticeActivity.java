@@ -59,7 +59,6 @@ public class NoticeActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // 捕获音量按键事件传给 musicFragment 处理音量键控制
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 finish();
