@@ -1,28 +1,19 @@
 package com.mine.musharing.audio;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.mine.musharing.activities.MusicChatActivity;
-import com.mine.musharing.bases.Category;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.SerializableList;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.Music;
+import com.mine.musharing.models.Playlist;
+import com.mine.musharing.models.SerializableList;
+import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.requestTasks.SendTask;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.UserUtil;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * 播放列表的"管理员"
@@ -134,7 +125,7 @@ public class MusicListHolder {
     public boolean handlePlaylistMsg(Msg msg) {
         Playlist newPlaylist = ParseUtil.playlistContentParse(msg.getContent());
 
-        if (newPlaylist != null && !newPlaylist.getId().equals(this.playlist.getId())) {
+        if (newPlaylist != null && !newPlaylist.getId().equals(this.playlist.getId()) && !newPlaylist.getMusicList().isEmpty()) {
             Log.d(TAG, "handlePlaylistMsg: use new playlist from " + msg.getFromUid());
             setPlaylist(newPlaylist);
             return true;

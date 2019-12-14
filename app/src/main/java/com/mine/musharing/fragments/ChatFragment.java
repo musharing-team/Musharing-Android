@@ -1,15 +1,12 @@
 package com.mine.musharing.fragments;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -26,19 +22,15 @@ import android.widget.Toast;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
 import com.mine.musharing.audio.HotLineRecorder;
-import com.mine.musharing.audio.PlayAsyncer;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.RecordingDialogManager;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.RecordingDialogManager;
+import com.mine.musharing.models.User;
 import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
-import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.requestTasks.SendTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.support.constraint.Constraints.TAG;
 

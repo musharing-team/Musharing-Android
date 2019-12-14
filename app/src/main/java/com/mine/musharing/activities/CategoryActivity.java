@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.mine.musharing.R;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 import com.mine.musharing.fragments.CategoryFragment;
 
 /**

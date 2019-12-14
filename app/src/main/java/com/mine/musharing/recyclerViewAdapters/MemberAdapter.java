@@ -1,11 +1,9 @@
 package com.mine.musharing.recyclerViewAdapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 import com.mine.musharing.utils.Utility;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * RoomFragment 中 Room内成员RecycleView 的 Adapter

@@ -3,10 +3,9 @@ package com.mine.musharing.audio;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
-import android.util.Log;
 
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.requestTasks.SendTask;
 
@@ -20,8 +19,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * 实现 HotLine 功能的"录音机"

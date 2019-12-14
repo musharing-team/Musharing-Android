@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Base64;
 
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 
 /**
  * <h1>用户库</h1>

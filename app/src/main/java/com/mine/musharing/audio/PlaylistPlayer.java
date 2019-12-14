@@ -3,8 +3,7 @@ package com.mine.musharing.audio;
 import android.media.MediaPlayer;
 import android.util.Log;
 
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
+import com.mine.musharing.models.Music;
 
 import java.io.IOException;
 import java.util.List;

@@ -28,9 +28,9 @@ import com.mine.musharing.R;
 import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.Playlist;
+import com.mine.musharing.models.User;
 import com.mine.musharing.fragments.ChatFragment;
 import com.mine.musharing.fragments.MusicFragment;
 import com.mine.musharing.fragments.PlaylistFragment;
@@ -178,6 +178,12 @@ public class MusicChatActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(MusicChatActivity.this, SettingActivity.class);
                     reloadFlag = false;
                     startActivity(intent1);
+                    break;
+                case R.id.nav_lookaround:
+                    mDrawerLayout.closeDrawers();
+                    Intent intent2 = new Intent(MusicChatActivity.this, LookaroundActivity.class);
+                    reloadFlag = false;
+                    startActivity(intent2);
                     break;
                 case R.id.nav_exit:
                     mDrawerLayout.closeDrawers();

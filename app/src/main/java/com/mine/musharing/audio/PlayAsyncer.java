@@ -3,8 +3,8 @@ package com.mine.musharing.audio;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.requestTasks.SendTask;
 

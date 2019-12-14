@@ -3,6 +3,7 @@ package com.mine.musharing.utils;
 import java.io.IOException;
 
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -293,4 +294,33 @@ public class RequestUtil {
 		return NETWORK_ERROR_JSON;
 	}
 
+	/**
+	 * 接收通知的网络请求
+	 *
+	 * ⚠️注意，与其他的请求不同，这个方法是 GET！
+	 *
+	 * @param uid 当前用户uid
+	 * @return response json
+	 */
+	public static String notice(String uid) {
+		OkHttpClient client = new OkHttpClient();
+
+		// 拼接url＋queryString
+		HttpUrl.Builder urlBuilder = HttpUrl.parse(SERVER_URL + "/notice").newBuilder();
+		urlBuilder.addQueryParameter("from_uid", uid);
+
+		Request request = new Request.Builder()
+				.url(urlBuilder.build())
+				.get()
+				.build();
+		try {
+			Response response = client.newCall(request).execute();
+			if (response.isSuccessful() && response.body() != null) {
+				return response.body().string();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return NETWORK_ERROR_JSON;
+	}
 }

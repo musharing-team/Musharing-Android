@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -16,14 +15,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.RegisterTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.SensitiveWordsUtils;
 import com.mine.musharing.utils.UserUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -94,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // 敏感词检测
-        if(SensitiveWordsUtils.contains(userName)) {
+        if(SensitiveWordsUtils.contains(userName, SensitiveWordsUtils.MinMatchTYpe)) {
             Snackbar.make(registerLayout, "昵称不能包含敏感词汇。", Snackbar.LENGTH_LONG).show();
             return;
         }

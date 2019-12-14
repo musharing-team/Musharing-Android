@@ -1,12 +1,8 @@
 package com.mine.musharing.activities;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,18 +10,15 @@ import com.mine.musharing.R;
 import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
-import com.mine.musharing.audio.PlaylistPlayer;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.LoginTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.services.NoticeService;
 import com.mine.musharing.utils.UserUtil;
 
 import android.content.Intent;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -115,11 +108,20 @@ public class LoginActivity extends AppCompatActivity {
                 HotLineRecorder.getInstance().setUser(user);
 
                 runOnUiThread(() -> {
-                    Intent intent = new Intent(LoginActivity.this, MusicChatActivity.class);
+                    // 打包数据
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);
-                    intent.putExtra("data", bundle);
-                    startActivity(intent);
+
+                    // 开启 NoticeService
+                    Intent notifyServiceIntent = new Intent(LoginActivity.this, NoticeService.class);
+                    notifyServiceIntent.putExtra("data", bundle);
+                    startService(notifyServiceIntent);
+
+                    // 转到 MusicChatActivity
+                    Intent musicChatActivityIntent = new Intent(LoginActivity.this, MusicChatActivity.class);
+                    musicChatActivityIntent.putExtra("data", bundle);
+                    startActivity(musicChatActivityIntent);
+
                     finish();
                 });
             }

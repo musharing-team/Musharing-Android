@@ -5,12 +5,10 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -34,11 +31,10 @@ import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
 import com.mine.musharing.audio.PlaylistPlayer;
-import com.mine.musharing.bases.Msg;
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
-import com.mine.musharing.bases.RecordingDialogManager;
-import com.mine.musharing.bases.User;
+import com.mine.musharing.models.Msg;
+import com.mine.musharing.models.Music;
+import com.mine.musharing.models.RecordingDialogManager;
+import com.mine.musharing.models.User;
 import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
 import com.mine.musharing.utils.Utility;
 
@@ -46,8 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * <h1>音乐播放的碎片</h1>

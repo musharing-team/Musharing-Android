@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.bases.Music;
-import com.mine.musharing.bases.Playlist;
+import com.mine.musharing.models.Music;
 
 import java.util.ArrayList;
 import java.util.List;

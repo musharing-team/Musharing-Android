@@ -1,4 +1,4 @@
-package com.mine.musharing.bases;
+package com.mine.musharing.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;

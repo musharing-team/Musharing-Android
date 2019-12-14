@@ -1,6 +1,6 @@
 package com.mine.musharing.requestTasks;
 
-import com.mine.musharing.bases.Playlist;
+import com.mine.musharing.models.Playlist;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.RequestUtil;
 

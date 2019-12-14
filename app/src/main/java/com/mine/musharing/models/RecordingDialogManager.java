@@ -1,4 +1,4 @@
-package com.mine.musharing.bases;
+package com.mine.musharing.models;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,13 +7,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
