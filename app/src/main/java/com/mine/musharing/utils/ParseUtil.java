@@ -311,4 +311,17 @@ public class ParseUtil {
         }
         throw new ResponseError(ResponseError.UNEXPECTED);
     }
+
+    /**
+     *
+     * <h2>解析 获取 chatbot 回复 的结果</h2>
+     *
+     * @param responseText 请求的 response body
+     * @return 机器人回复文本
+     * @throws ResponseError
+     */
+    public static String chatbotResponseParse(String responseText) throws ResponseError {
+        // TODO: parse the chatbot response
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

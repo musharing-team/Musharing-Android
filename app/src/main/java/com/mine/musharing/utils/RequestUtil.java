@@ -323,4 +323,16 @@ public class RequestUtil {
 		}
 		return NETWORK_ERROR_JSON;
 	}
+
+	/**
+	 * 获取 chatbot 回复的网络请求
+	 *
+	 * @param statement 要让机器人回复的话
+	 * @return response body
+	 */
+	public static String chatbot(String statement) {
+		// TODO: implement chatbot request
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
 }
