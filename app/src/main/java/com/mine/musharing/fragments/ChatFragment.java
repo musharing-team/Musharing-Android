@@ -168,7 +168,7 @@ public class ChatFragment extends Fragment {
 
                             @Override
                             public void onFinish(String s) { }
-                        }).execute(UserUtil.chatbotUser.getUid(), chatbotReplyMsg.toString());
+                        }).execute(user.getUid(), chatbotReplyMsg.toString());
                     }
 
                     @Override
