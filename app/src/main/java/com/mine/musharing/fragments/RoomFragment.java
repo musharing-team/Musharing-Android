@@ -27,6 +27,7 @@ import com.mine.musharing.recyclerViewAdapters.MemberAdapter;
 import com.mine.musharing.requestTasks.AttendTask;
 import com.mine.musharing.requestTasks.MemberTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.StatusUtil;
 import com.mine.musharing.utils.UserUtil;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.TimerTask;
 
 import static android.support.constraint.Constraints.TAG;
 import static com.mine.musharing.utils.UserUtil.addMemberSign;
+import static com.mine.musharing.utils.UserUtil.chatbotUser;
 
 /**
  * <h1>房间碎片</h1>
@@ -160,6 +162,8 @@ public class RoomFragment extends Fragment {
 
                     Log.d(TAG, "refreshMemberList onSuccess: mMemberList" + mMemberList);
                     memberAdapter.notifyDataSetChanged();
+
+                    StatusUtil.chatbotEnable = mMemberList.contains(chatbotUser);
                     // Log.d(TAG, "onSuccess: notified");
                 });
                 // Log.d(TAG, "onSuccess: afterRunOnUiThread: " + mMemberList);
