@@ -19,8 +19,9 @@ public class RequestUtil {
 	/**
 	 * 服务器地址
 	 */
-	public static final String SERVER_URL = "http://39.107.75.19:5000";
+//	public static final String SERVER_URL = "http://39.107.75.19:5000";			// Service
 //	public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
+	public static final String SERVER_URL = "http://192.168.11.222:5000";		// another local address
 
 	/**
 	 * Unexpected Json
@@ -323,4 +324,16 @@ public class RequestUtil {
 		}
 		return NETWORK_ERROR_JSON;
 	}
+
+	/**
+	 * 获取 chatbot 回复的网络请求
+	 *
+	 * @param statement 要让机器人回复的话
+	 * @return response body
+	 */
+	public static String chatbot(String statement) {
+		// TODO: implement chatbot request
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
 }

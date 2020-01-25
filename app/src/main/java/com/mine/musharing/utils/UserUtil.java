@@ -27,6 +27,12 @@ public class UserUtil {
 	 * 代表 Playlist 的特殊用户对象
 	 */
 	public final static User playlistFakeUser = new User("playlist", "playlist", "");
+
+	/**
+	 * 代表 chatbot 的特殊用户对象
+	 */
+	public final static User chatbotUser = new User("chatbot", "chatbot", "https://cdn.pixabay.com/photo/2017/12/03/14/31/kawaii-2995014__480.png");
+
 	/**
 	 * 计算 password 用 userNameBase64 加盐后 md5 加密值 (hmac)
 	 * @param nameBase64 Base64编码后的用户名

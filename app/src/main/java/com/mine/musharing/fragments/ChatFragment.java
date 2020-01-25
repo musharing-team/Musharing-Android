@@ -26,8 +26,11 @@ import com.mine.musharing.models.Msg;
 import com.mine.musharing.models.RecordingDialogManager;
 import com.mine.musharing.models.User;
 import com.mine.musharing.recyclerViewAdapters.MsgAdapter;
+import com.mine.musharing.requestTasks.ChatbotTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.requestTasks.SendTask;
+import com.mine.musharing.utils.StatusUtil;
+import com.mine.musharing.utils.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +116,7 @@ public class ChatFragment extends Fragment {
             // TODO(b04) Different kinds of Msg
             Msg msg = new Msg(Msg.TYPE_TEXT, user, content);
 
+            // 发送消息
             new SendTask(new RequestTaskListener<String>() {
                 @Override
                 public void onStart() {}
@@ -135,6 +139,49 @@ public class ChatFragment extends Fragment {
                 public void onFinish(String s) {}
 
             }).execute(user.getUid(), msg.toString());
+
+            // chatbot reply
+            if (StatusUtil.chatbotEnable) {
+
+                // try to get chatbot reply
+                new ChatbotTask(new RequestTaskListener<String>() {
+                    @Override
+                    public void onStart() {}
+
+                    @Override
+                    public void onSuccess(String s) {
+                        // Send chatbot reply
+                        Msg chatbotReplyMsg = new Msg(Msg.TYPE_TEXT, UserUtil.chatbotUser, s);
+                        new SendTask(new RequestTaskListener<String>() {
+                            @Override
+                            public void onStart() { }
+
+                            @Override
+                            public void onSuccess(String s) { }
+
+                            @Override
+                            public void onFailed(String error) {
+                                getActivity().runOnUiThread(() -> {
+                                    Toast.makeText(getContext(), "机器人回复失败(ChatbotTask->SendTask)：" + error, Toast.LENGTH_SHORT).show();
+                                });
+                            }
+
+                            @Override
+                            public void onFinish(String s) { }
+                        }).execute(user.getUid(), chatbotReplyMsg.toString());
+                    }
+
+                    @Override
+                    public void onFailed(String error) {
+                        getActivity().runOnUiThread(() -> {
+                            Toast.makeText(getContext(), "机器人回复失败(ChatbotTask)：" + error, Toast.LENGTH_SHORT).show();
+                        });
+                    }
+
+                    @Override
+                    public void onFinish(String s) {}
+                }).execute(content);
+            }
         }
     }
 
