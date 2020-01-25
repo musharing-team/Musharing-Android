@@ -9,8 +9,6 @@ import com.mine.musharing.models.User;
  */
 public class StatusUtil {
 
-    // TODO: 完成在ChatFragment中用chatbot
-
     /**
      * 当前登录的用户（暂时没有使用，现在的解决方案是在各个Activity、Fragment 间用 intent bundle 传递）
      */
