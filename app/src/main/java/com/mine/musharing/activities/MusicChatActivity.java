@@ -39,6 +39,9 @@ import com.mine.musharing.requestTasks.LeaveTask;
 import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,6 +49,7 @@ import java.util.TimerTask;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.support.constraint.Constraints.TAG;
+import static java.lang.Math.abs;
 
 /**
  * <h1>音乐聊天活动</h1>
@@ -61,6 +65,10 @@ import static android.support.constraint.Constraints.TAG;
  * <em>Musharing理念的主要实现活动</em>
  */
 public class MusicChatActivity extends AppCompatActivity {
+
+    private final int[] TopNavItems = {R.id.top_nav_music, R.id.top_nav_room, R.id.top_nav_playlist, R.id.top_nav_me};
+
+    private int currentNavItem = R.id.top_nav_music;
 
     private User user;
 
@@ -156,7 +164,7 @@ public class MusicChatActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         transaction.add(R.id.chat_fragment, chatFragment);
-        transaction.add(R.id.music_fragment, musicFragment);
+        transaction.add(R.id.main_fragment, musicFragment);
 
         transaction.add(R.id.room_in_music_chat_activity, roomFragment);
         transaction.add(R.id.playlist_in_music_chat_activity, playlistFragment);
@@ -323,6 +331,56 @@ public class MusicChatActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 点击顶部导航栏
+     */
+    public void topNavItemOnClick(View clicked) {
+        int clickedId = clicked.getId();
+        if (clickedId != currentNavItem) {
+            // ui change
+            navUIChange(clickedId);
+            // TODO: mainFragment change
+            mainFragmentChange(clickedId);
+            currentNavItem = clickedId;
+        }
+
+    }
+
+    private void navUIChange(int current) {
+        int currentIndex = -1;
+        for (int i=0; i < TopNavItems.length; i++) {
+            if (TopNavItems[i] == current) {
+                currentIndex = i;
+            }
+        }
+
+        int[] textSizes = {0, 0, 0, 0};
+        for (int i=0; i < TopNavItems.length; i++) {
+            switch (abs(i - currentIndex)) {
+                case 3:
+                    textSizes[i] = 12;
+                    break;
+                case 2:
+                    textSizes[i] = 14;
+                    break;
+                case 1:
+                    textSizes[i] = 16;
+                    break;
+                case 0:
+                    textSizes[i] = 22;
+                    break;
+                default:
+                    textSizes[i] = 12;
+            }
+            TextView tv = findViewById(TopNavItems[i]);
+            tv.setTextSize(textSizes[i]);
+        }
+    }
+
+    private void mainFragmentChange(int current) {
+
+    }
+
 
     /**
      * 重置定时任务
@@ -401,13 +459,13 @@ public class MusicChatActivity extends AppCompatActivity {
     /**
      * <h1>捕获实体按键的按下事件</h1>
      *
-     * <p>捕获音量按键事件传给 musicFragment 处理音量键控制</p>
+     * <p>捕获音量按键事件传给 mainFragment 处理音量键控制</p>
      * <p>捕获返回键，禁止返回（MusicChatActivity 是主界面，不应该退出）</p>
      *
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // 捕获音量按键事件传给 musicFragment 处理音量键控制
+        // 捕获音量按键事件传给 mainFragment 处理音量键控制
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -446,7 +504,7 @@ public class MusicChatActivity extends AppCompatActivity {
             transaction.remove(musicFragment);
 
             transaction.add(R.id.chat_fragment, chatFragment);
-            transaction.add(R.id.music_fragment, musicFragment);
+            transaction.add(R.id.main_fragment, musicFragment);
 
             transaction.addToBackStack(null);
             transaction.commit();

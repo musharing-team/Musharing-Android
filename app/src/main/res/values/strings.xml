@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Musharing DEMO</string>
-    <string name="version">0.4.11(20191214.1503)</string>
+    <string name="version">0.4.12(20200125.1609)</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ullamcorper enim vel odio ullamcorper, eget efficitur lacus vestibulum. Nullam lobortis nibh sed quam sollicitudin iaculis. Proin consectetur aliquam lorem, sed sagittis nunc consequat nec. Nam id interdum metus. Suspendisse consequat, metus vitae volutpat aliquam, augue lectus gravida metus, a volutpat nisl neque a neque. Nunc tempus eget velit cursus ornare. Sed consequat posuere pellentesque. In placerat eu ex non molestie. Morbi lacinia nulla volutpat eleifend faucibus. Nulla ac justo sit amet lorem aliquet feugiat et eget risus. Nunc a metus nunc. Nunc sit amet vestibulum enim.</string>
 </resources>

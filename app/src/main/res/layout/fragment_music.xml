@@ -139,31 +139,31 @@
                     android:gravity="center">
 
                     <!-- Nav -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginHorizontal="8dp"
-                        android:gravity="center"
-                        android:layout_gravity="center">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:layout_marginHorizontal="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_gravity="center">-->
 
-                        <Button
-                            android:id="@+id/nav_button"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/button_common"
-                            android:foreground="?android:attr/selectableItemBackground"/>
+<!--                        <Button-->
+<!--                            android:id="@+id/nav_button"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/button_common"-->
+<!--                            android:foreground="?android:attr/selectableItemBackground"/>-->
 
-                        <TextView
-                            android:text="导航"
-                            android:layout_margin="2dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center" />
+<!--                        <TextView-->
+<!--                            android:text="导航"-->
+<!--                            android:layout_margin="2dp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:gravity="center" />-->
 
-                    </LinearLayout>
+<!--                    </LinearLayout>-->
 
                     <!--上一曲-->
                     <ImageButton
@@ -210,32 +210,32 @@
                         android:background="#0000" />
 
                     <!-- Room -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginHorizontal="8dp"
-                        android:gravity="center"
-                        android:layout_gravity="center">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:layout_marginHorizontal="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_gravity="center">-->
 
-                        <Button
-                            android:id="@+id/room_button"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/button_common"
-                            android:foreground="?android:attr/selectableItemBackground"/>
+<!--                        <Button-->
+<!--                            android:id="@+id/room_button"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/button_common"-->
+<!--                            android:foreground="?android:attr/selectableItemBackground"/>-->
 
-                        <TextView
-                            android:text="房间"
-                            android:layout_margin="2dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:foreground="?android:attr/selectableItemBackground"/>
+<!--                        <TextView-->
+<!--                            android:text="房间"-->
+<!--                            android:layout_margin="2dp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:gravity="center"-->
+<!--                            android:foreground="?android:attr/selectableItemBackground"/>-->
 
-                    </LinearLayout>
+<!--                    </LinearLayout>-->
 
                 </LinearLayout>
 

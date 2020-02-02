@@ -199,22 +199,22 @@ public class MusicFragment extends Fragment {
         return false;
     }
 
-    /**
-     * 点击 导航、房间 的事件
-     * @param view
-     */
-    public void navRoomButtonOnClick(View view) {
-        MusicChatActivity parent = (MusicChatActivity) getActivity();
-        switch (view.getId()) {
-            case R.id.nav_button:
-                parent.openDrawer(MusicChatActivity.DRAWER_NAV);
-                break;
-            case R.id.room_button:
-                parent.openDrawer(MusicChatActivity.RRAWER_ROOM);
-                break;
-        }
-
-    }
+//    /**
+//     * 点击 导航、房间 的事件
+//     * @param view
+//     */
+//    public void navRoomButtonOnClick(View view) {
+//        MusicChatActivity parent = (MusicChatActivity) getActivity();
+//        switch (view.getId()) {
+//            case R.id.nav_button:
+//                parent.openDrawer(MusicChatActivity.DRAWER_NAV);
+//                break;
+//            case R.id.room_button:
+//                parent.openDrawer(MusicChatActivity.RRAWER_ROOM);
+//                break;
+//        }
+//
+//    }
 
     /**
      * 初始化HotlineRecorder 以及 录音时管理UI效果的RecordingDialogManager
@@ -254,10 +254,10 @@ public class MusicFragment extends Fragment {
         volumeBar = musicFragmentView.findViewById(R.id.play_volume);
 
         // nav and room button
-        navButton = musicFragmentView.findViewById(R.id.nav_button);
-        navButton.setOnClickListener(this::navRoomButtonOnClick);
-        roomButton = musicFragmentView.findViewById(R.id.room_button);
-        roomButton.setOnClickListener(this::navRoomButtonOnClick);
+//        navButton = musicFragmentView.findViewById(R.id.nav_button);
+//        navButton.setOnClickListener(this::navRoomButtonOnClick);
+//        roomButton = musicFragmentView.findViewById(R.id.room_button);
+//        roomButton.setOnClickListener(this::navRoomButtonOnClick);
 
         // Hot line button
         hotLineButton = musicFragmentView.findViewById(R.id.hotline_in_music_fragment);
