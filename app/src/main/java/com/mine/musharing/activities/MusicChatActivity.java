@@ -42,6 +42,7 @@ import com.mine.musharing.R;
 import com.mine.musharing.audio.HotLineRecorder;
 import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.audio.PlayAsyncer;
+import com.mine.musharing.fragments.MeFragment;
 import com.mine.musharing.models.Msg;
 import com.mine.musharing.models.Playlist;
 import com.mine.musharing.models.User;
@@ -102,7 +103,7 @@ public class MusicChatActivity extends AppCompatActivity {
 
     private PlaylistFragment mainPlaylistFragment;
 
-    private Fragment mainMeFragment;
+    private MeFragment mainMeFragment;
 
     private ChatFragment chatFragment;
 
@@ -178,7 +179,7 @@ public class MusicChatActivity extends AppCompatActivity {
         mainPlaylistFragment = new PlaylistFragment();
         mainPlaylistFragment.setArguments(bundle);
 
-        mainMeFragment = new RoomFragment();
+        mainMeFragment = new MeFragment();
         mainMeFragment.setArguments(bundle);
 
         // init sied Fragments
@@ -655,7 +656,7 @@ public class MusicChatActivity extends AppCompatActivity {
     /**
      * 退出当前房间
      */
-    private void leaveRoom() {
+    public void leaveRoom() {
         new LeaveTask(new RequestTaskListener<String>() {
             @Override
             public void onStart() {}
