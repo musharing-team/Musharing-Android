@@ -2,9 +2,11 @@ package com.mine.musharing.activities;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.transition.TransitionSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import com.mine.musharing.requestTasks.RegisterTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.SensitiveWordsUtils;
 import com.mine.musharing.utils.UserUtil;
+import com.mine.musharing.utils.Utility;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -55,6 +58,21 @@ public class RegisterActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.register_img);
         Glide.with(this).load(imgUrl).into(imageView);
+
+        setupTransition();
+    }
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
     }
 
     /**
@@ -111,8 +129,9 @@ public class RegisterActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     Toast.makeText(RegisterActivity.this, "注册成功，请登录\nWelcome, " + user.getName(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(RegisterActivity.this).toBundle();
+                    startActivity(intent, translateBundle);
+                    // finish();
                 });
             }
 

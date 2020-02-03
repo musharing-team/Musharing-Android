@@ -2,11 +2,13 @@ package com.mine.musharing.activities;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +20,7 @@ import com.mine.musharing.audio.MusicListHolder;
 import com.mine.musharing.models.User;
 import com.mine.musharing.fragments.PlaylistFragment;
 import com.mine.musharing.fragments.RoomFragment;
+import com.mine.musharing.utils.Utility;
 
 /**
  * <h1>房间/播放列表活动</h1>
@@ -64,8 +67,27 @@ public class RoomPlaylistActivity extends AppCompatActivity {
         playlistCardView.setOnClickListener(this::playlistCardOnClick);
 
         initFragments();
+        setupTransition();
     }
 
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
+    }
+
+
+    /**
+     * 初始化 fragments
+     */
     private void initFragments() {
         // 打包要传递给 fragments 的 user 数据
         Bundle bundle = new Bundle();
@@ -95,11 +117,15 @@ public class RoomPlaylistActivity extends AppCompatActivity {
      * TODO:这个命名有点问题，需要 refactor 一下
      */
     public void playlistCardOnClick(View view) {
-        Intent intent = new Intent(this, CategoryActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
-        intent.putExtra("data", bundle);
-        startActivity(intent);
+        runOnUiThread(() -> {
+            Intent intent = new Intent(this, CategoryActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            intent.putExtra("data", bundle);
+
+            Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(RoomPlaylistActivity.this).toBundle();
+            startActivity(intent, translateBundle);
+        });
     }
 
     /**
@@ -118,12 +144,16 @@ public class RoomPlaylistActivity extends AppCompatActivity {
             Snackbar.make(findViewById(R.id.attend_room_layout),
                     "选择一张歌单再开始吧^_^", Snackbar.LENGTH_LONG).show();
         } else {
-            Intent intent = new Intent(this, MusicChatActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("user", user);
-            intent.putExtra("data", bundle);
-            startActivity(intent);
-            finish();
+            runOnUiThread(() -> {
+                Intent intent = new Intent(this, MusicChatActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", user);
+                intent.putExtra("data", bundle);
+
+                Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(RoomPlaylistActivity.this).toBundle();
+                startActivity(intent, translateBundle);
+                // finish();
+            });
         }
 
         intoRoomButton.setVisibility(View.VISIBLE);

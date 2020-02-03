@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -53,6 +54,7 @@ import com.mine.musharing.fragments.RoomFragment;
 import com.mine.musharing.requestTasks.LeaveTask;
 import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.Utility;
 
 import java.util.List;
 import java.util.Random;
@@ -133,7 +135,11 @@ public class MusicChatActivity extends AppCompatActivity {
     // reloadFlag
     private boolean reloadFlag = false;
 
-    Bundle bundle;
+    Bundle bundle;      // data need to pass
+
+    // for 转场动画
+    Bundle translateBundle;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -141,6 +147,30 @@ public class MusicChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_chat);
 
+        setupTransition();
+
+        getPermissions();
+
+        // 获取数据
+        Intent intent = getIntent();
+        user = (User) intent.getBundleExtra("data").get("user");
+        // playlist = (Playlist) intent.getBundleExtra("data").get("playlist");
+
+        setupActionBar();
+
+        initFragments();
+
+        initNavigationView();
+
+        initTouchShield();
+
+        restartTimerTasks();
+    }
+
+    /**
+     * 尝试获取必要权限
+     */
+    private void getPermissions() {
         // permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -148,20 +178,24 @@ public class MusicChatActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
+    }
 
-        // 获取数据
-        Intent intent = getIntent();
-        user = (User) intent.getBundleExtra("data").get("user");
-        // playlist = (Playlist) intent.getBundleExtra("data").get("playlist");
-
-        // Show ic_menu
+    /**
+     * 设置标题栏
+     */
+    private void setupActionBar() {
         mDrawerLayout = findViewById(R.id.draw_layout);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
             // actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         }
+    }
 
+    /**
+     * 初始化各 fragment
+     */
+    private void initFragments() {
         // 处理 fragments
         // 打包要传递给 fragments 的 user 数据
         bundle = new Bundle();
@@ -211,7 +245,12 @@ public class MusicChatActivity extends AppCompatActivity {
 
         // Add mainFragment
         mainFragmentChange(R.id.top_nav_music);
+    }
 
+    /**
+     * 初始化 NavigationView
+     */
+    private void initNavigationView() {
         // Enable NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_friends);
@@ -223,15 +262,17 @@ public class MusicChatActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_settings:
                     mDrawerLayout.closeDrawers();
-                    Intent intent1 = new Intent(MusicChatActivity.this, SettingActivity.class);
-                    reloadFlag = false;
-                    startActivity(intent1);
+                    runOnUiThread(() -> {
+                        Intent intent1 = new Intent(MusicChatActivity.this, SettingActivity.class);
+                        reloadFlag = false;
+                        startActivity(intent1, translateBundle);
+                    });
                     break;
                 case R.id.nav_lookaround:
                     mDrawerLayout.closeDrawers();
                     Intent intent2 = new Intent(MusicChatActivity.this, LookaroundActivity.class);
                     reloadFlag = false;
-                    startActivity(intent2);
+                    startActivity(intent2, translateBundle);
                     break;
                 case R.id.nav_exit:
                     mDrawerLayout.closeDrawers();
@@ -249,7 +290,31 @@ public class MusicChatActivity extends AppCompatActivity {
 
         navUserNameView = navigationView.getHeaderView(0).findViewById(R.id.nav_user_name_view);
         navUserNameView.setText(user.getName());
+    }
 
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        runOnUiThread(() -> {
+            translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
+        });
+
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
+    }
+
+    /**
+     * 初始化 TouchShield，防止用户在未设置 room、playlist 前操作 musicFragment，
+     * 并显示需要到 RoomPlaylistActivity 选择好友与播放列表时提示用户操作的 Snackbar
+     */
+    private void initTouchShield() {
         touchShield = findViewById(R.id.touch_shield);
         touchShield.setOnClickListener(null);
         touchShield.setOnTouchListener(null);
@@ -260,16 +325,16 @@ public class MusicChatActivity extends AppCompatActivity {
                 .setAction("去添加", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("user", user);
-                        intent.putExtra("data", bundle);
-                        reloadFlag = true;
-                        startActivity(intent);
+                        runOnUiThread(() -> {
+                            Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("user", user);
+                            intent.putExtra("data", bundle);
+                            reloadFlag = true;
+                            startActivity(intent, translateBundle);
+                        });
                     }
                 });
-
-        restartTimerTasks();
     }
 
     /**
@@ -336,6 +401,9 @@ public class MusicChatActivity extends AppCompatActivity {
         }).execute(user.getUid());
     }
 
+    /**
+     * 总之就是判断有没有加好友、选歌单啦，没有的话开个TouchShield
+     */
     private void checkMemberMusiclist() {
 
         if (roomFragment != null && playlistFragment != null) {
@@ -664,13 +732,6 @@ public class MusicChatActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String s) {
                 runOnUiThread(() -> {
-//                    Intent intent = new Intent(MusicChatActivity.this, RoomPlaylistActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("user", user);
-//                    intent.putExtra("data", bundle);
-//                    startActivity(intent);
-//                    finish();
-
                     cancelTimerTasks();
                     MusicListHolder.getInstance().setPlaylist(new Playlist());
                     reloadFlag = true;
