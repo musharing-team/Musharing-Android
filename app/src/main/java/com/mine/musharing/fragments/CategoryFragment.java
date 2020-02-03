@@ -26,6 +26,7 @@ import com.mine.musharing.recyclerViewAdapters.CategoryAdapter;
 import com.mine.musharing.requestTasks.CategoriesTask;
 import com.mine.musharing.requestTasks.PlaylistTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.ParseUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,20 @@ public class CategoryFragment extends Fragment {
                 @Override
                 public void onFailed(String error) {
                     getActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                        String readableError;
+                        switch (error) {
+                            case ParseUtil.ResponseError.PLAYLIST_NOT_EXIST:
+                                readableError = "播放列表不存在"; break;
+                            case ParseUtil.ResponseError.FROM_NOT_IN_ROOM:
+                                readableError = "请加入房间"; break;
+                            case ParseUtil.ResponseError.FROM_NOT_LOGIN:
+                                readableError = "请登录。"; break;
+                            case ParseUtil.ResponseError.FROM_NOT_EXIST:
+                                readableError = "错误！发起用户不存在。"; break;
+                            default:
+                                readableError = "出错啦，请稍后再试TAT";
+                        }
+                        Toast.makeText(getContext(), readableError, Toast.LENGTH_SHORT).show();
                     });
                 }
 
@@ -155,7 +169,20 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onFailed(String error) {
                 getActivity().runOnUiThread(() -> {
-                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ParseUtil.ResponseError.FAIL_TO_GET_INDEX:
+                            readableError = "无法获取播放列表"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_IN_ROOM:
+                            readableError = "请加入房间"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_LOGIN:
+                            readableError = "请登录。"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_EXIST:
+                            readableError = "错误！发起用户不存在。"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(getActivity(), readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 

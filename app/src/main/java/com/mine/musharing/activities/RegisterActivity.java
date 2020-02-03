@@ -20,6 +20,7 @@ import com.mine.musharing.R;
 import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.RegisterTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.SensitiveWordsUtils;
 import com.mine.musharing.utils.UserUtil;
 import com.mine.musharing.utils.Utility;
@@ -138,7 +139,20 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailed(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ParseUtil.ResponseError.NAME_OCCUPIED:
+                            readableError = "用户名被占用了，换一个吧。"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_IN_ROOM:
+                            readableError = "请加入房间"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_LOGIN:
+                            readableError = "请登录。"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_EXIST:
+                            readableError = "错误！发起用户不存在。"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(RegisterActivity.this, readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 

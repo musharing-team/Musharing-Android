@@ -16,6 +16,7 @@ import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.LoginTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.services.NoticeService;
+import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.UserUtil;
 
 import android.content.Intent;
@@ -40,6 +41,8 @@ import android.widget.Toast;
 
 import com.mine.musharing.utils.AESUtil;
 import com.mine.musharing.utils.Utility;
+
+import com.mine.musharing.utils.ParseUtil.ResponseError;
 
 import java.util.Random;
 import java.util.UUID;
@@ -160,7 +163,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailed(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ResponseError.WRONG_NAME:
+                            readableError = "用户不存在"; break;
+                        case ResponseError.WRONG_PASSWORD:
+                            readableError = "密码错误"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(LoginActivity.this, readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 

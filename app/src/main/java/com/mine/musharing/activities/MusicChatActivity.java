@@ -54,6 +54,8 @@ import com.mine.musharing.fragments.RoomFragment;
 import com.mine.musharing.requestTasks.LeaveTask;
 import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.ParseUtil;
+import com.mine.musharing.utils.ParseUtil.ResponseError;
 import com.mine.musharing.utils.Utility;
 
 import java.util.List;
@@ -391,7 +393,18 @@ public class MusicChatActivity extends AppCompatActivity {
             @Override
             public void onFailed(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(MusicChatActivity.this, error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ResponseError.FROM_NOT_IN_ROOM:
+                            readableError = "请加入房间"; break;
+                        case ResponseError.FROM_NOT_LOGIN:
+                            readableError = "请登录。"; break;
+                        case ResponseError.FROM_NOT_EXIST:
+                            readableError = "错误！发起用户不存在。"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(MusicChatActivity.this, readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -742,8 +755,18 @@ public class MusicChatActivity extends AppCompatActivity {
             @Override
             public void onFailed(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(MusicChatActivity.this, error, Toast.LENGTH_SHORT).show();
-                });
+                    String readableError;
+                    switch (error) {
+                        case ResponseError.FROM_NOT_IN_ROOM:
+                            readableError = "请加入房间"; break;
+                        case ResponseError.FROM_NOT_LOGIN:
+                            readableError = "请登录。"; break;
+                        case ResponseError.FROM_NOT_EXIST:
+                            readableError = "错误！发起用户不存在。"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(MusicChatActivity.this, readableError, Toast.LENGTH_SHORT).show();                });
             }
 
             @Override
