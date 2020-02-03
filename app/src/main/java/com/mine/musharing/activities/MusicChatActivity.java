@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -39,9 +40,6 @@ import com.mine.musharing.requestTasks.LeaveTask;
 import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,6 +64,10 @@ import static java.lang.Math.abs;
  */
 public class MusicChatActivity extends AppCompatActivity {
 
+    FragmentManager fragmentManager;
+
+    FragmentTransaction fragmentTransaction;
+
     private final int[] TopNavItems = {R.id.top_nav_music, R.id.top_nav_room, R.id.top_nav_playlist, R.id.top_nav_me};
 
     private int currentNavItem = R.id.top_nav_music;
@@ -80,7 +82,13 @@ public class MusicChatActivity extends AppCompatActivity {
 
     private TextView navUserNameView;
 
-    private MusicFragment musicFragment;
+    private MusicFragment mainMusicFragment;
+
+    private RoomFragment mainRoomFragment;
+
+    private PlaylistFragment mainPlaylistFragment;
+
+    private Fragment mainMeFragment;
 
     private ChatFragment chatFragment;
 
@@ -109,6 +117,8 @@ public class MusicChatActivity extends AppCompatActivity {
 
     // reloadFlag
     private boolean reloadFlag = false;
+
+    Bundle bundle;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -139,38 +149,53 @@ public class MusicChatActivity extends AppCompatActivity {
 
         // 处理 fragments
         // 打包要传递给 fragments 的 user 数据
-        Bundle bundle = new Bundle();
+        bundle = new Bundle();
         bundle.putSerializable("user", user);
         bundle.putSerializable("playlist", MusicListHolder.getInstance().getPlaylist());
         bundle.putSerializable("musiclist", MusicListHolder.getInstance().getMusicList());
 
-        // init MusicFragment
-        musicFragment = new MusicFragment();
-        musicFragment.setArguments(bundle);
+        // init MainFragments
+        mainMusicFragment = new MusicFragment();
+        mainMusicFragment.setArguments(bundle);
 
-        // init ChatFragment
+        mainRoomFragment = new RoomFragment();
+        mainRoomFragment.setArguments(bundle);
+
+        mainPlaylistFragment = new PlaylistFragment();
+        mainPlaylistFragment.setArguments(bundle);
+
+        mainMeFragment = new RoomFragment();
+        mainMeFragment.setArguments(bundle);
+
+        // init sied Fragments
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
 
-        // init RoomFragment
         roomFragment = new RoomFragment();
         roomFragment.setArguments(bundle);
 
-        // init PlaylistFragment
         playlistFragment = new PlaylistFragment();
         playlistFragment.setArguments(bundle);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        // Add side fragments
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
-        transaction.add(R.id.chat_fragment, chatFragment);
-        transaction.add(R.id.main_fragment, musicFragment);
+        fragmentTransaction.add(R.id.chat_fragment, chatFragment);
+        fragmentTransaction.add(R.id.room_in_music_chat_activity, roomFragment);
+        fragmentTransaction.add(R.id.playlist_in_music_chat_activity, playlistFragment);
 
-        transaction.add(R.id.room_in_music_chat_activity, roomFragment);
-        transaction.add(R.id.playlist_in_music_chat_activity, playlistFragment);
+        // Add main fragments
+        fragmentTransaction.add(R.id.main_music_fragment, mainMusicFragment);
+        fragmentTransaction.add(R.id.main_room_fragment, mainRoomFragment);
+        fragmentTransaction.add(R.id.main_playlist_fragment, mainPlaylistFragment);
+        fragmentTransaction.add(R.id.main_me_fragment, mainMeFragment);
 
-        transaction.addToBackStack(null);
-        transaction.commit();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+        // Add mainFragment
+        mainFragmentChange(R.id.top_nav_music);
 
         // Enable NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -259,7 +284,7 @@ public class MusicChatActivity extends AppCompatActivity {
                     for (Msg msg : newMsgs) {
                         switch (msg.getType()) {
                             case Msg.TYPE_TEXT:
-                                musicFragment.showTextMsg(msg);
+                                mainMusicFragment.showTextMsg(msg);
                                 chatFragment.showTextMsg(msg);
                                 break;
                             case Msg.TYPE_PLAYER_ASYNC:
@@ -268,7 +293,7 @@ public class MusicChatActivity extends AppCompatActivity {
                             case Msg.TYPE_RECORD:
                                 HotLineRecorder.getInstance().handleRecordMsg(msg);
                                 Msg recordSignMsg = new Msg(msg.TYPE_TEXT, new User(msg.getFromUid(), msg.getFromName(), msg.getFromImg()), "[语音]");
-                                musicFragment.showTextMsg(recordSignMsg);
+                                mainMusicFragment.showTextMsg(recordSignMsg);
                                 chatFragment.showTextMsg(recordSignMsg);
                             case Msg.TYPE_PLAYLIST:
                                 boolean changed = MusicListHolder.getInstance().handlePlaylistMsg(msg);
@@ -278,7 +303,7 @@ public class MusicChatActivity extends AppCompatActivity {
                         }
                     }
                     // 清除过多的历史消息
-                    musicFragment.clearSurplusMsgs(1);
+                    mainMusicFragment.clearSurplusMsgs(1);
                     chatFragment.clearSurplusMsgs(20);
                 });
             }
@@ -338,22 +363,33 @@ public class MusicChatActivity extends AppCompatActivity {
         int clickedId = clicked.getId();
         if (clickedId != currentNavItem) {
             // ui change
-            navUIChange(clickedId);
-            // TODO: mainFragment change
+            topNavUIChange(clickedId);
+            // mainFragment change
             mainFragmentChange(clickedId);
             currentNavItem = clickedId;
         }
 
     }
 
-    private void navUIChange(int current) {
+    /**
+     * topNavBar 里选择新 item 后的 UI 改变
+     * @param current R.id of a selected item
+     */
+    private void topNavUIChange(int current) {
+        // set background color
+        if (current == R.id.top_nav_music) {
+            findViewById(R.id.top_nav_bar).setBackgroundColor(getResources().getColor(R.color.tpsl2Blue));
+        } else {
+            findViewById(R.id.top_nav_bar).setBackgroundColor(0xfff);
+        }
+
+        // set text sizes and color
         int currentIndex = -1;
         for (int i=0; i < TopNavItems.length; i++) {
             if (TopNavItems[i] == current) {
                 currentIndex = i;
             }
         }
-
         int[] textSizes = {0, 0, 0, 0};
         for (int i=0; i < TopNavItems.length; i++) {
             switch (abs(i - currentIndex)) {
@@ -374,11 +410,44 @@ public class MusicChatActivity extends AppCompatActivity {
             }
             TextView tv = findViewById(TopNavItems[i]);
             tv.setTextSize(textSizes[i]);
+
+
+            if (current == R.id.top_nav_music) {
+                if (i == currentIndex) {
+                    tv.setTextColor(getResources().getColor(R.color.boneLight));
+                } else {
+                    tv.setTextColor(getResources().getColor(R.color.tpsl2Grey));
+                }
+            } else {
+                if (i == currentIndex) {
+                    tv.setTextColor(getResources().getColor(R.color.sparkBlueDark));
+                } else {
+                    tv.setTextColor(getResources().getColor(R.color.tpsl2Blue));
+                }
+            }
         }
     }
 
+    /**
+     * topNavBar 里选择新 item 后的 mainFragment 内容改变
+     * @param current R.id of a selected item
+     */
     private void mainFragmentChange(int current) {
+        findViewById(R.id.main_music_fragment).setVisibility(View.GONE);
+        findViewById(R.id.main_room_fragment).setVisibility(View.GONE);
+        findViewById(R.id.main_playlist_fragment).setVisibility(View.GONE);
+        findViewById(R.id.main_me_fragment).setVisibility(View.GONE);
 
+        switch (current) {
+            case R.id.top_nav_music:
+                findViewById(R.id.main_music_fragment).setVisibility(View.VISIBLE); break;
+            case R.id.top_nav_room:
+                findViewById(R.id.main_room_fragment).setVisibility(View.VISIBLE); break;
+            case R.id.top_nav_playlist:
+                findViewById(R.id.main_playlist_fragment).setVisibility(View.VISIBLE); break;
+            case R.id.top_nav_me:
+                findViewById(R.id.main_me_fragment).setVisibility(View.VISIBLE); break;
+        }
     }
 
 
@@ -469,7 +538,7 @@ public class MusicChatActivity extends AppCompatActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                return musicFragment.onKeyDown(keyCode, event);
+                return mainMusicFragment.onKeyDown(keyCode, event);
             case KeyEvent.KEYCODE_BACK:
                 return true;
             default:
@@ -481,7 +550,7 @@ public class MusicChatActivity extends AppCompatActivity {
     protected void onRestart() {
         if (reloadFlag) {
             // 为防止错误，重启 Music、Chat Fragment
-            musicFragment.onDestroy();
+            mainMusicFragment.onDestroy();
 
             // 打包要传递给 fragments 的 user 数据
             Bundle bundle = new Bundle();
@@ -490,8 +559,8 @@ public class MusicChatActivity extends AppCompatActivity {
             bundle.putSerializable("musiclist", MusicListHolder.getInstance().getMusicList());
 
             // init MusicFragment
-            musicFragment = new MusicFragment();
-            musicFragment.setArguments(bundle);
+            mainMusicFragment = new MusicFragment();
+            mainMusicFragment.setArguments(bundle);
 
             // init ChatFragment
             chatFragment = new ChatFragment();
@@ -501,10 +570,10 @@ public class MusicChatActivity extends AppCompatActivity {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
             transaction.remove(chatFragment);
-            transaction.remove(musicFragment);
+            transaction.remove(mainMusicFragment);
 
             transaction.add(R.id.chat_fragment, chatFragment);
-            transaction.add(R.id.main_fragment, musicFragment);
+            transaction.add(R.id.main_music_fragment, mainMusicFragment);
 
             transaction.addToBackStack(null);
             transaction.commit();
@@ -522,7 +591,7 @@ public class MusicChatActivity extends AppCompatActivity {
 
         // destroy fragments
         chatFragment.onDestroy();
-        musicFragment.onDestroy();
+        mainMusicFragment.onDestroy();
 
         // 结束HotLineRecorder
         HotLineRecorder.getInstance().onDestroy();

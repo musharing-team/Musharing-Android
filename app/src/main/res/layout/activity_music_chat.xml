@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:text="播放"
                             android:onClick="topNavItemOnClick"
-                            android:textSize="21sp"
+                            android:textSize="22sp"
                             android:textAlignment="center"
                             android:textColor="@color/boneLight" />
                         <TextView
@@ -62,9 +62,9 @@
                             android:layout_height="wrap_content"
                             android:text="房间"
                             android:onClick="topNavItemOnClick"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textAlignment="center"
-                            android:textColor="@color/boneLight"/>
+                            android:textColor="@color/tpsl2Grey"/>
                         <TextView
                             android:id="@+id/top_nav_playlist"
                             android:layout_weight="1"
@@ -72,9 +72,9 @@
                             android:layout_height="wrap_content"
                             android:text="列表"
                             android:onClick="topNavItemOnClick"
-                            android:textSize="15sp"
+                            android:textSize="14sp"
                             android:textAlignment="center"
-                            android:textColor="@color/boneLight"/>
+                            android:textColor="@color/tpsl2Grey"/>
                         <TextView
                             android:id="@+id/top_nav_me"
                             android:layout_weight="1"
@@ -84,7 +84,7 @@
                             android:onClick="topNavItemOnClick"
                             android:textSize="12sp"
                             android:textAlignment="center"
-                            android:textColor="@color/boneLight"/>
+                            android:textColor="@color/tpsl2Grey"/>
                         <RelativeLayout
                             android:layout_weight="2"
                             android:layout_width="0dp"
@@ -95,18 +95,40 @@
                         android:layout_height="1dp"
                         android:background="@color/tpsl2Grey"/>
 
-                    <!-- Main Fragment (for Music\Room\Playlist\Me) -->
-                    <FrameLayout
-                        android:id="@+id/main_fragment"
+                    <!-- Main Fragments (for Music\Room\Playlist\Me) -->
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <FrameLayout
+                            android:id="@+id/main_music_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="visible"/>
+                        <FrameLayout
+                            android:id="@+id/main_room_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+                        <FrameLayout
+                            android:id="@+id/main_playlist_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+                        <FrameLayout
+                            android:id="@+id/main_me_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
 
 
                 <RelativeLayout
                     android:id="@+id/touch_shield"
-                    android:layout_marginTop="54dp"
+                    android:layout_marginTop="64dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#8000"/>
