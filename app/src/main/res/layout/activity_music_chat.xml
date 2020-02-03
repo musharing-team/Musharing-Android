@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:text="播放"
                             android:onClick="topNavItemOnClick"
-                            android:textSize="22sp"
+                            android:textSize="24sp"
                             android:textAlignment="center"
                             android:textColor="@color/boneLight" />
                         <TextView
@@ -62,7 +62,7 @@
                             android:layout_height="wrap_content"
                             android:text="房间"
                             android:onClick="topNavItemOnClick"
-                            android:textSize="16sp"
+                            android:textSize="18sp"
                             android:textAlignment="center"
                             android:textColor="@color/tpsl2Grey"/>
                         <TextView
@@ -72,7 +72,7 @@
                             android:layout_height="wrap_content"
                             android:text="列表"
                             android:onClick="topNavItemOnClick"
-                            android:textSize="14sp"
+                            android:textSize="15sp"
                             android:textAlignment="center"
                             android:textColor="@color/tpsl2Grey"/>
                         <TextView

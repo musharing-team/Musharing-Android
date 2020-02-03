@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +16,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.ChangeScroll;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -41,6 +54,7 @@ import com.mine.musharing.requestTasks.ReceiveTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -376,6 +390,45 @@ public class MusicChatActivity extends AppCompatActivity {
      * @param current R.id of a selected item
      */
     private void topNavUIChange(int current) {
+        // Animated transition
+        TransitionSet transitionSet = new TransitionSet();
+
+        // First two are important for top nav items' text ui change
+        transitionSet.addTransition(new ChangeBounds());
+        transitionSet.addTransition(new ChangeClipBounds());
+
+        transitionSet.addTransition(new ChangeTransform());
+        transitionSet.addTransition(new ChangeImageTransform());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            transitionSet.addTransition(new ChangeScroll());
+        }
+
+        if (current == R.id.top_nav_music) {
+            transitionSet.addTransition(new Fade());
+        } else {
+            // randomly apply one or all:
+            switch (new Random().nextInt(4)) {
+                case 0:
+                    transitionSet.addTransition(new Fade());
+                    break;
+                case 1:
+                    transitionSet.addTransition(new Slide());
+                    break;
+                case 2:
+                    transitionSet.addTransition(new Explode());
+                    break;
+                default:
+                    transitionSet.addTransition(new Fade());
+                    transitionSet.addTransition(new Slide());
+                    transitionSet.addTransition(new Explode());
+            }
+        }
+
+        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
+
+        TransitionManager.beginDelayedTransition(mDrawerLayout, transitionSet);
+
         // set background color
         if (current == R.id.top_nav_music) {
             findViewById(R.id.top_nav_bar).setBackgroundColor(getResources().getColor(R.color.tpsl2Blue));
@@ -393,24 +446,21 @@ public class MusicChatActivity extends AppCompatActivity {
         int[] textSizes = {0, 0, 0, 0};
         for (int i=0; i < TopNavItems.length; i++) {
             switch (abs(i - currentIndex)) {
-                case 3:
-                    textSizes[i] = 12;
-                    break;
-                case 2:
-                    textSizes[i] = 14;
+                case 0:
+                    textSizes[i] = 24;
                     break;
                 case 1:
-                    textSizes[i] = 16;
+                    textSizes[i] = 18;
                     break;
-                case 0:
-                    textSizes[i] = 22;
+                case 2:
+                    textSizes[i] = 15;
                     break;
-                default:
+                default:        // including case 3
                     textSizes[i] = 12;
             }
+
             TextView tv = findViewById(TopNavItems[i]);
             tv.setTextSize(textSizes[i]);
-
 
             if (current == R.id.top_nav_music) {
                 if (i == currentIndex) {
