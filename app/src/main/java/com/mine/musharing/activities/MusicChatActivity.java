@@ -137,10 +137,7 @@ public class MusicChatActivity extends AppCompatActivity {
     // reloadFlag
     private boolean reloadFlag = false;
 
-    Bundle bundle;      // data need to pass
-
-    // for 转场动画
-    Bundle translateBundle;
+    Bundle bundle;      // data for passing to fragments and other activities
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -267,14 +264,18 @@ public class MusicChatActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Intent intent1 = new Intent(MusicChatActivity.this, SettingActivity.class);
                         reloadFlag = false;
+                        Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
                         startActivity(intent1, translateBundle);
                     });
                     break;
                 case R.id.nav_lookaround:
                     mDrawerLayout.closeDrawers();
-                    Intent intent2 = new Intent(MusicChatActivity.this, LookaroundActivity.class);
-                    reloadFlag = false;
-                    startActivity(intent2, translateBundle);
+                    runOnUiThread(() -> {
+                        Intent intent2 = new Intent(MusicChatActivity.this, LookaroundActivity.class);
+                        reloadFlag = false;
+                        Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
+                        startActivity(intent2, translateBundle);
+                    });
                     break;
                 case R.id.nav_exit:
                     mDrawerLayout.closeDrawers();
@@ -299,10 +300,6 @@ public class MusicChatActivity extends AppCompatActivity {
      * 设置 Activity 的转场动画
      */
     private void setupTransition() {
-        runOnUiThread(() -> {
-            translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
-        });
-
         TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
         TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
         TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
@@ -333,6 +330,7 @@ public class MusicChatActivity extends AppCompatActivity {
                             bundle.putSerializable("user", user);
                             intent.putExtra("data", bundle);
                             reloadFlag = true;
+                            Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
                             startActivity(intent, translateBundle);
                         });
                     }
@@ -424,28 +422,22 @@ public class MusicChatActivity extends AppCompatActivity {
                     roomFragment.getmMemberList().size() <= 1 ||    // 没加好友
                     MusicListHolder.getInstance().getMusicList().size() < 1   // 没加歌单
             ) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!memberMusicCheckSnackbar.isShown()) {
-                            memberMusicCheckSnackbar.show();
-                        }
-                        if (touchShield.getVisibility() != View.VISIBLE) {
-                            touchShield.setVisibility(View.VISIBLE);
-                        }
+                runOnUiThread(() -> {
+                    if (!memberMusicCheckSnackbar.isShown()) {
+                        memberMusicCheckSnackbar.show();
+                    }
+                    if (touchShield.getVisibility() != View.VISIBLE) {
+                        touchShield.setVisibility(View.VISIBLE);
                     }
                 });
 
             } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (memberMusicCheckSnackbar.isShown()) {
-                            memberMusicCheckSnackbar.dismiss();
-                        }
-                        if (touchShield.getVisibility() != View.GONE) {
-                            touchShield.setVisibility(View.GONE);
-                        }
+                runOnUiThread(() -> {
+                    if (memberMusicCheckSnackbar.isShown()) {
+                        memberMusicCheckSnackbar.dismiss();
+                    }
+                    if (touchShield.getVisibility() != View.GONE) {
+                        touchShield.setVisibility(View.GONE);
                     }
                 });
             }
