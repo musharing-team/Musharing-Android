@@ -165,8 +165,8 @@ public class LoginActivity extends AppCompatActivity {
                 String accountDecrypted = AESUtil.decrypt(randomKey, accountEncrypted);
                 String passwordDecrypted = AESUtil.decrypt(accountDecrypted, passwordEncrypted);
 
-                userNameText.setText(AESUtil.decodeName(accountDecrypted));
-                passwordText.setText(AESUtil.decodeName(passwordDecrypted));
+                userNameText.setText(AESUtil.decodeBase64(accountDecrypted));
+                passwordText.setText(AESUtil.decodeBase64(passwordDecrypted));
 //
 //                Log.d(TAG, "rememberAccount: key: " + randomKey);
 //                Log.d(TAG, "rememberAccount: accountRaw: " + accountDecrypted);
@@ -191,8 +191,8 @@ public class LoginActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = pref.edit();
 
         if (rememberAccountCheckBox.isChecked()) {
-            String accountRaw = AESUtil.encodeName(userNameText.getText().toString());
-            String passwordRaw = AESUtil.encodeName(passwordText.getText().toString());
+            String accountRaw = AESUtil.encodeBase64(userNameText.getText().toString());
+            String passwordRaw = AESUtil.encodeBase64(passwordText.getText().toString());
 
             /*
             用 randomUUID 加密 account

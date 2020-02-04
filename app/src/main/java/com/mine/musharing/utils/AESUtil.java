@@ -158,7 +158,7 @@ public class AESUtil {
     /**
      * 获取 Base64 编码
      */
-    public static String encodeName(String text) {
+    public static String encodeBase64(String text) {
         byte[] data = text.getBytes(StandardCharsets.UTF_8);
         String base64 = Base64.encodeToString(data, Base64.DEFAULT);
         return base64;
@@ -167,7 +167,7 @@ public class AESUtil {
     /**
      * 解码 Base64
      */
-    public static String decodeName(String base64) {
+    public static String decodeBase64(String base64) {
         byte[] data = Base64.decode(base64, Base64.DEFAULT);
         String text = new String(data, StandardCharsets.UTF_8);
         return text;
