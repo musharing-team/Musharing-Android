@@ -1,8 +1,10 @@
 package com.mine.musharing.utils;
 
 import android.util.Log;
+import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -151,5 +153,23 @@ public class AESUtil {
             result[i] = (byte) (Integer.parseInt(tmp, 16) & 0xFF);
         }
         return result;
+    }
+
+    /**
+     * 获取 Base64 编码
+     */
+    public static String encodeBase64(String text) {
+        byte[] data = text.getBytes(StandardCharsets.UTF_8);
+        String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+        return base64;
+    }
+
+    /**
+     * 解码 Base64
+     */
+    public static String decodeBase64(String base64) {
+        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+        String text = new String(data, StandardCharsets.UTF_8);
+        return text;
     }
 }
