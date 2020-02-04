@@ -7,7 +7,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 28
         versionCode 16
-        versionName "0.5.1(20200204.1053 normUX alpha-3)"
+        versionName "0.5.1(20200204.1305)"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
