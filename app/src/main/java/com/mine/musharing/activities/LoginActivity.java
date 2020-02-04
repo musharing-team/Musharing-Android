@@ -1,8 +1,10 @@
 package com.mine.musharing.activities;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,10 +16,21 @@ import com.mine.musharing.models.User;
 import com.mine.musharing.requestTasks.LoginTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.services.NoticeService;
+import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.UserUtil;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.ChangeScroll;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -27,7 +40,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mine.musharing.utils.AESUtil;
+import com.mine.musharing.utils.Utility;
 
+import com.mine.musharing.utils.ParseUtil.ResponseError;
+
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -66,6 +83,21 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         getRememberedAccount();
+
+        setupTransition();
+    }
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
     }
 
     /**
@@ -120,16 +152,27 @@ public class LoginActivity extends AppCompatActivity {
                     // 转到 MusicChatActivity
                     Intent musicChatActivityIntent = new Intent(LoginActivity.this, MusicChatActivity.class);
                     musicChatActivityIntent.putExtra("data", bundle);
-                    startActivity(musicChatActivityIntent);
 
-                    finish();
+                    Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this).toBundle();
+                    startActivity(musicChatActivityIntent, translateBundle);
+
+                    // finish();
                 });
             }
 
             @Override
             public void onFailed(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ResponseError.WRONG_NAME:
+                            readableError = "用户不存在"; break;
+                        case ResponseError.WRONG_PASSWORD:
+                            readableError = "密码错误"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(LoginActivity.this, readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -145,9 +188,13 @@ public class LoginActivity extends AppCompatActivity {
      * 转到注册界面
      */
     public void toRegisterOnClick(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
-        // finish();
+        runOnUiThread(() -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this).toBundle();
+            startActivity(intent, translateBundle);
+            // finish();
+        });
+
     }
 
     /**
@@ -167,12 +214,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 userNameText.setText(accountDecrypted);
                 passwordText.setText(passwordDecrypted);
-//
-//                Log.d(TAG, "rememberAccount: key: " + randomKey);
-//                Log.d(TAG, "rememberAccount: accountRaw: " + accountDecrypted);
-//                Log.d(TAG, "rememberAccount: passwordRaw: " + passwordDecrypted);
-//                Log.d(TAG, "rememberAccount: accountEncrypted: " + accountEncrypted);
-//                Log.d(TAG, "rememberAccount: passwordEncrypted: " + passwordEncrypted);
 
                 // "续订"
                 rememberAccountCheckBox.setChecked(true);
@@ -206,12 +247,7 @@ public class LoginActivity extends AppCompatActivity {
             editor.putBoolean("remember", true);
             editor.putString("account", accountEncrypted);
             editor.putString("password", passwordEncrypted);
-//
-//            Log.d(TAG, "rememberAccount: key: " + randomKey);
-//            Log.d(TAG, "rememberAccount: accountRaw: " + accountRaw);
-//            Log.d(TAG, "rememberAccount: passwordRaw: " + passwordRaw);
-//            Log.d(TAG, "rememberAccount: accountEncrypted: " + accountEncrypted);
-//            Log.d(TAG, "rememberAccount: passwordEncrypted: " + passwordEncrypted);
+
         } else {
             editor.clear();
         }

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Musharing DEMO</string>
-    <string name="version">0.4.11(20191214.1503)</string>
+    <string name="version">0.5.1(20200204.1053 normUX alpha-3)</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ullamcorper enim vel odio ullamcorper, eget efficitur lacus vestibulum. Nullam lobortis nibh sed quam sollicitudin iaculis. Proin consectetur aliquam lorem, sed sagittis nunc consequat nec. Nam id interdum metus. Suspendisse consequat, metus vitae volutpat aliquam, augue lectus gravida metus, a volutpat nisl neque a neque. Nunc tempus eget velit cursus ornare. Sed consequat posuere pellentesque. In placerat eu ex non molestie. Morbi lacinia nulla volutpat eleifend faucibus. Nulla ac justo sit amet lorem aliquet feugiat et eget risus. Nunc a metus nunc. Nunc sit amet vestibulum enim.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

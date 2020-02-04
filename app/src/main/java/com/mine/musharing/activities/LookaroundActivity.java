@@ -4,11 +4,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionSet;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.mine.musharing.R;
+import com.mine.musharing.utils.Utility;
 
 public class LookaroundActivity extends AppCompatActivity {
 
@@ -31,6 +33,21 @@ public class LookaroundActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("http://47.94.209.7/forums/forum/musharing/");
+
+        setupTransition();
+    }
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
     }
 
     @Override

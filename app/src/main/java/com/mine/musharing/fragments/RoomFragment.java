@@ -27,6 +27,7 @@ import com.mine.musharing.recyclerViewAdapters.MemberAdapter;
 import com.mine.musharing.requestTasks.AttendTask;
 import com.mine.musharing.requestTasks.MemberTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
+import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.StatusUtil;
 import com.mine.musharing.utils.UserUtil;
 
@@ -173,7 +174,18 @@ public class RoomFragment extends Fragment {
             public void onFailed(String error) {
                 // Log.d(TAG, "onFailed: error");
                 getActivity().runOnUiThread(() -> {
-                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ParseUtil.ResponseError.FROM_NOT_IN_ROOM:
+                            readableError = "请加入房间"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_LOGIN:
+                            readableError = "请登录。"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_EXIST:
+                            readableError = "错误！发起用户不存在。"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(getActivity(), readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -238,7 +250,22 @@ public class RoomFragment extends Fragment {
             @Override
             public void onFailed(String error) {
                 getActivity().runOnUiThread(() -> {
-                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                    String readableError;
+                    switch (error) {
+                        case ParseUtil.ResponseError.TARGET_IN_ROOM:
+                            readableError = "你的朋友正在别的房间中，不可以打扰ta哦。"; break;
+                        case ParseUtil.ResponseError.TARGET_NOT_LOGIN:
+                            readableError = "你的朋友没有登录，联系不上ta。"; break;
+                        case ParseUtil.ResponseError.TARGET_NOT_EXIST:
+                            readableError = "在 Musharing 家族中没有这个人。。。"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_LOGIN:
+                            readableError = "请先登录。"; break;
+                        case ParseUtil.ResponseError.FROM_NOT_EXIST:
+                            readableError = "错误！发起用户不存在。"; break;
+                        default:
+                            readableError = "出错啦，请稍后再试TAT";
+                    }
+                    Toast.makeText(getActivity(), readableError, Toast.LENGTH_SHORT).show();
                 });
             }
 
