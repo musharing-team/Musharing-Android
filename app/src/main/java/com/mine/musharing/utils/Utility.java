@@ -1,5 +1,16 @@
 package com.mine.musharing.utils;
 
+import android.os.Build;
+import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.ChangeScroll;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -126,5 +137,43 @@ public class Utility {
             result = s.replaceAll("^[　*| *| *|//s*]*", "").replaceAll("[　*| *| *|//s*]*$", "");
         }
         return result;
+    }
+
+    /**
+     * 获取一组随即转场动画
+     *
+     * @return a random TransitionSet
+     */
+    public static TransitionSet getRandomTransitionSet() {
+        TransitionSet transitionSet = new TransitionSet();
+
+        transitionSet.addTransition(new ChangeBounds());
+        transitionSet.addTransition(new ChangeClipBounds());
+
+        transitionSet.addTransition(new ChangeTransform());
+        transitionSet.addTransition(new ChangeImageTransform());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            transitionSet.addTransition(new ChangeScroll());
+        }
+        // randomly apply one or all:
+        switch (new Random().nextInt(4)) {
+            case 0:
+                transitionSet.addTransition(new Fade());
+                break;
+            case 1:
+                transitionSet.addTransition(new Slide());
+                break;
+            case 2:
+                transitionSet.addTransition(new Explode());
+                break;
+            default:
+                transitionSet.addTransition(new Fade());
+                transitionSet.addTransition(new Slide());
+                transitionSet.addTransition(new Explode());
+        }
+        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
+
+        return transitionSet;
     }
 }

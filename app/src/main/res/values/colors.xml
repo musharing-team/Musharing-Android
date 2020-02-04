@@ -30,4 +30,6 @@
 
     <color name="heartRed">#FE584F</color>
     <color name="hotRed">#EB4532</color>
+    
+    <color name="PurpleA100">#ea80fc</color>
 </resources>

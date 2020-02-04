@@ -1,8 +1,10 @@
 package com.mine.musharing.activities;
 
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.TransitionSet;
 import android.view.View;
 
 import com.mine.musharing.R;
@@ -39,6 +41,8 @@ public class BootActivity extends AppCompatActivity {
             }
         };
         mTimer.schedule(loadTimerTask, 200);
+
+        setupTransition();
     }
 
     /**
@@ -111,12 +115,28 @@ public class BootActivity extends AppCompatActivity {
      * 进入登录界面
      */
     private void toLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        runOnUiThread(() -> {
+            Intent intent = new Intent(this, LoginActivity.class);
+            Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(BootActivity.this).toBundle();
+            startActivity(intent, translateBundle);
+            // finish();    // finish() 会与专场动画矛盾
+        });
     }
 
     public void startOnClick(View view) {
         toLogin();
+    }
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
     }
 }

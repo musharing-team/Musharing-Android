@@ -4,9 +4,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionSet;
 import android.view.MenuItem;
 
 import com.mine.musharing.R;
+import com.mine.musharing.utils.Utility;
 
 /**
  * <h1>关于页面</h1>
@@ -28,6 +30,21 @@ public class AboutActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("关于");
         }
+
+        setupTransition();
+    }
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
     }
 
     @Override

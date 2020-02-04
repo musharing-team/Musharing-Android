@@ -68,7 +68,7 @@ public class MusicFragment extends Fragment {
     private TextView artistTextView;
 
     private Button playButton;
-    private TextView playStatusTextView;
+    // private TextView playStatusTextView;
     private ProgressBar progressBar;
     private SeekBar volumeBar;
     private TextView playedTime;
@@ -86,10 +86,6 @@ public class MusicFragment extends Fragment {
     private int maxVolume;
 
     private int currentIndex = -1;
-
-    // 导航、房间按钮
-    private Button navButton;
-    private Button roomButton;
 
     // Hot line
     private HotLineRecorder hotLineRecorder;
@@ -200,23 +196,6 @@ public class MusicFragment extends Fragment {
     }
 
     /**
-     * 点击 导航、房间 的事件
-     * @param view
-     */
-    public void navRoomButtonOnClick(View view) {
-        MusicChatActivity parent = (MusicChatActivity) getActivity();
-        switch (view.getId()) {
-            case R.id.nav_button:
-                parent.openDrawer(MusicChatActivity.DRAWER_NAV);
-                break;
-            case R.id.room_button:
-                parent.openDrawer(MusicChatActivity.RRAWER_ROOM);
-                break;
-        }
-
-    }
-
-    /**
      * 初始化HotlineRecorder 以及 录音时管理UI效果的RecordingDialogManager
      */
     private void initHotlineRecorder() {
@@ -231,18 +210,13 @@ public class MusicFragment extends Fragment {
      */
     @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
-//        screenLayout = musicFragmentView.findViewById(R.id.screen_layout);
-//        // screenLayout.setBackgroundColor(Utility.randomCardColor());
-//        screenBackground = (GradientDrawable) screenLayout.getBackground();
-//        screenBackground.setColor(Utility.randomCardColor());
-
         // Title
         titleTextView = musicFragmentView.findViewById(R.id.play_title_text);
         artistTextView = musicFragmentView.findViewById(R.id.play_artist_text);
 
         // Play/Pause button
         playButton = musicFragmentView.findViewById(R.id.play_button);
-        playStatusTextView = musicFragmentView.findViewById(R.id.play_status_text);
+        // playStatusTextView = musicFragmentView.findViewById(R.id.play_status_text);
         playButton.setOnClickListener(this::playOrPauseOnClick);
 
         // Progress
@@ -252,12 +226,6 @@ public class MusicFragment extends Fragment {
 
         // Volume
         volumeBar = musicFragmentView.findViewById(R.id.play_volume);
-
-        // nav and room button
-        navButton = musicFragmentView.findViewById(R.id.nav_button);
-        navButton.setOnClickListener(this::navRoomButtonOnClick);
-        roomButton = musicFragmentView.findViewById(R.id.room_button);
-        roomButton.setOnClickListener(this::navRoomButtonOnClick);
 
         // Hot line button
         hotLineButton = musicFragmentView.findViewById(R.id.hotline_in_music_fragment);
@@ -326,18 +294,13 @@ public class MusicFragment extends Fragment {
 
                 titleTextView.setText(currentMusic.getName());
                 artistTextView.setText(currentMusic.getArtist());
-
-                // screenLayout.setBackgroundColor(Utility.randomCardColor());
-                // screenBackground.setColor(Utility.randomCardColor());        这个更改会造成 Activity 意外结束
             }
 
             // 播放/暂停按钮
             if (playlistPlayer.isPlaying()) {
-                playStatusTextView.setText("暂停");
-                playButton.setBackgroundResource(R.drawable.button_start);
+                playButton.setBackgroundResource(R.drawable.ic_pause_black_48dp);
             } else {
-                playStatusTextView.setText("播放");
-                playButton.setBackgroundResource(R.drawable.button_stop);
+                playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_48dp);
             }
 
             // 刷新进度条

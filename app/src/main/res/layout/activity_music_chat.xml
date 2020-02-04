@@ -8,6 +8,7 @@
     android:id="@+id/draw_layout"
     tools:context=".activities.MusicChatActivity" >
 
+    <!--主体播放、聊天页-->
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,17 +30,108 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 android:fitsSystemWindows="true">
 
-                <!-- Music Fragment -->
-                <FrameLayout
-                    android:id="@+id/music_fragment"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <!--Top NavBar-->
+                    <LinearLayout
+                        android:id="@+id/top_nav_bar"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="48dp"
+                        android:paddingHorizontal="16dp"
+                        android:gravity="center"
+                        android:background="@color/tpsl2Blue"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true">
+                        <TextView
+                            android:id="@+id/top_nav_music"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="播放"
+                            android:onClick="topNavItemOnClick"
+                            android:textSize="24sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/boneLight" />
+                        <TextView
+                            android:id="@+id/top_nav_room"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="房间"
+                            android:onClick="topNavItemOnClick"
+                            android:textSize="18sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/tpsl2Grey"/>
+                        <TextView
+                            android:id="@+id/top_nav_playlist"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="列表"
+                            android:onClick="topNavItemOnClick"
+                            android:textSize="15sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/tpsl2Grey"/>
+                        <TextView
+                            android:id="@+id/top_nav_me"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="我的"
+                            android:onClick="topNavItemOnClick"
+                            android:textSize="12sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/tpsl2Grey"/>
+                        <RelativeLayout
+                            android:layout_weight="2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/tpsl2Grey"/>
+
+                    <!-- Main Fragments (for Music\Room\Playlist\Me) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <FrameLayout
+                            android:id="@+id/main_music_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="visible"/>
+                        <FrameLayout
+                            android:id="@+id/main_room_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+                        <FrameLayout
+                            android:id="@+id/main_playlist_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+                        <FrameLayout
+                            android:id="@+id/main_me_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
 
                 <RelativeLayout
                     android:id="@+id/touch_shield"
+                    android:layout_marginTop="64dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#5000"/>
+                    android:background="#8000"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -60,6 +152,7 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
+    <!--左导航页-->
     <android.support.design.widget.NavigationView
         android:layout_gravity="start"
         android:id="@+id/nav_view"
@@ -70,6 +163,7 @@
         android:layout_height="match_parent" >
     </android.support.design.widget.NavigationView>
 
+    <!--右房间页-->
     <LinearLayout
         android:layout_gravity="end"
         android:orientation="vertical"
