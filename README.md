@@ -56,6 +56,12 @@ Musharing-Android follows the [Contributor Covenant](http://contributor-covenant
 
 This project exists thanks to [all the people who contribute](https://github.com/musharing-team/Musharing-Android/graphs/contributors). 
 
+## Donation
+
+Donations are welcomed and thanked.
+
+Bitcoin: `1DgTSywmxeYvwpSxtNaU1zJE3VwK345v9A`.
+
 ## License
 
 [MIT](LICENSE) © Musharing Team
