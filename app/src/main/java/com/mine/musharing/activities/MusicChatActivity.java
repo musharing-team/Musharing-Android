@@ -262,19 +262,28 @@ public class MusicChatActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     mDrawerLayout.closeDrawers();
                     runOnUiThread(() -> {
-                        Intent intent1 = new Intent(MusicChatActivity.this, SettingActivity.class);
+                        Intent intentSetting = new Intent(MusicChatActivity.this, SettingActivity.class);
                         reloadFlag = false;
                         Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
-                        startActivity(intent1, translateBundle);
+                        startActivity(intentSetting, translateBundle);
                     });
                     break;
                 case R.id.nav_lookaround:
                     mDrawerLayout.closeDrawers();
                     runOnUiThread(() -> {
-                        Intent intent2 = new Intent(MusicChatActivity.this, LookaroundActivity.class);
+                        Intent intentLookaround = new Intent(MusicChatActivity.this, LookaroundActivity.class);
                         reloadFlag = false;
                         Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
-                        startActivity(intent2, translateBundle);
+                        startActivity(intentLookaround, translateBundle);
+                    });
+                    break;
+                case R.id.nav_feedback:
+                    mDrawerLayout.closeDrawers();
+                    runOnUiThread(() -> {
+                        Intent intentFeedback = new Intent(MusicChatActivity.this, FeedbackActivity.class);
+                        reloadFlag = false;
+                        Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
+                        startActivity(intentFeedback, translateBundle);
                     });
                     break;
                 case R.id.nav_exit:

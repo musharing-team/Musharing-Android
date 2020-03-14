@@ -23,6 +23,9 @@ public class RequestUtil {
 //	public static final String SERVER_URL = "http://192.168.43.214:5000";		// local debug for back-end via emulator
 //	public static final String SERVER_URL = "http://192.168.11.222:5000";		// another local address
 
+	public static final String FORUM_LOOKAROUND_URL = "http://39.107.75.19:1080/musharing-forums/forum/musharing-lookaround/";
+	public static final String FORUM_FEEDBACK_URL = "http://39.107.75.19:1080/musharing-forums/forum/musharing-feedback/";
+
 	/**
 	 * Unexpected Json
 	 *

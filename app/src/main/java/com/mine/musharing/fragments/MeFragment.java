@@ -14,10 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mine.musharing.R;
-import com.mine.musharing.activities.LoginActivity;
-import com.mine.musharing.activities.LookaroundActivity;
-import com.mine.musharing.activities.MusicChatActivity;
-import com.mine.musharing.activities.SettingActivity;
+import com.mine.musharing.activities.*;
 import com.mine.musharing.models.User;
 
 import java.util.ArrayList;
@@ -73,12 +70,16 @@ public class MeFragment extends Fragment {
     public void meFragmentButtonOnClick(View view) {
         switch (view.getId()) {
             case R.id.me_setting:
-                Intent intent1 = new Intent(getContext(), SettingActivity.class);
-                startActivity(intent1);
+                Intent intentSetting = new Intent(getContext(), SettingActivity.class);
+                startActivity(intentSetting);
                 break;
             case R.id.me_lookaround:
-                Intent intent2 = new Intent(getContext(), LookaroundActivity.class);
-                startActivity(intent2);
+                Intent intentLookaround = new Intent(getContext(), LookaroundActivity.class);
+                startActivity(intentLookaround);
+                break;
+            case R.id.me_feedback:
+                Intent intentFeedback = new Intent(getContext(), FeedbackActivity.class);
+                startActivity(intentFeedback);
                 break;
             case R.id.me_leave:
                 ((MusicChatActivity)getActivity()).leaveRoom();
