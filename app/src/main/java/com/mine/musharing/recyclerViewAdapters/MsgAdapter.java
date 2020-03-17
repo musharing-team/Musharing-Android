@@ -77,7 +77,8 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
             holder.othersLayout.setVisibility(View.GONE);
 
             Glide.with(holder.itemView).load(msg.getFromImg()).into(holder.selfImg);
-            String content = Utility.formatText(msg.getContent(), SINGLE_LINE_LONG);
+            // String content = Utility.formatText(msg.getContent(), SINGLE_LINE_LONG);
+            String content = msg.getContent();
             holder.selfMsg.setText(content);
         } else {
             // 别人发出的消息
@@ -85,7 +86,8 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
             holder.othersLayout.setVisibility(View.VISIBLE);
 
             Glide.with(holder.itemView).load(msg.getFromImg()).into(holder.othersImg);
-            String content = Utility.formatText(msg.getContent(), SINGLE_LINE_LONG);
+            // String content = Utility.formatText(msg.getContent(), SINGLE_LINE_LONG);
+            String content = msg.getContent();
             holder.othersMsg.setText(content);
         }
     }

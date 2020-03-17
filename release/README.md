@@ -6,12 +6,18 @@
 >
 > Enjoy your Musharing and await a better.
 
+* V0.6.1(20200317.1054)
+  * 现可在「添加朋友」时选择 「chatbot」，添加一个聊天机器人。得益于 AI 技术，这个可爱的 chatbot 不会让您和朋友们失望的！同时，有了永不疲惫的 AI 相伴，即使是一个人也可以享受 Musharing 的感动了。
+  * 改进较长文本消息的显示。
+  * 部分代码重构，带来少许性能提升。
 * V0.5.1(20200204.1305) 
   * 我们长期以来致力于优化 UX，现推出更好的用户体验。
-  * 【该服务暂不可用】加入了 Chatbot 聊天机器人，一个人也可以享受 Musharing 的感动。
+  * 【功能预告】即将推出 Chatbot 聊天机器人【该服务暂不可用】
   * 修复已知 Bugs 。
 
 ## DEMO
+
+> The DEMO Versions are underdeveloped and just for preview.
 
 ### `DEMO-v0.4.*`
 

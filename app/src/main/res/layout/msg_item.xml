@@ -29,13 +29,14 @@
             android:background="@drawable/msg_ios_left">
 
             <TextView
-                android:id="@+id/others_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textIsSelectable="true"
-                android:layout_margin="4dp"
-                android:textColor="#e000"/>
+                    android:id="@+id/others_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxWidth="150dp"
+                    android:textIsSelectable="true"
+                    android:layout_margin="4dp"
+                    android:textColor="#e000"/>
 
         </LinearLayout>
 
@@ -57,13 +58,14 @@
             android:background="@drawable/msg_ios_right">
 
         <TextView
-            android:id="@+id/self_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textIsSelectable="true"
-            android:layout_margin="4dp"
-            android:textColor="#efff"/>
+                android:id="@+id/self_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxWidth="150dp"
+                android:textIsSelectable="true"
+                android:layout_margin="4dp"
+                android:textColor="#efff"/>
 
         </LinearLayout>
 

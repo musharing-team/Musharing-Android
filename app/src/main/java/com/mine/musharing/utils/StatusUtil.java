@@ -17,5 +17,5 @@ public class StatusUtil {
     /**
      * 是否启用 chatbot
      */
-    public static boolean chatbotEnable = false;
+    public static boolean chatbotEnable = true;
 }

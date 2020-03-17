@@ -6,8 +6,8 @@ android {
         applicationId "com.mine.musharing"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 16
-        versionName "0.5.1(20200204.1305)"
+        versionCode 18
+        versionName "0.6.1(20200317.1054)"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {

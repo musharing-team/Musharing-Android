@@ -321,7 +321,19 @@ public class ParseUtil {
      * @throws ResponseError
      */
     public static String chatbotResponseParse(String responseText) throws ResponseError {
-        // TODO: parse the chatbot response
-        throw new UnsupportedOperationException("Not yet implemented");
+        try {
+            JSONObject jsonObject = new JSONObject(responseText);
+
+            if (jsonObject.has("chatbot_resp")) {
+                return jsonObject.getString("chatbot_resp");
+
+            } else if (jsonObject.has("error")) {
+                String errorCode = jsonObject.getString("error");
+                throw new ResponseError(errorCode);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        throw new ResponseError(ResponseError.UNEXPECTED);
     }
 }
