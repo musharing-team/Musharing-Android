@@ -6,7 +6,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.effect.Effect;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +46,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.os.VibrationEffect.DEFAULT_AMPLITUDE;
+
 /**
  * <h1>音乐播放的碎片</h1>
  *
@@ -68,6 +73,8 @@ public class MusicFragment extends Fragment {
     private TextView artistTextView;
 
     private Button playButton;
+    private ProgressBar playButtonProgressbar;
+
     // private TextView playStatusTextView;
     private ProgressBar progressBar;
     private SeekBar volumeBar;
@@ -133,7 +140,8 @@ public class MusicFragment extends Fragment {
      * @param view
      */
     public void playOrPauseOnClick(View view) {
-        Log.d(TAG, "playOrPauseOnClick: playlistPlayer.isPlaying: " + playlistPlayer.isPlaying());
+        playOrPauseClickedFeedback();
+
         if (playlistPlayer.isPlaying()) {
             playlistPlayer.pause();
             playAsyncer.postPaused();
@@ -141,6 +149,23 @@ public class MusicFragment extends Fragment {
             playlistPlayer.start();
             playAsyncer.postStarted();
         }
+    }
+
+    private void playOrPauseClickedFeedback() {
+        try {
+            // 一个震动效果
+            Vibrator vibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(50, DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(50);
+            }
+        } finally {
+            // 视觉反馈
+            playButton.setVisibility(View.GONE);
+            playButtonProgressbar.setVisibility(View.VISIBLE);
+        }
+
     }
 
     /**
@@ -159,7 +184,6 @@ public class MusicFragment extends Fragment {
                     // 对话框效果
                     recordingDialogManager.showRecordingDialog();
                     recordingDialogManager.recording();
-
                 }
 
                 try {
@@ -216,6 +240,7 @@ public class MusicFragment extends Fragment {
 
         // Play/Pause button
         playButton = musicFragmentView.findViewById(R.id.play_button);
+        playButtonProgressbar = musicFragmentView.findViewById(R.id.play_button_progressbar);
         // playStatusTextView = musicFragmentView.findViewById(R.id.play_status_text);
         playButton.setOnClickListener(this::playOrPauseOnClick);
 
@@ -237,8 +262,6 @@ public class MusicFragment extends Fragment {
         msgRecyclerView.setLayoutManager(layoutManager);
         adapter = new MsgAdapter(user, mMsgList);
         msgRecyclerView.setAdapter(adapter);
-
-
     }
 
     /**
@@ -296,7 +319,7 @@ public class MusicFragment extends Fragment {
                 artistTextView.setText(currentMusic.getArtist());
             }
 
-            // 播放/暂停按钮
+            // 控制按钮：播放 或是 暂停
             if (playlistPlayer.isPlaying()) {
                 playButton.setBackgroundResource(R.drawable.ic_pause_black_48dp);
             } else {
@@ -371,6 +394,10 @@ public class MusicFragment extends Fragment {
      * @param msg
      */
     public void showTextMsg(Msg msg) {
+        if (msg.getContent().length() > 10) {
+            String s = msg.getContent().substring(0, 7) + "...";
+            msg.setContent(s);
+        }
         mMsgList.add(msg);
         adapter.notifyItemInserted(mMsgList.size() - 1); // 有新消息,刷新显示
         msgRecyclerView.scrollToPosition(mMsgList.size() - 1);   // 移动到最后一条消息

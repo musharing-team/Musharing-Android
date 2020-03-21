@@ -1,6 +1,7 @@
 package com.mine.musharing.fragments;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.StatusUtil;
 import com.mine.musharing.utils.UserUtil;
+import com.mine.musharing.views.AppendDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +135,7 @@ public class RoomFragment extends Fragment {
     /**
      * 刷新（重新请求）当前房间中的成员列表
      */
-    private void refreshMemberList() {
+    public void refreshMemberList() {
         // mMemberList.clear();
         if (getActivity() == null) {
             return;
@@ -206,26 +208,28 @@ public class RoomFragment extends Fragment {
     private void addMember() {
         String uid = user.getUid();
 
-        final EditText editText = new EditText(getActivity());
-        editText.setTextSize(30);
-        final CardView layout = new CardView(getActivity());
-        layout.setRadius(32);
-        layout.setCardElevation(2);
-        layout.setCardBackgroundColor(Color.WHITE);
-        layout.addView(editText);
-        AlertDialog.Builder inputDialog = new AlertDialog.Builder(getActivity());
-        inputDialog.setTitle("请输入您朋友的用户名：").setView(layout);
-        inputDialog.setPositiveButton("确定", (dialog, which) -> {
-            String targetName = editText.getText().toString();
-            if (TextUtils.isEmpty(targetName)) {
-                return;
-            } else {
-                String targetNameEncoded = UserUtil.encodeName(targetName);
-                attendRequest(uid, targetNameEncoded);
-            }
-        });
-
-        inputDialog.show();
+//        final EditText editText = new EditText(getActivity());
+//        editText.setTextSize(30);
+//        final CardView layout = new CardView(getActivity());
+//        layout.setRadius(32);
+//        layout.setCardElevation(2);
+//        layout.setCardBackgroundColor(Color.WHITE);
+//        layout.addView(editText);
+//        AlertDialog.Builder inputDialog = new AlertDialog.Builder(getActivity());
+//        inputDialog.setTitle("请输入您朋友的用户名：").setView(layout);
+//        inputDialog.setPositiveButton("确定", (dialog, which) -> {
+//            String targetName = editText.getText().toString();
+//            if (TextUtils.isEmpty(targetName)) {
+//                return;
+//            } else {
+//                String targetNameEncoded = UserUtil.encodeName(targetName);
+//                attendRequest(uid, targetNameEncoded);
+//            }
+//        });
+//
+//        inputDialog.show();
+        final Dialog appendDialog = new AppendDialog(getContext(), this, uid);
+        appendDialog.show();
 
     }
 
