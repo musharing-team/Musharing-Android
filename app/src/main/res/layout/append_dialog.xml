@@ -48,60 +48,96 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
             android:background="#FFF"
-            app:queryHint="搜索 Musharing 用户名"
+            app:queryHint="搜索用户/粘贴Mu口令"
             app:iconifiedByDefault="false"/>
 
-        <!--我的二维码-->
-        <RelativeLayout
-            android:id="@+id/my_qr"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginVertical="8dp"
-            android:background="#FFF"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
 
-            <ImageView
-                android:id="@+id/my_qr_code_img"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="6dp"
-                android:src="@drawable/qr_code_line" />
-
+            <!--我的Mu口令-->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@id/my_qr_code_img"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:id="@+id/my_text_code"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:orientation="vertical"
+                android:background="#FFF"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginVertical="6dp"
+                    android:src="@drawable/ic_kou_ling" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的Mu口令"
+                    android:gravity="center"
+                    android:textColor="#000"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发到微信、QQ，加朋友"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="1dp"
+                android:layout_height="48dp"/>
+
+            <!--我的二维码-->
+            <LinearLayout
+                android:id="@+id/my_qr"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:orientation="vertical"
+                android:background="#FFF"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginVertical="6dp"
+                    android:src="@drawable/qr_code_line" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="我的二维码"
+                    android:gravity="center"
                     android:textColor="#000"
                     android:textSize="18dp" />
 
                 <TextView
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="扫一扫，加入我的房间"
                     android:textSize="12dp" />
+
+
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical|right"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_keyboard_arrow_right_grey_500_24dp" />
+        </LinearLayout>
 
-        </RelativeLayout>
-
-        <!--面对面建群-->
+        <!--扫一扫-->
         <RelativeLayout
-            android:id="@+id/face_to_face"
+            android:id="@+id/scan_qr"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginVertical="8dp"
@@ -109,31 +145,31 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/face_to_face_img"
+                android:id="@+id/scan_qr_img"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="6dp"
-                android:src="@drawable/ic_track_changes_black_48dp" />
+                android:src="@drawable/ic_scan_qr" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/face_to_face_img"
+                android:layout_toRightOf="@id/scan_qr_img"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="面对面添加"
+                    android:text="扫一扫"
                     android:textColor="#000"
                     android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="邀请身边的朋友加入房间"
+                    android:text="扫描二维码加入朋友的房间"
                     android:textSize="12dp" />
             </LinearLayout>
 
