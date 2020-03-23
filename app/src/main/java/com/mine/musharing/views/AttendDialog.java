@@ -79,13 +79,22 @@ public class AttendDialog extends Dialog {
         checkClipMuCode();
     }
 
-
     private void build() {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.append_dialog, null);
 
         // 搜索
         SearchView friendSearchView = view.findViewById(R.id.friend_search_view);
+
+        // SearchView 默认弹出软键盘，但想默认隐藏解决方法
+        // From https://github.com/chufengma/android-skills/issues/23
+        friendSearchView.post(new Runnable() {
+            @Override
+            public void run() {
+                friendSearchView.clearFocus();
+            }
+        });
+
         friendSearchView.setIconified(false);
         friendSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -29,7 +29,7 @@ public class ClipboardUtil {
      * @return 成功则返回获取到的内容，否则返回空字符串""
      */
     public static String getFromClipboard(ClipboardManager clipboard) {
-        if (clipboard != null) {
+        if ((clipboard != null) && (clipboard.getPrimaryClip() != null)) {
             return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
         }
         return "";
