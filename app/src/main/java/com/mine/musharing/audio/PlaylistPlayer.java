@@ -217,7 +217,11 @@ public class PlaylistPlayer {
      * @return true if currently playing, false otherwise
      */
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        try {
+            return mediaPlayer.isPlaying();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**

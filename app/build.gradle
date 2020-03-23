@@ -39,4 +39,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.18'
+    implementation 'com.github.yuzhiqiang1993:zxing:2.2.8'
 }

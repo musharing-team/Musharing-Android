@@ -1,23 +1,19 @@
 package com.mine.musharing.fragments;
 
 
+import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mine.musharing.R;
@@ -29,13 +25,15 @@ import com.mine.musharing.requestTasks.MemberTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.ParseUtil;
 import com.mine.musharing.utils.StatusUtil;
-import com.mine.musharing.utils.UserUtil;
+import com.mine.musharing.views.AttendDialog;
+import com.yzq.zxinglibrary.common.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 import static com.mine.musharing.utils.UserUtil.addMemberSign;
 import static com.mine.musharing.utils.UserUtil.chatbotUser;
@@ -67,6 +65,8 @@ public class RoomFragment extends Fragment {
     private final static int REFRESH_PERIOD = 10000;     // 这个请求常常在后端日志里刷屏出现，应该尽量降低其频率。
 
     private boolean autoRefreshFlag = true;     // 自动刷新时不显示 swipeRefreshLayout 的 progressbar
+
+    private AttendDialog attendDialog;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class RoomFragment extends Fragment {
     /**
      * 刷新（重新请求）当前房间中的成员列表
      */
-    private void refreshMemberList() {
+    public void refreshMemberList() {
         // mMemberList.clear();
         if (getActivity() == null) {
             return;
@@ -206,26 +206,28 @@ public class RoomFragment extends Fragment {
     private void addMember() {
         String uid = user.getUid();
 
-        final EditText editText = new EditText(getActivity());
-        editText.setTextSize(30);
-        final CardView layout = new CardView(getActivity());
-        layout.setRadius(32);
-        layout.setCardElevation(2);
-        layout.setCardBackgroundColor(Color.WHITE);
-        layout.addView(editText);
-        AlertDialog.Builder inputDialog = new AlertDialog.Builder(getActivity());
-        inputDialog.setTitle("请输入您朋友的用户名：").setView(layout);
-        inputDialog.setPositiveButton("确定", (dialog, which) -> {
-            String targetName = editText.getText().toString();
-            if (TextUtils.isEmpty(targetName)) {
-                return;
-            } else {
-                String targetNameEncoded = UserUtil.encodeName(targetName);
-                attendRequest(uid, targetNameEncoded);
-            }
-        });
-
-        inputDialog.show();
+//        final EditText editText = new EditText(getActivity());
+//        editText.setTextSize(30);
+//        final CardView layout = new CardView(getActivity());
+//        layout.setRadius(32);
+//        layout.setCardElevation(2);
+//        layout.setCardBackgroundColor(Color.WHITE);
+//        layout.addView(editText);
+//        AlertDialog.Builder inputDialog = new AlertDialog.Builder(getActivity());
+//        inputDialog.setTitle("请输入您朋友的用户名：").setView(layout);
+//        inputDialog.setPositiveButton("确定", (dialog, which) -> {
+//            String targetName = editText.getText().toString();
+//            if (TextUtils.isEmpty(targetName)) {
+//                return;
+//            } else {
+//                String targetNameEncoded = UserUtil.encodeName(targetName);
+//                attendRequest(uid, targetNameEncoded);
+//            }
+//        });
+//
+//        inputDialog.show();
+        attendDialog = new AttendDialog(getContext(), this, user);
+        attendDialog.show();
 
     }
 
@@ -282,5 +284,21 @@ public class RoomFragment extends Fragment {
      */
     public List<User> getmMemberList() {
         return mMemberList;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 扫描二维码/条码回传
+        if (requestCode == AttendDialog.REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+            if (data != null) {
+                String content = data.getStringExtra(Constant.CODED_CONTENT);
+                if ((attendDialog == null) || (!attendDialog.isShowing())) {
+                    attendDialog = new AttendDialog(getContext(), this, user);
+                }
+                attendDialog.search(content);
+            }
+        }
     }
 }
