@@ -85,7 +85,7 @@ public class MusicFragment extends Fragment {
     // 定时任务
     private Timer mTimerForMusic;
     private TimerTask refreshMusicTimerTask;
-    private static final int MUSIC_REFRESH_PERIOD = 1000;
+    private static final int MUSIC_REFRESH_PERIOD = 500;
 
     // 音量控制
     private AudioManager audioManager;
@@ -320,6 +320,8 @@ public class MusicFragment extends Fragment {
             }
 
             // 控制按钮：播放 或是 暂停
+            playButton.setVisibility(View.VISIBLE);
+            playButtonProgressbar.setVisibility(View.GONE);
             if (playlistPlayer.isPlaying()) {
                 playButton.setBackgroundResource(R.drawable.ic_pause_black_48dp);
             } else {
