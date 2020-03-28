@@ -140,14 +140,16 @@ public class MusicFragment extends Fragment {
      * @param view
      */
     public void playOrPauseOnClick(View view) {
-        playOrPauseClickedFeedback();
+        if (playButton.getVisibility() == View.VISIBLE) {
+            playOrPauseClickedFeedback();
 
-        if (playlistPlayer.isPlaying()) {
-            playlistPlayer.pause();
-            playAsyncer.postPaused();
-        } else {
-            playlistPlayer.start();
-            playAsyncer.postStarted();
+            if (playlistPlayer.isPlaying()) {
+                playlistPlayer.pause();
+                playAsyncer.postPaused();
+            } else {
+                playlistPlayer.start();
+                playAsyncer.postStarted();
+            }
         }
     }
 
@@ -240,9 +242,11 @@ public class MusicFragment extends Fragment {
 
         // Play/Pause button
         playButton = musicFragmentView.findViewById(R.id.play_button);
-        playButtonProgressbar = musicFragmentView.findViewById(R.id.play_button_progressbar);
         // playStatusTextView = musicFragmentView.findViewById(R.id.play_status_text);
         playButton.setOnClickListener(this::playOrPauseOnClick);
+
+        playButtonProgressbar = musicFragmentView.findViewById(R.id.play_button_progressbar);
+        playButtonProgressbar.setOnClickListener(this::playOrPauseOnClick);
 
         // Progress
         progressBar = musicFragmentView.findViewById(R.id.play_progress_bar);
