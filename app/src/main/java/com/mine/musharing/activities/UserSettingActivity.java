@@ -23,6 +23,8 @@ import com.mine.musharing.utils.ParseUtil;
 
 public class UserSettingActivity extends AppCompatActivity {
 
+    // TODO: add appbar!
+
     User user;
 
     ImageView userImgView;
