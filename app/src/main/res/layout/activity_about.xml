@@ -81,7 +81,7 @@
                         android:layout_below="@id/version"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Designed By Musharing Team"
+                        android:text="Designed with ❤️ By Musharing Team"
                         android:layout_centerHorizontal="true"
                         android:layout_margin="8dp"
                         android:layout_gravity="center"
@@ -126,7 +126,7 @@
 
                     <TextView
                         android:layout_gravity="center"
-                        android:text="MIT LICENSE © Musharing Team"
+                        android:text="MIT LICENSE"
                         android:textColor="#fff"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -150,7 +150,7 @@
 
                     <TextView
                         android:layout_gravity="center"
-                        android:text="意见反馈"
+                        android:text="联系我们"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -185,7 +185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="由 CDFMLR 提供后台服务\n对信息完整与安全性不做保证"
+                        android:text="由 CDFMLR 运营\n对信息完整与安全性不做保证"
                         android:textSize="16sp"
                         android:gravity="center"
                         android:layout_margin="8dp"
@@ -246,7 +246,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Demo 中的歌曲由 BaSO4 授权给 Musharing 团队测试使用\n禁止用于包括但不限于拷贝、出售等其他任何用途。\n版权所有，侵权必究！"
+                        android:text="Demo 中的歌曲由 BaSO4 特别授权给 Musharing 团队测试使用\n禁止用于包括但不限于拷贝、出售等其他任何用途。\n版权所有，侵权必究！"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textSize="10sp"
@@ -260,7 +260,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="16dp"
-                android:text="Copyright © 2019 Musharing Team.\n All rights reserved."
+                android:text="Copyright © 2020 Musharing Team.\n All rights reserved."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

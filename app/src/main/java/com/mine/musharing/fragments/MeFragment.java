@@ -3,6 +3,7 @@ package com.mine.musharing.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -70,8 +71,12 @@ public class MeFragment extends Fragment {
     public void meFragmentButtonOnClick(View view) {
         switch (view.getId()) {
             case R.id.me_setting:
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", user);
                 Intent intentSetting = new Intent(getContext(), SettingActivity.class);
-                startActivity(intentSetting);
+                intentSetting.putExtra("data", bundle);
+                Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity()).toBundle();
+                startActivity(intentSetting, translateBundle);
                 break;
             case R.id.me_lookaround:
                 Intent intentLookaround = new Intent(getContext(), LookaroundActivity.class);

@@ -61,7 +61,7 @@ public class NoticeService extends Service {
                 @Override
                 public void onSuccess(List<Notice> newNotices) {
                     if (!newNotices.isEmpty()) {
-                        // Log.d(TAG, "new notices: " + newNotices.toString());
+                        Log.d(TAG, "new notices: " + newNotices.toString());
                         for (Notice n : newNotices) {
                             if (!history.contains(n.getNid())) {
                                 history.add(n.getNid());

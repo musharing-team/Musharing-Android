@@ -162,10 +162,10 @@
                             android:background="@drawable/ic_play_arrow_black_48dp"
                             android:foreground="?android:attr/selectableItemBackground"/>
                         <ProgressBar
-                                android:id="@+id/play_button_progressbar"
-                                android:layout_width="36dp"
-                                     android:layout_height="36dp"
-                                     android:visibility="gone"/>
+                            android:id="@+id/play_button_progressbar"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <!--下一曲-->

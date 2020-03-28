@@ -262,8 +262,9 @@ public class MusicChatActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     mDrawerLayout.closeDrawers();
                     runOnUiThread(() -> {
-                        Intent intentSetting = new Intent(MusicChatActivity.this, SettingActivity.class);
                         reloadFlag = false;
+                        Intent intentSetting = new Intent(MusicChatActivity.this, SettingActivity.class);
+                        intentSetting.putExtra("data", bundle);
                         Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MusicChatActivity.this).toBundle();
                         startActivity(intentSetting, translateBundle);
                     });

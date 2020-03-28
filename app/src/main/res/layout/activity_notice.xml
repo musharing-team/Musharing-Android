@@ -67,6 +67,7 @@
                     android:id="@+id/notice_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:layout_margin="24dp"
                     android:textColor="@color/pureBlackDarker"
                     android:text="@string/lorem"/>

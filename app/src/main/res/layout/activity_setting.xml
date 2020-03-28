@@ -38,7 +38,8 @@
 
             <!--账户-->
             <android.support.v7.widget.CardView
-                android:onClick="nonImplementSettingOnClick"
+                android:id="@+id/setting_user"
+                android:onClick="settingItemOnClick"
                 app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -73,9 +74,10 @@
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="1dp"/>-->
 
-            <!--通用-->
+            <!--通知-->
             <android.support.v7.widget.CardView
-                android:onClick="nonImplementSettingOnClick"
+                android:id="@+id/setting_notice"
+                android:onClick="settingItemOnClick"
                 app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -92,7 +94,7 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:text="通用"
+                        android:text="通知"
                         android:textSize="20dp"
                         android:layout_margin="16dp"
                         android:layout_gravity="center_vertical"
@@ -111,7 +113,8 @@
 
             <!--隐私-->
             <android.support.v7.widget.CardView
-                android:onClick="nonImplementSettingOnClick"
+                android:id="@+id/setting_privacy"
+                android:onClick="settingItemOnClick"
                 app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -148,7 +151,8 @@
 
             <!--帮助-->
             <android.support.v7.widget.CardView
-                android:onClick="nonImplementSettingOnClick"
+                android:id="@+id/setting_help_feedback"
+                android:onClick="settingItemOnClick"
                 app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -184,7 +188,8 @@
 
             <!--关于-->
             <android.support.v7.widget.CardView
-                android:onClick="aboutSettingOnClick"
+                android:id="@+id/setting_about"
+                android:onClick="settingItemOnClick"
                 app:cardBackgroundColor="@color/pureWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
