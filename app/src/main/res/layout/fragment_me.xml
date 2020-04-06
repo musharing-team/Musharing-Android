@@ -243,7 +243,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_margin="16dp"
-            android:text="一句不想被看到的话👀"
+            android:text="拿破仑说过一句富有哲理的话：“不要等待，时机永远不会恰到好处。”这启发了我。就我个人来说, Musharing对我的意义, 不能不说非常重大。我们都知道, 只要有意义, 那么就必须慎重考虑。这样看来,快向你的朋友分享Musharing吧。"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

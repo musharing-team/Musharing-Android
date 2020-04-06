@@ -2,8 +2,12 @@ package com.mine.musharing.activities;
 
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.transition.TransitionSet;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +24,7 @@ import com.mine.musharing.requestTasks.LeaveTask;
 import com.mine.musharing.requestTasks.LogoutTask;
 import com.mine.musharing.requestTasks.RequestTaskListener;
 import com.mine.musharing.utils.ParseUtil;
+import com.mine.musharing.utils.Utility;
 
 public class UserSettingActivity extends AppCompatActivity {
 
@@ -35,6 +40,18 @@ public class UserSettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_setting);
+
+        // Show Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar_userSetting);
+        toolbar.setTitle("账户与安全");
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("账户与安全");
+        }
+
+        setupTransition();
 
         Intent intent = getIntent();
         user = (User) intent.getBundleExtra("data").get("user");
@@ -79,5 +96,27 @@ public class UserSettingActivity extends AppCompatActivity {
         }).execute(user.getUid());
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+
+    /**
+     * 设置 Activity 的转场动画
+     */
+    private void setupTransition() {
+        TransitionSet transitionSet1 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet2 = Utility.getRandomTransitionSet();
+        TransitionSet transitionSet3 = Utility.getRandomTransitionSet();
+
+        getWindow().setEnterTransition(transitionSet1);
+        getWindow().setExitTransition(transitionSet2);
+        getWindow().setReenterTransition(transitionSet3);
+    }
 }

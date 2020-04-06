@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.transition.TransitionSet;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.mine.musharing.R;
 import com.mine.musharing.models.User;
@@ -113,6 +112,10 @@ public class SettingActivity extends AppCompatActivity {
                 bundle.putSerializable("user", user);
                 intent = new Intent(this, UserSettingActivity.class);
                 intent.putExtra("data", bundle);
+                break;
+            case R.id.setting_privacy:
+                intent = new Intent(this, PrivacyActivity.class);
+                break;
             default:
                 Snackbar.make(findViewById(R.id.setting_layout), "暂不可用", Snackbar.LENGTH_LONG).show();
         }
