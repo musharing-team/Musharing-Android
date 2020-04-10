@@ -27,6 +27,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.mine.musharing.R;
 import com.mine.musharing.activities.LoginActivity;
 import com.mine.musharing.activities.MusicChatActivity;
@@ -400,11 +401,15 @@ public class MusicFragment extends Fragment {
      * @param msg
      */
     public void showTextMsg(Msg msg) {
-        if (msg.getContent().length() > 10) {
-            String s = msg.getContent().substring(0, 7) + "...";
-            msg.setContent(s);
+        // 使用Gson序列化进行深拷贝
+        Gson gson = new Gson();
+        Msg msgCopy = gson.fromJson(gson.toJson(msg), Msg.class);
+
+        if (msgCopy.getContent().length() > 15) {
+            String s = msgCopy.getContent().substring(0, 12) + "...";
+            msgCopy.setContent(s);
         }
-        mMsgList.add(msg);
+        mMsgList.add(msgCopy);
         adapter.notifyItemInserted(mMsgList.size() - 1); // 有新消息,刷新显示
         msgRecyclerView.scrollToPosition(mMsgList.size() - 1);   // 移动到最后一条消息
     }
