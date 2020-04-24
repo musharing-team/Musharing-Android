@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,8 @@ public class BootActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
 
+    private final static int GUIDE_ACTIVITY_REQUEST_CODE = 512;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,8 @@ public class BootActivity extends AppCompatActivity {
         String isFirstEnterApp = pref.getString("LastAppVersion", "NEVER_USED");
 
         if (!Objects.equals(isFirstEnterApp, this.getString(R.string.version))) {
-            startPrivacyDialog();
+            toGuide();
+            // startPrivacyDialog();
         } else {
             // 跳转到登录界面
             runOnUiThread(() -> {
@@ -231,6 +235,25 @@ public class BootActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 进入欢迎引导界面
+     */
+    private void toGuide() {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(this, GuideActivity.class);
+            Bundle translateBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(BootActivity.this).toBundle();
+            startActivityForResult(intent, GUIDE_ACTIVITY_REQUEST_CODE, translateBundle);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GUIDE_ACTIVITY_REQUEST_CODE) {
+            startPrivacyDialog();
+        }
+    }
 
     /**
      * 进入登录界面

@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.TaCActivity"></activity>
+        <activity android:name=".activities.GuideActivity"></activity>
+        <activity android:name=".activities.TaCActivity" />
         <activity android:name=".activities.PrivacyActivity" />
         <activity android:name=".activities.UserSettingActivity" />
         <activity
@@ -82,11 +83,9 @@
             android:enabled="true"
             android:exported="true" />
     </application>
-
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-feature android:name="android.hardware.camera" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
