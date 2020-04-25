@@ -6,6 +6,8 @@
 >
 > Enjoy your Musharing and await a better.
 
+* V0.6.7(20200425.2011) *A Signed Version*
+  * 全新欢迎引导页面
 * V0.6.6(20200410.0906)
   * 新增《隐私政策》和《用户协议》
   * 解决了长消息无法正常显示的问题
