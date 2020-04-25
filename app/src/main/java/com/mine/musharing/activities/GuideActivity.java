@@ -117,6 +117,8 @@ public class GuideActivity extends AppCompatActivity {
                 setIndicator(position);
                 if (position == GUIDE_PAGE_COUNT - 1) {
                     finishButton.setVisibility(View.VISIBLE);
+                } else if (finishButton.getVisibility() == View.VISIBLE) {
+                    finishButton.setVisibility(View.GONE);
                 }
             }
 
