@@ -11,9 +11,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.mine.musharing.R;
@@ -142,7 +145,7 @@ public class RoomFragment extends Fragment {
         new MemberTask(new RequestTaskListener<List<User>>() {
             @Override
             public void onStart() {
-                getActivity().runOnUiThread(()-> {
+                getActivity().runOnUiThread(() -> {
                     // progressBar.setVisibility(View.VISIBLE);
                     if (autoRefreshFlag) {
                         swipeRefreshLayout.setRefreshing(true);
@@ -177,11 +180,14 @@ public class RoomFragment extends Fragment {
                     String readableError;
                     switch (error) {
                         case ParseUtil.ResponseError.FROM_NOT_IN_ROOM:
-                            readableError = "请加入房间"; break;
+                            readableError = "请加入房间";
+                            break;
                         case ParseUtil.ResponseError.FROM_NOT_LOGIN:
-                            readableError = "请登录。"; break;
+                            readableError = "请登录。";
+                            break;
                         case ParseUtil.ResponseError.FROM_NOT_EXIST:
-                            readableError = "错误！发起用户不存在。"; break;
+                            readableError = "错误！发起用户不存在。";
+                            break;
                         default:
                             readableError = "出错啦，请稍后再试TAT";
                     }
@@ -227,12 +233,19 @@ public class RoomFragment extends Fragment {
 //
 //        inputDialog.show();
         attendDialog = new AttendDialog(getContext(), this, user);
+        attendDialog.setTitle("添加朋友");
+        Window window = attendDialog.getWindow();
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = (int) (display.getWidth() * 0.8);                     //使用这种方式更改了dialog的框宽
+        window.setAttributes(params);
         attendDialog.show();
 
     }
 
     /**
      * 发送添加人的请求
+     *
      * @param uid
      * @param targetNameEncoded
      */
@@ -255,15 +268,20 @@ public class RoomFragment extends Fragment {
                     String readableError;
                     switch (error) {
                         case ParseUtil.ResponseError.TARGET_IN_ROOM:
-                            readableError = "你的朋友正在别的房间中，不可以打扰ta哦。"; break;
+                            readableError = "你的朋友正在别的房间中，不可以打扰ta哦。";
+                            break;
                         case ParseUtil.ResponseError.TARGET_NOT_LOGIN:
-                            readableError = "你的朋友没有登录，联系不上ta。"; break;
+                            readableError = "你的朋友没有登录，联系不上ta。";
+                            break;
                         case ParseUtil.ResponseError.TARGET_NOT_EXIST:
-                            readableError = "在 Musharing 家族中没有这个人。。。"; break;
+                            readableError = "在 Musharing 家族中没有这个人。。。";
+                            break;
                         case ParseUtil.ResponseError.FROM_NOT_LOGIN:
-                            readableError = "请先登录。"; break;
+                            readableError = "请先登录。";
+                            break;
                         case ParseUtil.ResponseError.FROM_NOT_EXIST:
-                            readableError = "错误！发起用户不存在。"; break;
+                            readableError = "错误！发起用户不存在。";
+                            break;
                         default:
                             readableError = "出错啦，请稍后再试TAT";
                     }
@@ -280,6 +298,7 @@ public class RoomFragment extends Fragment {
 
     /**
      * 获取当前的成员列表
+     *
      * @return 当前的成员列表
      */
     public List<User> getmMemberList() {
@@ -296,6 +315,12 @@ public class RoomFragment extends Fragment {
                 String content = data.getStringExtra(Constant.CODED_CONTENT);
                 if ((attendDialog == null) || (!attendDialog.isShowing())) {
                     attendDialog = new AttendDialog(getContext(), this, user);
+                    attendDialog.setTitle("添加朋友");
+                    Window window = attendDialog.getWindow();
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+                    WindowManager.LayoutParams params = window.getAttributes();
+                    params.width = (int) (display.getWidth() * 0.8);                     //使用这种方式更改了dialog的框宽
+                    window.setAttributes(params);
                 }
                 attendDialog.search(content);
             }
